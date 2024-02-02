@@ -1,0 +1,96 @@
+name: Release
+on:  
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    name: Node unit tests
+    runs-on: ubuntu-latest
+    environment: testnet
+    strategy:
+      matrix:
+        node: ['18']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache .npm-store
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm-store
+          key: ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/package-lock.yaml') }}
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install Node Dependencies
+        run: npm ci        
+
+      - name: Lint source
+        run: |
+          npm run lint:ci
+
+      - name: Build package
+        run: |
+          npm run build
+
+      - name: Run tests
+        run: |
+          npm run test:ci
+        env:
+          CI: true
+          DEBUG: ${{ secrets.DEBUG }}
+          STAGE: ${{ secrets.STAGE }}
+          PVT_KEY: ${{ secrets.PVT_KEY }}
+          RPC_URL: ${{ secrets.RPC_URL }}
+          CHAIN_ID: ${{ secrets.CHAIN_ID }}
+          CHAIN: ${{ secrets.CHAIN }}
+          PINATA_KEY: ${{ secrets.PINATA_KEY }}
+          PINATA_SECRET: ${{ secrets.PINATA_SECRET }}
+          MAX_GAS_PRICE: ${{ secrets.MAX_GAS_PRICE }}
+          ROOT_PVT_KEY: ${{ secrets.ROOT_PVT_KEY }}
+          WALLET_EXPIRY_DAYS: ${{ secrets.WALLET_EXPIRY_DAYS }}
+          IPFSCREDS: ${{ secrets.IPFSCREDS }}
+          IPFSUPLOAD: ${{ secrets.IPFSUPLOAD }}
+          IPFSREAD: ${{ secrets.IPFSREAD }}
+  publish-gpr:
+    if: github.event_name == 'push'
+    name: Publish modules
+    needs: build
+    runs-on: ubuntu-latest
+    environment: testnet
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.18.1
+          registry-url: https://npm.pkg.github.com/
+      - run: npm ci
+
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          # This expects you to have a script called release which does a build for your packages and calls changeset publish
+          publish: npm run release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEBUG: ${{ secrets.DEBUG }}
+          STAGE: ${{ secrets.STAGE }}
+          PVT_KEY: ${{ secrets.PVT_KEY }}
+          RPC_URL: ${{ secrets.RPC_URL }}
+          CHAIN_ID: ${{ secrets.CHAIN_ID }}
+          CHAIN: ${{ secrets.CHAIN }}
+          PINATA_KEY: ${{ secrets.PINATA_KEY }}
+          PINATA_SECRET: ${{ secrets.PINATA_SECRET }}
+          MAX_GAS_PRICE: ${{ secrets.MAX_GAS_PRICE }}
+          ROOT_PVT_KEY: ${{ secrets.ROOT_PVT_KEY }}
+          WALLET_EXPIRY_DAYS: ${{ secrets.WALLET_EXPIRY_DAYS }}
+          IPFSCREDS: ${{ secrets.IPFSCREDS }}
+          IPFSUPLOAD: ${{ secrets.IPFSUPLOAD }}
+          IPFSREAD: ${{ secrets.IPFSREAD }}
+

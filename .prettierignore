@@ -1,0 +1,13 @@
+# Add files here to ignore them from prettier formatting
+
+/dist
+/coverage
+/apps
+/doc
+/cypress
+/.github
+/.vscode
+/node_modules
+/tmp
+/packages/*/dist
+/packages/lit-third-party-libs
