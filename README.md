@@ -1,5 +1,16 @@
 # verify client sdk
 
+[![Release][gha-badge]][gha-ci] [![TypeScript version][ts-badge]][typescript-5-0]
+[![License: Apache 2.0][license-badge]][license]
+
+[gha-ci]: https://github.com/verify-media/verify-client/actions/workflows/release.yml
+[gha-badge]: https://github.com/verify-media/verify-client/actions/workflows/release.yml/badge.svg
+[ts-badge]: https://img.shields.io/badge/TypeScript-5.0-blue.svg
+[typescript-5-0]: https://devblogs.microsoft.com/typescript/announcing-typescript-5-0/
+[license-badge]: https://img.shields.io/badge/license-Apache_2.0-blue.svg
+[license]: https://github.com/superical/ethers-decode-error/blob/main/LICENSE
+
+
 ## What is VERIFY?
 
 VERIFY aims to be the central repository for content license and provenance, equipping the world with a backend to verify the source and license of digital content.
