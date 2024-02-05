@@ -4,11 +4,12 @@
   "description": "a client sdk for interacting with the verify protocol",
   "keywords": [
     "bcl",
-    "verify-media",
-    "verify protocol"
+    "verifymedia",
+    "verify protocol",
+    "fox"
   ],
   "author": "bcl",
-  "license": "Apache License",
+  "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/prod/index.cjs",
   "module": "./dist/prod/index.es.js",
@@ -40,7 +41,6 @@
     "prepare": "husky install",
     "changeset": "changeset",
     "version": "changeset version",
-    "release:verify-client": "npm run prepublishOnly && npm run version",
     "release": "npm run prepublishOnly && npm run changeset publish",
     "banner": "node ./banner.mjs"
   },
@@ -49,7 +49,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bclxyz/np-client"
+    "url": "https://github.com/verify-media/verify-client/"
+  },
+  "bugs": {
+    "url": "https://github.com/verify-media/verify-client/issues"
   },
   "homepage": "https://www.verifymedia.com/",
   "devDependencies": {
