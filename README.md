@@ -6,7 +6,7 @@ VERIFY aims to be the central repository for content license and provenance, equ
 
 VERIFY is a public library of signed digital assets with capabilities that allow for a single DRM solution for digital assets. Every asset stored in VERIFY is signed by a real world entity that attests to the provenance of the asset. The publisher declares the asset’s license for access and reference through a smart contract module.
 
-[verifymedia/verify-client](https://github.com/verify-media/verify-client/pkgs/npm/verify-client/170509994) is a typesafe sdk for interacting with the [verify protocol](https://www.verifymedia.com/). It is written in typescript and is compiled to es6, cjs and umd bundles.
+[verify-media/verify-client](https://www.npmjs.com/org/verify-media/verify-client) is a typesafe sdk for interacting with the [verify protocol](https://www.verifymedia.com/). It is written in typescript and is compiled to es6, cjs and umd bundles.
 
 ## Quick Start
 
@@ -23,13 +23,13 @@ VERIFY is a public library of signed digital assets with capabilities that allow
   cd test-verifymedia-client
   npm init -y
   touch index.mjs
-  npm i @verifymedia/verify-client
+  npm i @verify-media/verify-client
   ```
 
 - Open this test-verifymedia-client/index.mjs in your favorite IDE and add the following snippet
 
   ```javascript
-  import { hashData } from '@verifymedia/verify-client'
+  import { hashData } from '@verify-media/verify-client'
   console.log(hashData('hello world'))
   ```
 
@@ -77,7 +77,7 @@ the sdk offers methods to interact with the verify - some of the methods are as 
   - This method is used to initialize the sdk, you can either set env vars or pass a config object. **This function needs to be called before performing any sdk action**. Here's an example of how to use it:
 
     ```javascript
-    import { init } from '@verifymedia/verify-client'
+    import { init } from '@verify-media/verify-client'
 
     init({
       debug: false,
@@ -109,7 +109,7 @@ the sdk offers methods to interact with the verify - some of the methods are as 
     if env vars are set your could call init without any params
 
     ```javascript
-    import { init } from '@verifymedia/verify-client'
+    import { init } from '@verify-media/verify-client'
 
     init()
     ```
@@ -119,7 +119,7 @@ the sdk offers methods to interact with the verify - some of the methods are as 
   - This method is used to fetch sdk config. Here's an example of how to use it:
 
     ```javascript
-    import { getConfig } from '@verifymedia/verify-client'
+    import { getConfig } from '@verify-media/verify-client'
 
     const { chainId } = await getConfig()
     ```
@@ -129,7 +129,7 @@ the sdk offers methods to interact with the verify - some of the methods are as 
   - This method is used to register a root wallet in the system. Here's an example of how to use it:
 
     ```javascript
-    import { registerRoot } from '@verifymedia/verify-client'
+    import { registerRoot } from '@verify-media/verify-client'
     await registerRoot(orgName)
     ```
 
@@ -144,7 +144,7 @@ the sdk offers methods to interact with the verify - some of the methods are as 
   - This method is used to unregister a root wallet in the system. Here's an example of how to use it:
 
     ```javascript
-    import { unregisterRoot } from '@verifymedia/verify-client'
+    import { unregisterRoot } from '@verify-media/verify-client'
     await unregisterRoot(rootPvtKey)
     ```
 
@@ -159,7 +159,7 @@ the sdk offers methods to interact with the verify - some of the methods are as 
   - This method is used to register a intermediate wallet (signer wallet) in the system. Here's an example of how to use it:
 
     ```javascript
-    import { register } from '@verifymedia/verify-client'
+    import { register } from '@verify-media/verify-client'
     await register()
     ```
 
@@ -174,7 +174,7 @@ the sdk offers methods to interact with the verify - some of the methods are as 
   - This method is used to unregister a intermediate wallet (signer wallet) in the system. Here's an example of how to use it:
 
     ```javascript
-    import { unregister } from '@verifymedia/verify-client'
+    import { unregister } from '@verify-media/verify-client'
     await unregister()
     ```
 
@@ -189,7 +189,7 @@ the sdk offers methods to interact with the verify - some of the methods are as 
   - This method is used to encrypt an asset . Here's an example of how to use it:
 
     ```javascript
-    import { encryptAsset } from '@verifymedia/verify-client'
+    import { encryptAsset } from '@verify-media/verify-client'
     const encryptedAsset = await encryptAsset({
       content: blob,
       contentHash: hash
@@ -207,7 +207,7 @@ the sdk offers methods to interact with the verify - some of the methods are as 
   - This method is used to upload an asset to [pinata](https://www.pinata.cloud/) (an ipfs service) . Here's an example of how to use it:
 
     ```javascript
-    import { uploadToPinata } from '@verifymedia/verify-client'
+    import { uploadToPinata } from '@verify-media/verify-client'
     await uploadToPinata({
       data: {
         name: 'sandbox sample asset',
@@ -232,7 +232,7 @@ the sdk offers methods to interact with the verify - some of the methods are as 
   - This method is used to fetch an asset from [pinata](https://www.pinata.cloud/) (an ipfs service) . Here's an example of how to use it:
 
     ```javascript
-    import { fetchFileFromPinata } from '@verifymedia/verify-client'
+    import { fetchFileFromPinata } from '@verify-media/verify-client'
     await fetchFileFromPinata(uri, 'meta')
     ```
 
@@ -247,7 +247,7 @@ the sdk offers methods to interact with the verify - some of the methods are as 
   - This method is used to sign an asset node . Here's an example of how to use it:
 
     ```javascript
-    import { signAssetNode } from '@verifymedia/verify-client'
+    import { signAssetNode } from '@verify-media/verify-client'
     const signedAssetNode = await signAssetNode(assetNode.data)
     ```
 
@@ -262,7 +262,7 @@ the sdk offers methods to interact with the verify - some of the methods are as 
   - This method is used to publish an asset node to polygon. Here's an example of how to use it:
 
     ```javascript
-    import { publish } from '@verifymedia/verify-client'
+    import { publish } from '@verify-media/verify-client'
     await publish(parentNode, {
       assetId: assetHash,
       assetUri: assetIpfsUri,
@@ -281,7 +281,7 @@ the sdk offers methods to interact with the verify - some of the methods are as 
   - This method is used to get node data from polygon. Here's an example of how to use it:
 
     ```javascript
-    import { getNode } from '@verifymedia/verify-client'
+    import { getNode } from '@verify-media/verify-client'
     await getNode(assetHash)
     ```
 
@@ -296,7 +296,7 @@ the sdk offers methods to interact with the verify - some of the methods are as 
   - This method is used to decrypt an asset. Here's an example of how to use it:
 
     ```javascript
-    import { decryptAsset } from '@verifymedia/verify-client'
+    import { decryptAsset } from '@verify-media/verify-client'
     const decryptedAsset = await decryptAsset({
         ciphertext
         dataToEncryptHash,
@@ -315,7 +315,7 @@ the sdk offers methods to interact with the verify - some of the methods are as 
   - This method is used to verify an asset. Here's an example of how to use it:
 
     ```javascript
-    import { verifyAsset } from '@verifymedia/verify-client'
+    import { verifyAsset } from '@verify-media/verify-client'
     await verifyAsset(assetHash, assetNode)
     ```
 

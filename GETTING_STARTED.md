@@ -29,7 +29,7 @@ dotenv.config()
 - the sdk now can start using these settings
 
 ```bash
-import {init, getConfig} from '@verifymedia/verify-client'
+import {init, getConfig} from '@verify-media/verify-client'
 init()
 const config = getConfig()
 console.log(config.STAGE)
@@ -89,7 +89,7 @@ you could refer the [examples](https://github.com/verify-media/verify-client/blo
 - ### register root wallet
 
 ```javascript
-import { registerRoot, init } from '@verifymedia/verify-client'
+import { registerRoot, init } from '@verify-media/verify-client'
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -101,7 +101,7 @@ console.log(resp.transactionHash)
 - ### register intermediate wallet
 
 ```javascript
-import { register, init } from '@verifymedia/verify-client'
+import { register, init } from '@verify-media/verify-client'
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -125,7 +125,7 @@ import {
   addIPFSData,
   addSignatureData,
   verifyAsset
-} from '@verifymedia/verify-client'
+} from '@verify-media/verify-client'
 import dotenv from 'dotenv'
 dotenv.config()
 

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { init, signRequest } from '@verifymedia/verify-client'
+import { init, signRequest } from '@verify-media/verify-client'
 import dotenv from 'dotenv'
 
 dotenv.config()

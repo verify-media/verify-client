@@ -1,10 +1,10 @@
 {
-  "name": "@verifymedia/verify-client",
+  "name": "@verify-media/verify-client",
   "version": "0.0.1",
   "description": "a client sdk for interacting with the verify protocol",
   "keywords": [
     "bcl",
-    "verifymedia",
+    "verify-media",
     "verify protocol"
   ],
   "author": "bcl",
@@ -21,6 +21,7 @@
   "files": [
     "dist"
   ],
+  "private": "true",
   "scripts": {
     "lint": "eslint --fix \"src/**/\"",
     "format": "prettier --write './src/**/*.{ts,tsx}' && prettier --write './example/**/*.{ts,tsx}'",
@@ -41,11 +42,10 @@
     "version": "changeset version",
     "release:verify-client": "npm run prepublishOnly && npm run version",
     "release": "npm run prepublishOnly && npm run changeset publish",
-    "alpha-release": "npm run prepublishOnly && npm run changeset publish --tag alpha",
     "banner": "node ./banner.mjs"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://registry.npmjs.org/"
   },
   "repository": {
     "type": "git",

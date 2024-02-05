@@ -17,7 +17,7 @@ import {
   submitRequest,
   ContentTypes,
   MIME_TYPES
-} from '@verifymedia/verify-client'
+} from '@verify-media/verify-client'
 import dotenv from 'dotenv'
 
 dotenv.config()
