@@ -1,14 +1,15 @@
 {
-  "name": "@verifymedia/verify-client",
+  "name": "@verify-media/verify-client",
   "version": "0.0.1",
   "description": "a client sdk for interacting with the verify protocol",
   "keywords": [
     "bcl",
     "verifymedia",
-    "verify protocol"
+    "verify protocol",
+    "fox"
   ],
   "author": "bcl",
-  "license": "Apache License",
+  "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/prod/index.cjs",
   "module": "./dist/prod/index.es.js",
@@ -21,6 +22,7 @@
   "files": [
     "dist"
   ],
+  "private": "true",
   "scripts": {
     "lint": "eslint --fix \"src/**/\"",
     "format": "prettier --write './src/**/*.{ts,tsx}' && prettier --write './example/**/*.{ts,tsx}'",
@@ -39,17 +41,18 @@
     "prepare": "husky install",
     "changeset": "changeset",
     "version": "changeset version",
-    "release:verify-client": "npm run prepublishOnly && npm run version",
     "release": "npm run prepublishOnly && npm run changeset publish",
-    "alpha-release": "npm run prepublishOnly && npm run changeset publish --tag alpha",
     "banner": "node ./banner.mjs"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://registry.npmjs.org/"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bclxyz/np-client"
+    "url": "https://github.com/verify-media/verify-client/"
+  },
+  "bugs": {
+    "url": "https://github.com/verify-media/verify-client/issues"
   },
   "homepage": "https://www.verifymedia.com/",
   "devDependencies": {

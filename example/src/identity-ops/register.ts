@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { register, init } from '@verifymedia/verify-client'
+import { register, init } from '@verify-media/verify-client'
 import { Wallet, ethers } from 'ethers'
 
 import dotenv from 'dotenv'

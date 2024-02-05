@@ -1,4 +1,4 @@
-# @verifymedia/verify-client
+# @verify-media/verify-client
 
 ## 0.0.3
 
