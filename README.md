@@ -64,7 +64,7 @@ The repository hosts various [examples](https://github.com/verify-media/verify-c
 
 ## Tech Docs
 
-For the most up to date API documentation, check out the [verify-client sdk docs](https://probable-adventure-1w929yl.pages.github.io/)
+For the most up to date API documentation, check out the [verify-client sdk docs](https://sdk.verifymedia.com/)
 
 the sdk offers methods to interact with the verify - some of the methods are as follows:
 
