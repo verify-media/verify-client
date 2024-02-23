@@ -24,7 +24,7 @@ import {
   addIPFSData,
   addSignatureData
   // uploadToIPFS
-} from '@verifymedia/client'
+} from '@verify-media/verify-client'
 import dotenv from 'dotenv'
 
 dotenv.config()

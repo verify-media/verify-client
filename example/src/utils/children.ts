@@ -1,4 +1,4 @@
-import { init, getChildrenNodes } from '@verifymedia/client'
+import { init, getChildrenNodes } from '@verify-media/verify-client'
 import dotenv from 'dotenv'
 
 dotenv.config()

@@ -1,5 +1,15 @@
 # verify client sdk
 
+[![Release][gha-badge]][gha-ci] [![TypeScript version][ts-badge]][typescript-5-0]
+[![License: Apache 2.0][license-badge]][license]
+
+[gha-ci]: https://github.com/verify-media/verify-client/actions/workflows/release.yml
+[gha-badge]: https://github.com/verify-media/verify-client/actions/workflows/release.yml/badge.svg
+[ts-badge]: https://img.shields.io/badge/TypeScript-5.0-blue.svg
+[typescript-5-0]: https://devblogs.microsoft.com/typescript/announcing-typescript-5-0/
+[license-badge]: https://img.shields.io/badge/license-Apache_2.0-blue.svg
+[license]: https://github.com/superical/ethers-decode-error/blob/main/LICENSE
+
 VERIFY aims to be the central repository for content license and provenance, equipping the world with a backend to verify the source and license of digital content.
 
 VERIFY is a public library of signed digital assets with capabilities that allow for a single DRM solution for digital assets. Every asset stored in VERIFY is signed by a real world entity that attests to the provenance of the asset. The publisher declares the asset’s license for access and reference through a smart contract module.
@@ -23,13 +33,13 @@ VERIFY is a public library of signed digital assets with capabilities that allow
   cd test-verifymedia-client
   npm init -y
   touch index.mjs
-  npm i @verifymedia/client
+  npm i @verify-media/verify-client
   ```
 
 - Open test-verifymedia-client/index.mjs in your favorite IDE and add the following snippet
 
   ```javascript
-  import { hashData } from '@verifymedia/client'
+  import { hashData } from '@verify-media/verify-client'
   console.log(hashData('hello world'))
   ```
 

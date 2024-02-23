@@ -17,7 +17,7 @@ import {
   fetchFileFromPinata,
   verifyAsset,
   AssetNode
-} from '@verifymedia/client'
+} from '@verify-media/verify-client'
 import dotenv from 'dotenv'
 import fs from 'fs'
 

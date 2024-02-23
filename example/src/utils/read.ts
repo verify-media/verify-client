@@ -1,4 +1,4 @@
-import { init, getAssetDetails } from '@verifymedia/client'
+import { init, getAssetDetails } from '@verify-media/verify-client'
 import dotenv from 'dotenv'
 
 dotenv.config()
