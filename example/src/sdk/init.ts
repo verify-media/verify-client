@@ -4,7 +4,7 @@ import {
   version,
   register,
   registerOrg
-} from '@verifymedia/client'
+} from '@verify-media/verify-client'
 import dotenv from 'dotenv'
 import { Wallet, ethers } from 'ethers'
 

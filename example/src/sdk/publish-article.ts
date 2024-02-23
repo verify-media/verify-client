@@ -3,7 +3,7 @@ import {
   init,
   publishArticle,
   version
-} from '@verifymedia/client'
+} from '@verify-media/verify-client'
 import dotenv from 'dotenv'
 dotenv.config()
 init()

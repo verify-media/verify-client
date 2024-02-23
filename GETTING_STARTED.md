@@ -29,7 +29,7 @@ dotenv.config()
 - the sdk now can start using these settings
 
 ```bash
-import {init, getConfig} from '@verifymedia/client'
+import {init, getConfig} from '@verify-media/verify-client'
 init()
 const config = getConfig()
 console.log(config.STAGE)

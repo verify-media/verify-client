@@ -1,5 +1,5 @@
 {
-  "name": "@verifymedia/client",
+  "name": "@verify-media/verify-client",
   "version": "0.0.4",
   "description": "a client sdk for interacting with the verify protocol",
   "keywords": [

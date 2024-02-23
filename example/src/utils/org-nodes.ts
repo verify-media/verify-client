@@ -1,4 +1,4 @@
-import { init, registerOrg } from '@verifymedia/client'
+import { init, registerOrg } from '@verify-media/verify-client'
 import dotenv from 'dotenv'
 import { Wallet, ethers } from 'ethers'
 

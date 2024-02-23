@@ -19,7 +19,7 @@ other critical dependencies
 install the sdk
 
 ```bash
-npm i @verifymedia/client
+npm i @verify-media/verify-client
 ```
 
 or
@@ -33,7 +33,7 @@ npm i
 npm run build
 npm link
 cd example
-npm link @verifymedia/client
+npm link @verify-media/verify-client
 touch .env
 ```
 
