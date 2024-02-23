@@ -38,19 +38,21 @@ const pinataConfig = {
  * @async
  * @function uploadToIPFS
  * @param {UploadToPinataParams} params - The parameters for the upload.
- * @returns {Promise<PinataPinResponse | null>} A promise that resolves with the response from Pinata, or null if an error occurred.
+ * @returns {Promise<PinataPinResponse>} A promise that resolves with the response from Pinata, or null if an error occurred.
  * @throws Will throw an error if the upload fails.
  */
 export const uploadToIPFS = async ({
   data,
   config,
   type
-}: UploadToPinataParams): Promise<PinataPinResponse | null> => {
+}: UploadToPinataParams): Promise<PinataPinResponse> => {
   try {
     const { name, body } = data
     const { pinataKey, pinataSecret } = config
-    pinataConfig.headers.pinata_api_key = pinataKey || ''
-    pinataConfig.headers.pinata_secret_api_key = pinataSecret || ''
+    pinataConfig.headers.pinata_api_key =
+      pinataKey || process.env.PINATA_KEY || ''
+    pinataConfig.headers.pinata_secret_api_key =
+      pinataSecret || process.env.PINATA_SECRET || ''
 
     let pinataResp = null
 
@@ -144,8 +146,10 @@ export const testPinataConnection = async (
   config: PinataConfig
 ): Promise<string> => {
   const { pinataKey, pinataSecret } = config
-  pinataConfig.headers.pinata_api_key = pinataKey || ''
-  pinataConfig.headers.pinata_secret_api_key = pinataSecret || ''
+  pinataConfig.headers.pinata_api_key =
+    pinataKey || process.env.PINATA_KEY || ''
+  pinataConfig.headers.pinata_secret_api_key =
+    pinataSecret || process.env.PINATA_SECRET || ''
   const url = `${pinataConfig.root}/data/testAuthentication`
   const response = await fetch(url, {
     method: 'GET',
@@ -163,23 +167,35 @@ export const testPinataConnection = async (
  * @function fetchFromIPFS
  * @param {string} cid - The CID of the file to fetch.
  * @param {string} type - The type of the file ('meta' for JSON and 'asset' for binary data).
- * @returns {Promise<string | Uint8Array>} A promise that resolves with the file data as a string or a Uint8Array.
+ * @param {@link PinataConfig} config - The configuration for the Pinata API.
+ * @returns {Promise<AssetNode | Uint8Array>} A promise that resolves with the file data as a string or a Uint8Array.
  * @throws Will throw an error if the fetch fails.
  */
 export const fetchFromIPFS = async (
   cid: string,
-  type: string
-): Promise<AssetNode | Uint8Array | null> => {
-  const url = `https://gateway.pinata.cloud/ipfs/${cid}`
-  const response = await fetch(url)
-  let data: AssetNode | Uint8Array | null = null
+  type: string,
+  config: PinataConfig
+): Promise<AssetNode | Uint8Array> => {
+  const _cid = cid.replace('ipfs://', '')
+  const { pinataKey, pinataSecret } = config
+  const url = `https://gateway.pinata.cloud/ipfs/${_cid}`
+  pinataConfig.headers.pinata_api_key =
+    pinataKey || process.env.PINATA_KEY || ''
+  pinataConfig.headers.pinata_secret_api_key =
+    pinataSecret || process.env.PINATA_SECRET || ''
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: pinataConfig.headers
+  })
+
   if (type === 'meta') {
-    data = await response.json()
-    data
+    const data = (await response.json()) as AssetNode
+
+    return data
   } else {
     const resp = await response.arrayBuffer()
-    data = new Uint8Array(resp)
-  }
+    const data = new Uint8Array(resp)
 
-  return data
+    return data
+  }
 }

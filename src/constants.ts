@@ -14,7 +14,6 @@
 export const getIdentityContractAddress = (stage: string): string => {
   switch (stage) {
     case 'testnet':
-      // return '0x071024B916148d99d53318f5239C30dc5934900D'
       return '0x27BA7E931906FebA79dED5d32947b12f30379135'
     case 'mainnet':
       return '0xe2547fe5E99a08357083cFA42C6CDC0Cf5D65215'
@@ -26,7 +25,6 @@ export const getIdentityContractAddress = (stage: string): string => {
 export const getGraphContractAddress = (stage: string): string => {
   switch (stage) {
     case 'testnet':
-      // return '0xa013F34007cEc963e4F450e1eff8844BA74176F4'
       return '0xEF2E371BaFAe46a116519F18A1cfF750570E8842'
     case 'mainnet':
       return '0x41BC4B37093F156B1BAC7785e85fE5b25203f0C8'
@@ -34,3 +32,6 @@ export const getGraphContractAddress = (stage: string): string => {
       throw new Error('stage can be either testnet or mainnet')
   }
 }
+
+// 1 day: 60 secs by 60 mins by 24 hrs deadline for the signature to be valid till transaction is mined
+export const SIGNATURE_DEADLINE = 60 * 60 * 24

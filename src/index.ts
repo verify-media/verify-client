@@ -22,20 +22,23 @@ export {
   unRegisterRoot,
   register,
   unregister,
-  signRequest,
   publish,
   setUri,
-  publishBulk,
   createNode,
   setAccessAuth,
   setReferenceAuth,
   changeParent,
-  submitRequest,
   buildAssetPayload,
   addEncryptionData,
   addIPFSData,
-  addSignatureData
+  addSignatureData,
+  buildArticleBody,
+  registerOrg,
+  createArticleNode,
+  createLicenseNode
 } from './write'
+
+export { publishArticle } from './write/publish-templates'
 
 export {
   fetchFromIPFS,
@@ -53,8 +56,15 @@ export {
   getNodesCreated,
   checkAuth,
   checkRefAuth,
-  getTokenToNode
+  getTokenToNode,
+  getArticleProvenance,
+  getParentNode,
+  getChildrenNodes,
+  getAssetDetails,
+  decrypt
 } from './read'
+
+export { NodeType as NODE_TYPE } from './graph/protocol/types'
 export { LocationProtocol, ContentTypes, MIME_TYPES } from './types/schema'
 export { init, getConfig } from './utils/config'
 export { STAGE } from './types/app'
@@ -65,7 +75,7 @@ export type {
   NodeType,
   Node,
   ContentNode,
-  ContentGraphNode,
-  CHAINS,
-  CHAIN_IDS
+  ContentGraphNode
 } from './graph/protocol/types'
+
+export { version } from './version'

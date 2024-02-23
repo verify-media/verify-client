@@ -1,6 +1,6 @@
 // Copyright 2023 Blockchain Creative Labs LLC
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -15,6 +15,7 @@ import { IPFSResponse, UploadToIPFSParams } from './types'
 import fetch, { Headers, FormData } from 'node-fetch'
 import { debugLogger } from '../../utils/logger'
 import { AssetNode } from '../../types/schema'
+import { ensureIPFS } from '../../utils/app'
 
 //TODO explore https://github.com/ipfs/js-kubo-rpc-client
 /**
@@ -45,11 +46,6 @@ export const uploadToIPFS = async ({
   if (type === 'meta') {
     //TODO add validation on body type
     debugLogger().debug('uploading meta')
-    const asset = body as AssetNode
-    const { 'lit-protocol': litProtocol } = asset.data?.access || {}
-    if (asset.data?.encrypted && !litProtocol?.ciphertext) {
-      throw new Error('encrypted asset is missing ciphertext')
-    }
     formData.set('file-upload', JSON.stringify(body))
   } else {
     //TODO add validation on body type
@@ -96,7 +92,8 @@ export const fetchFromIPFS = async (
   ipfsGateway: string
 ): Promise<AssetNode | Uint8Array | null> => {
   debugLogger().debug(cid)
-  const url = `${ipfsGateway}/${cid}`
+  const _cid = ensureIPFS(cid).split('ipfs://')[1]
+  const url = `${ipfsGateway}/${_cid}`
   debugLogger().debug(url)
   const response = await fetch(url)
   debugLogger().debug(response)

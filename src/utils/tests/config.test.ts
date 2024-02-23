@@ -70,28 +70,6 @@ describe('test config operations', () => {
     }
   })
 
-  test('it throws error pvtKey are not set', () => {
-    mockEmptyEnvVars()
-    try {
-      init({
-        stage: STAGE.testnet,
-        rootPvtKey: '',
-        pvtKey: '',
-        rpcUrl: '',
-        walletExpiryDays: 1
-      })
-    } catch (e) {
-      expect(e instanceof Error).toBe(true)
-      if (e instanceof Error) {
-        message = e.message
-      }
-    } finally {
-      expect(message).toBe(
-        'this sdk accepts a private key, you can set an env var PVT_KEY or pass params to this function'
-      )
-    }
-  })
-
   test('it throws error rpcUrl is not set', () => {
     mockEmptyEnvVars()
     try {

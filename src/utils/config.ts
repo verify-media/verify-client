@@ -18,7 +18,7 @@ import {
 import { Config, Settings, STAGE } from '../types/app'
 import { setDebug } from './logger'
 
-export const { init, getConfig, clearConfig, unset } = (() => {
+export const { init, getConfig, clearConfig, unset, set } = (() => {
   let _config: Config = {
     stage: '',
     pvtKey: '',
@@ -62,11 +62,6 @@ export const { init, getConfig, clearConfig, unset } = (() => {
     if (!_config.stage) _config.stage = stage
 
     const pvtKey = config?.pvtKey || process.env.PVT_KEY || ''
-    if (!pvtKey) {
-      throw new Error(
-        'this sdk accepts a private key, you can set an env var PVT_KEY or pass params to this function'
-      )
-    }
     if (!_config.pvtKey) _config.pvtKey = pvtKey
 
     const rpcUrl = config?.rpcUrl || process.env.RPC_URL || ''
@@ -132,7 +127,6 @@ export const { init, getConfig, clearConfig, unset } = (() => {
   const getConfig = (): Config => {
     const keysToCheck = [
       'stage',
-      'pvtKey',
       'rpcUrl',
       'chainId',
       'chain',
@@ -178,5 +172,14 @@ export const { init, getConfig, clearConfig, unset } = (() => {
     delete _config[keyName]
   }
 
-  return { init, getConfig, clearConfig, unset }
+  /**
+   * @hidden
+   */
+  const set = (keyName: keyof Config, value: string): void => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    _config[keyName] = value
+  }
+
+  return { init, getConfig, clearConfig, unset, set }
 })()

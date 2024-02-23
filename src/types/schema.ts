@@ -73,6 +73,7 @@ export type AssetNodeData = {
     algo: HashingAlogs
     hash: string
   }
+  history: string[]
 }
 
 /**
@@ -89,7 +90,7 @@ export type AssetNode = {
   signature: Signature
 }
 
-type Authority = {
+export type Authority = {
   name: string
   contact: string
 }
@@ -126,6 +127,8 @@ type ContentMetadata = {
   authority: Authority
   contentType: MIME_TYPES // only supported mime types
   published: string
+  ownership: 'owned' | 'licensed' | 'referenced'
+  licensedFrom?: string
   metadata: Record<string, unknown>
 }
 
@@ -143,12 +146,9 @@ type VideoMetadata = {
   duration?: number
 } & ContentMetadata
 
-/**
- * @hidden
- */
 export type Content = TextMetadata | ImageMetadata | VideoMetadata
 
-type ArticleMetadata = {
+export type ArticleMetadata = {
   title: string
   description: string
   uri: string
@@ -158,12 +158,9 @@ type ArticleMetadata = {
   dateUpdated: string
   authority: Authority
   id: string
-  metadata?: Record<string, unknown>
+  optionalData?: Record<string, unknown>
 }
 
-/**
- * @hidden
- */
 export type Article = {
   metadata: ArticleMetadata
   contents: Content[]

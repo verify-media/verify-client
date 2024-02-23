@@ -17,7 +17,7 @@ import {
   fetchFileFromPinata,
   verifyAsset,
   AssetNode
-} from '@verify-media/verify-client'
+} from '@verifymedia/client'
 import dotenv from 'dotenv'
 import fs from 'fs'
 
@@ -31,12 +31,17 @@ async function consumeContent(assetId: string): Promise<{
   signer: string
   root: string
 }> {
+  const pinataConfig = {
+    pinataKey: process.env.PINATA_KEY || '',
+    pinataSecret: process.env.PINATA_SECRET || ''
+  }
   console.log('fetching details for assetId: ', assetId)
   const assetNode = await getNode(assetId)
   console.log(`fetching asset meta from ipfs @ ${assetNode.uri}`)
   const assetMeta = (await fetchFileFromPinata(
     assetNode.uri,
-    'meta'
+    'meta',
+    pinataConfig
   )) as AssetNode
   const asset = assetMeta
   const assetUri = asset.data.locations.filter((location) => {
@@ -45,14 +50,15 @@ async function consumeContent(assetId: string): Promise<{
   console.log(`fetching actual asset from ipfs @ ${assetUri}`)
 
   if (asset.data.type === 'text/html') {
-    const assetBody = await fetchFileFromPinata(assetUri, 'asset')
+    const assetBody = await fetchFileFromPinata(assetUri, 'asset', pinataConfig)
     const decoder = new TextDecoder()
     const decryptedString = decoder.decode(assetBody as Uint8Array)
     console.log('decryptedString ===> ', decryptedString)
   } else {
     const assetBody = (await fetchFileFromPinata(
       assetUri,
-      'asset'
+      'asset',
+      pinataConfig
     )) as Uint8Array
     const buffer = Buffer.from(assetBody)
     // Write buffer to a file

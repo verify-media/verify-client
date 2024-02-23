@@ -16,6 +16,17 @@ import { ContractInterface } from 'ethers'
 export type CHAINS = 'mumbai' | 'polygon'
 export type CHAIN_IDS = 80001 | 137
 
+export type LinkToken = {
+  token: string
+  expiry: number
+  deadline: number
+}
+
+export type UnLinkToken = {
+  token: string
+  deadline: number
+}
+
 /**
  * @hidden
  */

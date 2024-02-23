@@ -19,7 +19,7 @@ other critical dependencies
 install the sdk
 
 ```bash
-npm i @verify-media/verify-client
+npm i @verifymedia/client
 ```
 
 or
@@ -33,13 +33,37 @@ npm i
 npm run build
 npm link
 cd example
-npm link @verify-media/verify-client
+npm link @verifymedia/client
 touch .env
 ```
 
 your environment should now be setup to use the sdk build as a node module in the example app. Copy contents of .env.test to .env and set the following environment variables as mentioned in the following guide
 
-## Scripts
+# Setup
+
+please refer the [getting started](https://github.com/verify-media/verify-client/blob/public-release/GETTING_STARTED.md) guide.
+
+## Examples
+
+- ### Register the publisher and Init Org Structure
+
+  ```bash
+  npm run init-publisher
+  ```
+
+  this script registers the root and intermediate identities for a publisher and also initializes the org structure on verify protocol. During this process and org node and original material node are created on the protocol. This is a one time configuration for a publisher on the protocol, please update the orgNodeId and originalMaterialNodeId in the .env file for future use as follows:
+  
+- ### Publish article
+
+  ```bash
+  npm run publish-article <orgNodeId> <ogNodeId>
+  # npm run publish-article 0x20601de6e456a9819d83f58573beaa49315dfd3af31bb030e4d85e19c3beb07f 0xeb6a6499ad57495ca0687e648821fe3b64df8a3c661eea30c2aed2f00eb1fdd8
+  ```
+
+  this script demonstrates publishing of an article and its contents using a workflow such that content's provenance and usage context is always maintained while considering ownership and licenses.
+
+
+## Other Scripts
 
 - ### gen-wallet:
 
@@ -55,52 +79,80 @@ your environment should now be setup to use the sdk build as a node module in th
   npm run get-balance
   ```
 
-# Setup
-
-please refer the [getting started](https://github.com/verify-media/verify-client/blob/public-release/GETTING_STARTED.md) guide.
-
-## Examples
-
-- ### Register the root wallet
-
+- ### transfer:
+  transfer some amount of ether from one wallet to another
   ```bash
-  npm run register-root
+  npm run transfer <to> <amount>
+  ```
+  example:
+  ```bash
+  npm run transfer 0x20601de6e456a9819d83f58573beaa49315dfd3af31bb030e4d85e19c3beb07f 0.1
   ```
 
-  this script registers the root wallet on the blockchain. This is a one time activity. Once the root wallet is registered, multiple intermediate wallets can be registered under the root wallet.
-
-- ### Register intermediate wallet with the root wallet
-
+- ### org-nodes:
+  creates an org node and an original material node on the protocol for the configured root and intermediate identities
   ```bash
-  npm run register
+  npm run org-nodes
   ```
 
-  this script registers the intermediate wallet on the blockchain. This is a one time activity. Once the intermediate wallet is registered you can start publishing contnet using the intermediate wallet.
+- ### read:
+  reads the content and hierarchy of an asset stored on the protocol
+  ```bash
+  npm run read <assetId>
+  ```
+  example:
+  ```bash
+  npm run read 0x20601de6e456a9819d83f58573beaa49315dfd3af31bb030e4d85e19c3beb07f
+  ```  
 
-- ### Check status of wallets
+- ### children:
+  reads the content of all children nodes of the given node
+  ```bash
+  npm run children <nodeId>
+  ```
+  example:
+  ```bash
+  npm run children 0x20601de6e456a9819d83f58573beaa49315dfd3af31bb030e4d85e19c3beb07f
+  ```  
 
+- ### status:
+  gets the status of the configured root and intermediate identities
   ```bash
   npm run status
   ```
 
-  this script checks the status of the root wallet and the intermediate wallet
+- ### register-root:
+  registers the configured root identity on the protocol
+  ```bash
+  npm run register-root
+  ```
 
-- ### Publish content
+- ### register:
+  registers and links the configured intermediate identity to the root identity on the protocol
+  ```bash
+  npm run register
+  ```
 
+- ### unregister-root:
+  un registers the configured root identity on the protocol
+  ```bash
+  npm run unregister-root
+  ```
+
+- ### unregister:
+  un registers and unlinks the configured intermediate identity to the root identity on the protocol
+  ```bash
+  npm run unregister
+  ```
+
+- ### publish:
+  demonstrates a simple publish of asset on the protocol. <b>Note that this is a simple publish and does not maintain the provenance and usage context of the asset</b>
   ```bash
   npm run publish
   ```
 
-  this script publishes content on the blockchain (in this example the content is encrypted using [lit protocol](https://www.litprotocol.com/))
-
-- ### Verify content
-
-  you need to pass an asset id to verify content, you could get the asset id from the publish script output
-
+- ### consume:
+  demonstrates a simple consumption of asset from the protocol. Reads the asset details from chain and then from ipfs also decrypts the content and writes it to a file
   ```bash
-  npm run consume <asset_id>
+  npm run consume
   ```
-
-  this script verifies content / also shows how to consume content from verify protocol (content is decrypted using [lit protocol](https://www.litprotocol.com/))
-
-**_please explore the /src folder for more examples_**

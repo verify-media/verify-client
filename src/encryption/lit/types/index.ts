@@ -29,7 +29,7 @@ export type SiweMessageParams = {
  * @remarks
  * type definition for lit encryption return type
  */
-export type ReturnType = {
+export type EncryptAssetResponse = {
   ciphertext: string
   dataToEncryptHash: string
 }

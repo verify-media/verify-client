@@ -58,21 +58,6 @@ describe('testPinataConnection function', () => {
     fetchMock.resetMocks()
   })
 
-  it('should call fetch with the correct url and options when env vars are set', async () => {
-    const mockResponseData = { data: 'mockData' }
-    fetchMock.mockResponseOnce(JSON.stringify(mockResponseData))
-
-    await testPinataConnection(mockConfig)
-
-    expect(fetchMock).toHaveBeenCalledWith(
-      `${pinataConfig.root}/data/testAuthentication`,
-      {
-        method: 'GET',
-        headers: pinataConfig.headers
-      }
-    )
-  })
-
   it('should call fetch with the correct url and options when env vars are not set', async () => {
     const mockResponseData = { data: 'mockData' }
     fetchMock.mockResponseOnce(JSON.stringify(mockResponseData))
@@ -185,7 +170,8 @@ describe('fetchFromIPFS function', () => {
   it('should return the uploaded data when the fetch call succeeds for type non meta', async () => {
     const result = await fetchFromIPFS(
       'bafkreietiyihc5o6klsndpyhv2j7lpxqfstbjbtyphlafwemxz6reczhse',
-      'file'
+      'file',
+      mockConfig
     )
     const imageHash = await hashImage(imageUrl)
     const expectedHash = rawHash(result as Uint8Array)
@@ -203,7 +189,8 @@ describe('fetchFromIPFS function', () => {
 
     const result = await fetchFromIPFS(
       'bafkreiezu2gp5eprrw7rr54qmwwhs33k5elf42dwea2i7o3bpcwuohc7hm',
-      'meta'
+      'meta',
+      mockConfig
     )
     expect(JSON.stringify(result)).toEqual(
       JSON.stringify({
