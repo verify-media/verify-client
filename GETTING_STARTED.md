@@ -81,7 +81,7 @@ console.log(config.STAGE)
 
 _Note: if the rpc url configured in this example fails you could pick any other https based rpc url from [here](https://chainlist.org/?search=mumbai&testnets=true)_
 
-## Publishing Example
+## Publishing
 
 <b>Note: its important to follow the workflow mentioned in these 2 examples since it publishes content with a certain hierarchy which helps to maintain content provenance and context over a period of time</b>
 
