@@ -1,6 +1,6 @@
 // Copyright 2023 Blockchain Creative Labs LLC
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -17,14 +17,13 @@ import {
   Article,
   AssetNode,
   AssetNodeData,
+  Content,
   LocationProtocol,
   Signature
 } from '../types/schema'
 import { getConfig } from '../utils/config'
-import { SiweMessage } from 'siwe'
-import { SiweMessageParams } from 'src/encryption/lit/types'
-import { hashData, hash, isValidAssetNode } from '../utils/app'
-import { ReturnType } from '../encryption/lit/types'
+import { hashData, hash, isValidAssetNode, ensureIPFS } from '../utils/app'
+import { EncryptAssetResponse } from '../encryption/lit/types'
 export { uploadToIPFS } from '../storage/ipfs'
 export { uploadToIPFS as uploadToPinata } from '../storage/pinata'
 export { encryptAsset } from '../encryption/lit'
@@ -41,7 +40,10 @@ export {
   createNode,
   setAccessAuth,
   setReferenceAuth,
-  changeParent
+  changeParent,
+  registerOrg,
+  createArticleNode,
+  createLicenseNode
 } from '../graph/protocol'
 export { hashData, hash }
 
@@ -92,8 +94,9 @@ const sign = async (message: string): Promise<Signature> => {
  * Signs asset node data.
  *
  * @param {@link AssetNodeData} assetNodeData - The asset node data to sign.
- * @throws {Error} If failed to generate signature.
  * @returns {Promise<{@link Signature}>} A promise that resolves with the signature of the asset node data.
+ *
+ * @throws {Error} If failed to generate signature.
  */
 export const signAssetNode = async (
   assetNodeData: AssetNodeData
@@ -110,119 +113,6 @@ export const signAssetNode = async (
   const signature = await sign(hash)
 
   return signature
-}
-
-/**
- *
- * @param param0
- * @returns
- * @hidden
- */
-const generateSIWEMessage = async ({
-  address,
-  chainId,
-  uri = 'http://localhost/login',
-  version = '1',
-  domain = 'localhost',
-  origin = ''
-}: SiweMessageParams): Promise<string> => {
-  let statement = 'signed by ${origin} with root ${address}'
-  statement = statement.replace('${origin}', origin)
-  statement = statement.replace('${address}', address)
-  const siweMessage = new SiweMessage({
-    domain,
-    chainId,
-    statement,
-    uri,
-    version,
-    address
-  })
-
-  return siweMessage.prepareMessage()
-}
-
-/**
- *
- * @param origin
- * @returns
- * @hidden
- */
-export const signRequest = async (
-  origin: string
-): Promise<{
-  signature: string
-  message: string
-}> => {
-  const { rootPvtKey, chainId } = getConfig()
-  if (!rootPvtKey) {
-    throw new Error(
-      'rootPvtKey cannot be empty, either set and env var ROOT_PVT_KEY or pass a value to this function'
-    )
-  }
-  const wallet = new Wallet(rootPvtKey)
-  const message = await generateSIWEMessage({
-    address: wallet.address,
-    chainId: chainId,
-    origin
-  })
-  const signature = await wallet.signMessage(message)
-
-  return { signature, message }
-}
-
-const fetchControlPlane = async (
-  body: string,
-  signature: string,
-  origin: string
-): Promise<{
-  traceId: string
-  message: string
-}> => {
-  const apiHeaders = new Headers()
-  apiHeaders.append('x-signature', signature)
-  apiHeaders.append('x-origin', origin)
-  apiHeaders.append('Content-Type', 'application/json')
-
-  const requestOptions: RequestInit = {
-    method: 'POST',
-    headers: apiHeaders,
-    body: body,
-    redirect: 'follow'
-  }
-
-  const apiUrl = process.env.SUBMIT_ARTICLE_URL || ''
-  const resp = await fetch(apiUrl, requestOptions)
-
-  const data = await resp.json()
-
-  return data
-}
-
-/**
- * allows you to submit a request to publish an article using verify's publish pipeline.
- * to start using verify's publish pipeline please [contact us](https://www.verifymedia.com/contact-us.html)
- * @param article {@link Article}
- * @param origin
- * @returns a promise that resolves with a traceId, which can be used to further poll the system for the status of the request.
- */
-export const submitRequest = async (
-  article: Article,
-  origin: string
-): Promise<{
-  traceId: string
-  message: string
-}> => {
-  const body = {
-    message: '',
-    payload: article,
-    action: 'create'
-  }
-  const { signature, message } = await signRequest(origin)
-  body.message = message
-
-  const resp = await fetchControlPlane(JSON.stringify(body), signature, origin)
-
-  return resp
 }
 
 /**
@@ -250,7 +140,8 @@ export const buildAssetPayload = (assetHash: string): AssetNode => {
       contentBinding: {
         algo: 'keccak256',
         hash: assetHash
-      }
+      },
+      history: []
     },
     signature: {
       curve: 'secp256k1',
@@ -264,15 +155,60 @@ export const buildAssetPayload = (assetHash: string): AssetNode => {
 }
 
 /**
+ * Builds an XML string with a predefined schema to represent the article metadata and content association on chain. This data gets published as a text asset on chain.
+ * @param article payload of type {@link Article}
+ * @param articleBody main text content of the article
+ * @param otherContents other contents of the article like images, videos etc.
+ * @returns an XML string with a predefined schema to represent the article metadata and content association on chain
+ * @hidden
+ */
+export const buildArticleBody = (
+  article: Article,
+  articleBody: string,
+  otherContents: Array<Content & { hash: string }>
+): string => {
+  const xmlBody = `
+  <article>
+    <header>
+      <title>${article.metadata.title}</title>
+      <description>${article.metadata.description}</description>
+      <datePublished>${article.metadata.datePublished}</datePublished>      
+      <id>${article.metadata.id}</id>
+      <canonicalUrl>${article.metadata.uri}</canonicalUrl>
+      <publishedBy>${article.metadata.origin}</publishedBy>
+    </header>
+    <main>
+      <section>
+        ${articleBody}
+      </section>
+    </main>
+    <contents>
+      ${otherContents.map((content) => {
+        return `<image>
+                  <title>${content.title}</title>
+                  <contentType>${content.contentType}</contentType>
+                  <description>${content.description}</description>
+                  <creditedSource>${content.creditedSource}</creditedSource>
+                  <hash>${content.hash}</hash>
+                </image>`
+      })}
+    </contents>
+  </article>
+`
+
+  return xmlBody
+}
+
+/**
  * Adds encryption data to an {@link AssetNode} object.
  *
  * @param asset - The {@link AssetNode} object to add the encryption data to.
- * @param encryptedAsset - The encrypted asset data of type {@link ReturnType}
+ * @param encryptedAsset - The encrypted asset data of type {@link EncryptAssetResponse}
  * @returns The {@link AssetNode} object with the added encryption data.
  */
 export const addEncryptionData = (
   asset: AssetNode,
-  encryptedAsset: ReturnType
+  encryptedAsset: EncryptAssetResponse
 ): AssetNode => {
   asset.data.access = {
     'lit-protocol': {
@@ -292,8 +228,10 @@ export const addEncryptionData = (
  * @returns The {@link AssetNode} object with the added IPFS data.
  */
 export const addIPFSData = (asset: AssetNode, IpfsHash: string): AssetNode => {
+  if (!IpfsHash) throw new Error('ipfs hash cannot be empty')
+
   asset.data.locations.push({
-    uri: IpfsHash || '',
+    uri: ensureIPFS(IpfsHash),
     protocol: LocationProtocol.IPFS
   })
 

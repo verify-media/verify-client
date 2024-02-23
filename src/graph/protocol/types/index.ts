@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import { BigNumber, ContractInterface } from 'ethers'
-
-export type CHAINS = 'mumbai' | 'polygon'
-export type CHAIN_IDS = 80001 | 137
+import { AssetNode } from '../../../types/schema'
 
 /**
  * @hidden
@@ -39,6 +37,13 @@ export type ContentNode = PublishParam & {
 }
 
 /**
+ * @hidden
+ */
+export type RefContentNode = PublishParam & {
+  nodeType: NodeType.REFERENCE
+}
+
+/**
  * @remarks
  * type definition for node on verify protocol
  */
@@ -47,6 +52,25 @@ export type Node = {
   parentId: string
   nodeType: NodeType
   referenceOf: string
+}
+
+export type AssetDetails = {
+  assetId: string
+  type: string
+  provenance: AssetNode
+  location: string
+  orgStruct: string[]
+}
+
+export type OrgStruct = {
+  org: {
+    id: string
+    txnHash: string
+  }
+  originalMaterial: {
+    id: string
+    txnHash: string
+  }
 }
 
 /**
@@ -61,8 +85,8 @@ export type PublishParams = Array<PublishParam>
  * type of nodes stored on verify protocol
  */
 export enum NodeType {
-  ADMIN,
-  COLLECTION,
+  ORG,
+  REFERENCE,
   ASSET
 }
 

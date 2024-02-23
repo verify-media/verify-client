@@ -22,7 +22,11 @@ import {
   whoIs,
   rootName,
   nameToRoot,
-  getSigningWalletNonce
+  getSigningWalletNonce,
+  unRegisterRootFromVerify,
+  registerRootWithVerify,
+  getContractInstance,
+  genTypedSignatureHash
 } from '../index'
 import { ethers, Wallet, Contract, utils } from 'ethers'
 import { IDENTITY_ABI } from '../types'
@@ -45,7 +49,11 @@ jest.mock('ethers', () => {
       defaultAbiCoder: {
         ...original.utils.defaultAbiCoder,
         encode: jest.fn().mockImplementation(() => '0x0123456789abcdef')
-      }
+      },
+      SigningKey: jest.fn().mockImplementation(() => ({
+        signDigest: jest.fn()
+      })),
+      joinSignature: jest.fn()
     },
     Wallet: jest.fn().mockImplementation(() => ({
       ...originalWallet,
@@ -279,11 +287,92 @@ describe('identity functions', () => {
     )
   })
 
-  it('should fail to get root nonce for signer wallet address if config is not set', async () => {
-    unset('pvtKey')
-    await expect(getSigningWalletNonce()).rejects.toThrow(
-      'empty values found in config'
+  it('should un register root using the rootwallet address passed as a parameter and return transaction hash', async () => {
+    const mockReceipt = await mockTransactionResponse.wait()
+    const receipt = await unRegisterRootFromVerify(mockRootAddress)
+    expect(Wallet).not.toHaveBeenCalledWith(
+      config.rootPvtKey,
+      new ethers.providers.JsonRpcProvider(config.rpcUrl)
     )
-    config = init()
+
+    expect(Wallet).toHaveBeenCalledWith(
+      config.pvtKey,
+      new ethers.providers.JsonRpcProvider(config.rpcUrl)
+    )
+
+    expect(Contract).toHaveBeenCalledWith(
+      config.identityContractAddress,
+      IDENTITY_ABI,
+      expect.anything()
+    )
+
+    expect(JSON.stringify(receipt)).toBe(JSON.stringify(mockReceipt))
+  })
+
+  it('should register root using the rootwallet address passed as a parameter and return transaction hash', async () => {
+    const mockReceipt = await mockTransactionResponse.wait()
+    const receipt = await registerRootWithVerify(mockRootAddress, mockOrgName)
+    expect(Wallet).not.toHaveBeenCalledWith(
+      config.rootPvtKey,
+      new ethers.providers.JsonRpcProvider(config.rpcUrl)
+    )
+
+    expect(Wallet).toHaveBeenCalledWith(
+      config.pvtKey,
+      new ethers.providers.JsonRpcProvider(config.rpcUrl)
+    )
+
+    expect(Contract).toHaveBeenCalledWith(
+      config.identityContractAddress,
+      IDENTITY_ABI,
+      expect.anything()
+    )
+
+    expect(JSON.stringify(receipt)).toBe(JSON.stringify(mockReceipt))
+  })
+
+  it('should instantiate contract when pvtKey is set', async () => {
+    await getContractInstance()
+
+    expect(Wallet).toHaveBeenCalledWith(
+      config.pvtKey,
+      new ethers.providers.JsonRpcProvider(config.rpcUrl)
+    )
+
+    expect(Contract).toHaveBeenCalledWith(
+      config.identityContractAddress,
+      IDENTITY_ABI,
+      expect.anything()
+    )
+  })
+})
+
+describe('genTypedSignatureHash', () => {
+  it('returns the serialized signature', async () => {
+    const keccak256Spy = jest
+      .spyOn(utils, 'keccak256')
+      .mockReturnValue('mockHash')
+
+    const uint8array = new TextEncoder().encode('Hello World')
+    const arrayifySpy = jest
+      .spyOn(utils, 'arrayify')
+      .mockReturnValue(uint8array)
+
+    await genTypedSignatureHash('structData', 'domainseparator')
+
+    expect(keccak256Spy).toHaveBeenCalled()
+    keccak256Spy.mockRestore()
+    expect(arrayifySpy).toHaveBeenCalled()
+    arrayifySpy.mockRestore()
+    expect(utils.joinSignature).toHaveBeenCalled()
+  })
+
+  it('throws an error if rootPvtKey is not set', async () => {
+    unset('rootPvtKey')
+    await expect(
+      genTypedSignatureHash('structData', 'domainseparator')
+    ).rejects.toThrow(
+      'rootPvtKey cannot be empty, either set and env var ROOT_PVT_KEY or pass a value to this function'
+    )
   })
 })

@@ -11,12 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import { assetNode } from '../../__fixtures__/data'
 import {
   ensureHttps,
   ensureIPFS,
   hashData,
   isObjectEmpty,
   isObjectValuesEmpty,
+  isValidAssetNode,
   race
 } from '../app'
 
@@ -158,5 +160,21 @@ describe('hashData', () => {
     const result2 = hashData(data2)
 
     expect(result1).not.toBe(result2)
+  })
+})
+
+describe('isValidAssetNode', () => {
+  it('should throw an error if schema is incorrect', () => {
+    const _assetNode = { ...assetNode }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    delete _assetNode.description
+    const resp = isValidAssetNode(_assetNode)
+    expect(resp.error).toBeDefined()
+  })
+
+  it('should not throw an error if schema is correct', () => {
+    const resp = isValidAssetNode(assetNode)
+    expect(resp.error).not.toBeDefined()
   })
 })

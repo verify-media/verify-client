@@ -13,19 +13,21 @@
     "register": "npm run build && node ./src/identity-ops/register.js",
     "unregister": "npm run build && node ./src/identity-ops/unregister.js",
     "unregister-root": "npm run build && node ./src/identity-ops/unregister-root.js",
-    "status": "npm run build && node ./src/identity-ops/status.js",    
-    "create-wallet": "npm run build && node ./src/verify-publish-pipeline/create-wallet.js",
-    "link-wallet": "npm run build && node ./src/verify-publish-pipeline/link-wallet.js",
-    "fetch-wallet": "npm run build && node ./src/verify-publish-pipeline/fetch-wallet.js",
-    "submit-article": "npm run build && node ./src/verify-publish-pipeline/submit-article.js",
-    "all": "npm run build && node ./src/utils/all.js",
+    "status": "npm run build && node ./src/identity-ops/status.js",        
+    "publish-article": "npm run build && node ./src/sdk/publish-article.js",
+    "init-publisher": "npm run build && node ./src/sdk/init.js",
     "gen-wallet": "npm run build && node ./src/utils/gen-wallet.js",
-    "get-balance": "npm run build && node ./src/utils/get-balance.js"
+    "get-balance": "npm run build && node ./src/utils/get-balance.js",
+    "transfer": "npm run build && node ./src/utils/transferfunds.js",
+    "org-nodes": "npm run build && node ./src/utils/org-nodes.js",    
+    "read": "npm run build && node ./src/utils/read.js",
+    "children": "npm run build && node ./src/utils/children.js"    
   },
   "author": "bcl-eng",
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "alchemy-sdk": "^3.1.2",
     "ethers": "^5.7.0",
     "siwe": "^2.0.5"
   }

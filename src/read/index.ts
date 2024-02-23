@@ -13,10 +13,15 @@
 // limitations under the License.
 import { SiweMessage } from 'siwe'
 import { debugLogger } from '../utils/logger'
+import { AssetDetails } from '../graph/protocol/types'
+import { fetchFromIPFS } from '../storage/ipfs'
+import { decryptAsset } from '../encryption/lit'
+import { AssetNode } from 'src/types/schema'
+import { fetchFromIPFS as fetchFileFromPinata } from '../storage/pinata'
+export { fetchFileFromPinata }
 
 // limitations under the License.
 export { fetchFromIPFS } from '../storage/ipfs'
-export { fetchFromIPFS as fetchFileFromPinata } from '../storage/pinata'
 export { decryptAsset } from '../encryption/lit'
 export {
   whoIs,
@@ -32,7 +37,11 @@ export {
   getNodesCreated,
   checkAuth,
   checkRefAuth,
-  getTokenToNode
+  getTokenToNode,
+  getChildrenNodes,
+  getParentNode,
+  getArticleProvenance,
+  getAssetDetails
 } from '../graph/protocol'
 
 /**
@@ -84,4 +93,74 @@ export async function getImageData(url: string): Promise<Uint8Array> {
   debugLogger().debug(`gen buffer from image data blob`)
 
   return new Uint8Array(Buffer.from(buffer))
+}
+
+/**
+ * @hidden
+ */
+/* istanbul ignore next */
+export async function decrypt(
+  assetDetail: AssetDetails,
+  ipfsGateway = '',
+  pinataConfig?: {
+    pinataKey: string
+    pinataSecret: string
+  }
+): Promise<{
+  type: string
+  content: string | Buffer
+}> {
+  const assetMeta = assetDetail.provenance
+  let encContent: Uint8Array | AssetNode | null = null
+  if (pinataConfig?.pinataKey && pinataConfig?.pinataSecret) {
+    encContent = (await fetchFileFromPinata(
+      assetMeta.data.locations[0].uri,
+      'asset',
+      pinataConfig
+    )) as AssetNode
+  } else {
+    encContent = await fetchFromIPFS(
+      assetMeta.data.locations[0].uri,
+      'asset',
+      ipfsGateway
+    )
+  }
+
+  if (assetMeta.data.type === 'text/html') {
+    const decoder = new TextDecoder()
+    const decoded = decoder.decode(encContent as Uint8Array)
+
+    const ciphertext = assetMeta.data.access
+      ? assetMeta.data.access['lit-protocol']['ciphertext']
+      : ''
+
+    const decryptedAsset = await decryptAsset({
+      ciphertext: ciphertext,
+      dataToEncryptHash: decoded,
+      contentHash: assetMeta.data.contentBinding.hash
+    })
+    const decryptedString = decoder.decode(decryptedAsset as Uint8Array)
+
+    return {
+      type: assetMeta.data.type,
+      content: decryptedString
+    }
+  } else {
+    const decoder = new TextDecoder()
+    const decoded = decoder.decode(encContent as Uint8Array)
+    const ciphertext = assetMeta.data.access
+      ? assetMeta.data.access['lit-protocol']['ciphertext']
+      : ''
+    const decryptedAsset = await decryptAsset({
+      ciphertext: ciphertext,
+      dataToEncryptHash: decoded,
+      contentHash: assetMeta.data.contentBinding.hash
+    })
+    const buffer = Buffer.from(decryptedAsset)
+
+    return {
+      type: assetMeta.data.type,
+      content: buffer
+    }
+  }
 }

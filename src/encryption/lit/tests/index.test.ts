@@ -24,6 +24,11 @@ import { hashImage } from '../../../write'
 import { decryptToFile, encryptFile } from '@lit-protocol/lit-node-client'
 import { getDefaultAuth } from '../access'
 import { mockUnit8Array } from '../../../__fixtures__/data'
+import { mockEnvVars } from '../../../__fixtures__/env'
+
+mockEnvVars()
+
+const mockSignerWalletAddress = '0xC0ab82C83e3d8Ad1d998a38CbDEEf3f89d787eaa'
 
 const config = init({
   stage: '',
@@ -83,7 +88,7 @@ describe('test sign functions', () => {
   it('should be able to sign an auth message', async () => {
     const sign = await signAuthMessage()
     expect(sign).toBeDefined()
-    expect(sign.address).toBe('0xa65687578E904f5e9398EB63F036cB75FdC1f8e6')
+    expect(sign.address).toBe(mockSignerWalletAddress)
     expect(sign.derivedVia).toBe('web3.eth.personal.sign')
   })
 })

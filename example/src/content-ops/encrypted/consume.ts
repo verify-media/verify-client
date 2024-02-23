@@ -18,7 +18,7 @@ import {
   AssetNode,
   verifyAsset,
   decryptAsset
-} from '@verify-media/verify-client'
+} from '@verifymedia/client'
 import dotenv from 'dotenv'
 import fs from 'fs'
 
@@ -32,10 +32,18 @@ async function consumeContent(assetId: string): Promise<{
   signer: string
   root: string
 }> {
+  const pinataConfig = {
+    pinataKey: process.env.PINATA_KEY || '',
+    pinataSecret: process.env.PINATA_SECRET || ''
+  }
   console.log('fetching details for assetId: ', assetId)
   const assetNode = await getNode(assetId)
   console.log(`fetching asset meta from ipfs @ ${assetNode.uri}`)
-  const asset = (await fetchFileFromPinata(assetNode.uri, 'meta')) as AssetNode
+  const asset = (await fetchFileFromPinata(
+    assetNode.uri,
+    'meta',
+    pinataConfig
+  )) as AssetNode
   if (!asset.data.access || !asset.data.access['lit-protocol']) {
     throw new Error('asset is not encrypted')
   }
@@ -50,7 +58,11 @@ async function consumeContent(assetId: string): Promise<{
 
   console.log(`fetching actual asset from ipfs @ ${assetUri}`)
 
-  const dataToEncryptHash = await fetchFileFromPinata(assetUri, 'asset')
+  const dataToEncryptHash = await fetchFileFromPinata(
+    assetUri,
+    'asset',
+    pinataConfig
+  )
 
   if (asset.data.type === 'text/html') {
     const decoder = new TextDecoder()

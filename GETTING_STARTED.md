@@ -1,4 +1,4 @@
-_Note: this example assumes publishing on testnet using a [sandbox](https://docs.verifymedia.com/smart-contracts/#sandbox) env_
+_Note: this guide assumes publishing on testnet using a [sandbox](https://docs.verifymedia.com/smart-contracts/#sandbox) env_
 
 ## Configure
 
@@ -29,7 +29,7 @@ dotenv.config()
 - the sdk now can start using these settings
 
 ```bash
-import {init, getConfig} from '@verify-media/verify-client'
+import {init, getConfig} from '@verifymedia/client'
 init()
 const config = getConfig()
 console.log(config.STAGE)
@@ -39,14 +39,14 @@ console.log(config.STAGE)
 
   - a wallet funded with some matic. (_a private / public key pair required to sign transactions on the blockchain_)
   - [pinata](https://www.pinata.cloud/) (an ipfs service) credentials. (_storage for the content_)
-  - a rpc url for the [polygon testnet](https://mumbai.polygonscan.com/). (_allows for a developer to interact with an Ethereum node via HTTP(S)_)
+  - a rpc url for the polygon testnet. (_allows for a developer to interact with an Ethereum node via HTTP(S)_)
 
   lets go ahead and set these up
 
 - **Wallets**
-  - verify protocol expects a publisher to have an [root identity](https://www.pinata.cloud/) and an [intermediate identity](https://www.pinata.cloud/) which are represented by [wallets](https://ethereum.org/wallets)
+  - verify protocol expects a publisher to have an [root identity](https://docs.verifymedia.com/publishing/identity/#registering-a-root-identity) and an [intermediate identity](https://docs.verifymedia.com/publishing/identity/#creating-a-intermediate-identity) which are represented by [wallets](https://ethereum.org/wallets)
   - if you don't have an wallet already, you could set one up using
-    - [metamask](https://codehs.com/tutorial/jkeesh/how-to-set-up-an-ethereum-wallet-on-metamask)
+    - [metamask](https://codehs.com/tutorial/jkeesh/how-to-set-up-an-ethereum-wallet-on-metamask) (_<b>Note: this is NOT recommended in production / mainnet environments</b>_)
     - OR gen-wallet script from the [examples folder](https://github.com/verify-media/verify-client/blob/main/example/README.md)
       ```bash
       npm run gen-wallet
@@ -55,7 +55,7 @@ console.log(config.STAGE)
 - Copy private key and add it to .env against **ROOT_PVT_KEY**
 - Repeat the same steps to add an intermediate wallet and configure the private key in .env against **PVT_KEY**
 
-- Now that the wallets is created, add some funds.
+- Now that the wallets is created, add some funds to it.
   **Note: funds always need to be added to the intermediate wallet (public key) only**, since this is all on testnet (**not real money**) the intermediate wallet (_public key_) can be funded using one of the following faucets:
 
   - https://mumbaifaucet.com/
@@ -71,132 +71,77 @@ console.log(config.STAGE)
     ```bash
       npm run get-balance
     ```
-- All of the assets published on verify protocol are stored on IPFS, verify client sdk supports this via [pinata](https://www.pinata.cloud/) or your own IPFS cluster setup using [kubo](https://github.com/ipfs/kubo).
+- All of the content published on verify protocol are stored on IPFS, verify client sdk supports this via [pinata](https://www.pinata.cloud/) or your own IPFS cluster setup using [kubo](https://github.com/ipfs/kubo).
   For the purpose of this example lets setup a [free](https://www.pinata.cloud/pricing) pinata account. Configure the pinata api key and pinata secret add that to .env as
-  `bash
-PINATA_KEY=<PINATA_KEY>
-PINATA_SECRET=<PINATA_SECRET>
-`
+
+  ```bash
+  PINATA_KEY=<PINATA_KEY>
+  PINATA_SECRET=<PINATA_SECRET>
+  ```
 
 _Note: if the rpc url configured in this example fails you could pick any other https based rpc url from [here](https://chainlist.org/?search=mumbai&testnets=true)_
 
+## Publishing Example
+
+<b>Note: its important to follow the workflow mentioned in these 2 examples since it publishes content with a certain hierarchy which helps to maintain content provenance and context over a period of time</b>
+
+
+- ### Setting up the publisher identities and org structure 
+  #### prerequisite:
+  - root wallet exists and is configured with sdk.
+  - intermediate wallet exists and is configured with sdk.
+  - intermediate wallet is funded.
+
+  #### steps performed:
+  - register root wallet on verify protocol.
+  - link intermediate wallet with root wallet on verify protocol.
+  - create orgNode and OriginalMaterialNode on verify protocol for the given publisher. This is a one time configuration for a publisher on the protocol, please update the orgNodeId and originalMaterialNodeId in the .env file for future use as follows
+
+    ```bash
+    ORG_NODE=<orgNodeId>
+    OG_NODE=<ogNodeId>
+    ```
+
+  #### execute: 
+  - env [setup](https://github.com/bclxyz/np-client/blob/master/example/README.md) for examples folder
+
+    ```bash
+    npm run init-publisher
+    ```
+
+  <i>checkout the script in ./examples/src/sdk/init.ts for each individual step</i>
+
+- ### Publishing an article
+
+  #### prerequisite:
+  - orgNode exists and is passed as input.
+  - OriginalMaterialNode exists and is passed as input.
+  - intermediate wallet is funded.
+
+  #### steps performed:
+  - encrypt content.
+  - upload content to ipfs if it does not exist on verify protocol already.
+  - upload content meta to ipfs if its a new content or if metadata has changed for an existing content. (content metadata holds the location to actual content on ipfs).
+  - sign content metadata.
+  - publish on verify protocol <b>with the right hierarchy</b>
+
+
+  #### execute: 
+  env [setup](https://github.com/bclxyz/np-client/blob/master/example/README.md) for examples folder
+
+  ```bash
+  npm run publish-article <orgNodeId> <ogNodeId>
+  # npm run publish-article 0x20601de6e456a9819d83f58573beaa49315dfd3af31bb030e4d85e19c3beb07f 0xeb6a6499ad57495ca0687e648821fe3b64df8a3c661eea30c2aed2f00eb1fdd8
+  ```
+
+  <i>checkout the script in ./examples/src/sdk/publish-article.ts for each individual steps</i>
+
 ## How to ?
 
-you could refer the [examples](https://github.com/verify-media/verify-client/blob/main/example/README.md) demonstrating operations performed by the sdk.
+you could refer the [examples](https://github.com/verify-media/verify-client/blob/main/example/README.md) folder demonstrating operations performed by the sdk.
 
-## Simple Publishing Example
-
-- ### register root wallet
-
-```javascript
-import { registerRoot, init } from '@verify-media/verify-client'
-import dotenv from 'dotenv'
-dotenv.config()
-
-init()
-const resp = await registerRoot('my-org')
-console.log(resp.transactionHash)
-```
-
-- ### register intermediate wallet
-
-```javascript
-import { register, init } from '@verify-media/verify-client'
-import dotenv from 'dotenv'
-dotenv.config()
-
-init()
-const resp = await register()
-console.log(resp.transactionHash)
-```
-
-- ### publish asset
-
-```javascript
-import {
-  init,
-  hashData,
-  encryptAsset,
-  publish,
-  uploadToPinata,
-  signAssetNode,
-  buildAssetPayload,
-  addEncryptionData,
-  addIPFSData,
-  addSignatureData,
-  verifyAsset
-} from '@verify-media/verify-client'
-import dotenv from 'dotenv'
-dotenv.config()
-
-const config = init()
-
-const text = 'hello world'
-const hash = hashData(text) //asset hash acts as the asset id
-
-let asset = buildAssetPayload(hash)
-asset.data.description = 'sandbox sample string'
-asset.data.type = 'text/html'
-asset.data.encrypted = true
-asset.data.manifest.uri = 'https://verifymedia.com'
-asset.data.manifest.title = 'sandbox sample title'
-asset.data.manifest.creditedSource = 'verifymedia'
-asset.data.manifest.signingOrg.name = 'MY_ORG'
-asset.data.manifest.signingOrg.unit = 'MY_ORG'
-asset.data.manifest.published = new Date().toISOString()
-
-const blob = new Blob([text], { type: 'text/plain' })
-const encryptedAsset = await encryptAsset({
-  content: blob,
-  contentHash: hash
-})
-asset = addEncryptionData(asset, encryptedAsset)
-
-// upload the encrypted asset to ipfs
-const ipfsAssetUri = await uploadToPinata({
-  data: {
-    name: 'sandbox sample enc text asset',
-    body: new TextEncoder().encode(encryptedAsset.dataToEncryptHash) // since text needs to be converted to a blob
-  },
-  config: {
-    pinataKey: process.env.PINATA_KEY,
-    pinataSecret: process.env.PINATA_SECRET
-  },
-  type: 'asset'
-})
-
-asset = addIPFSData(asset, ipfsAssetUri?.IpfsHash || '')
-
-const signature = await signAssetNode(asset.data)
-asset = addSignatureData(asset, signature)
-
-// upload the asset meta data to ipfs
-const ipfsUri = await uploadToPinata({
-  data: {
-    name: 'sandbox sample string',
-    body: asset
-  },
-  config: {
-    pinataKey: process.env.PINATA_KEY,
-    pinataSecret: process.env.PINATA_SECRET
-  },
-  type: 'meta'
-})
-
-const ZeroHash =
-  '0x0000000000000000000000000000000000000000000000000000000000000000'
-
-resp = await publish(ZeroHash, {
-  id: hash,
-  uri: ipfsUri.IpfsHash || '',
-  referenceOf: ZeroHash
-})
-
-console.log(resp.transactionHash)
-
-const verifiedAsset = await verifyAsset(hash, asset)
-console.log(verifiedAsset)
-```
+## Content Hierarchy On Verify Protocol
+TODO
 
 ## Known Issues
 

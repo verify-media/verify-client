@@ -162,10 +162,10 @@ export function isValidAssetNode(asset: AssetNodeData): {
         .uri()
         .pattern(/^https:\/\//)
         .required(),
-      alt: Joi.string().optional(),
+      alt: Joi.string().allow('').optional(),
+      caption: Joi.string().allow('').optional(),
       title: Joi.string().required(),
       description: Joi.string().optional(),
-      caption: Joi.string().optional(),
       creditedSource: Joi.string().required(),
       signingOrg: Joi.object({
         name: Joi.string().required(),
@@ -176,8 +176,12 @@ export function isValidAssetNode(asset: AssetNodeData): {
     contentBinding: Joi.object({
       algo: Joi.string().valid('keccak256').required(),
       hash: Joi.string().required()
-    }).required()
+    }).required(),
+    history: Joi.array().items(Joi.string()).optional()
   })
 
   return AssetNodeDataSchema.validate(asset)
 }
+
+export const trimLowerCase = (str = ''): string =>
+  str && str.replace(/\s/g, '').toLowerCase()

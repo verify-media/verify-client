@@ -1,15 +1,14 @@
 {
-  "name": "@verify-media/verify-client",
-  "version": "0.0.1",
+  "name": "@verifymedia/client",
+  "version": "0.0.4",
   "description": "a client sdk for interacting with the verify protocol",
   "keywords": [
     "bcl",
     "verifymedia",
-    "verify protocol",
-    "fox"
+    "verify protocol"
   ],
   "author": "bcl",
-  "license": "Apache-2.0",
+  "license": "Apache License",
   "type": "module",
   "main": "./dist/prod/index.cjs",
   "module": "./dist/prod/index.es.js",
@@ -22,7 +21,6 @@
   "files": [
     "dist"
   ],
-  "private": "true",
   "scripts": {
     "lint": "eslint --fix \"src/**/\"",
     "format": "prettier --write './src/**/*.{ts,tsx}' && prettier --write './example/**/*.{ts,tsx}'",
@@ -31,6 +29,7 @@
     "test": "cross-env NODE_ENV=test jest --verbose --coverage --setupFiles dotenv/config",
     "test:watch": "cross-env NODE_ENV=test jest --watch --setupFiles dotenv/config",
     "test:ci": "cross-env NODE_ENV=test jest --runInBand --ci --coverage --coverageDirectory=coverage",
+    "prebuild": "rm -rf ./dist && node ./src/scripts/version.mjs",
     "build:prod": "cross-env NODE_ENV=production microbundle --tsconfig ./tsconfig.json --format es,cjs  --output dist/prod/index.js",
     "watch:prod": "cross-env NODE_ENV=production microbundle watch --tsconfig ./tsconfig.json --format es,cjs  --output dist/prod/index.js",
     "build:dev": "cross-env NODE_ENV=development microbundle --define process.env.NODE_ENV=development --tsconfig ./tsconfig.json --generateTypes false --format es --output dist/dev/index.js",
@@ -41,18 +40,17 @@
     "prepare": "husky install",
     "changeset": "changeset",
     "version": "changeset version",
+    "release:verify-client": "npm run prepublishOnly && npm run version",
     "release": "npm run prepublishOnly && npm run changeset publish",
+    "alpha-release": "npm run prepublishOnly && npm run changeset publish --tag alpha",
     "banner": "node ./banner.mjs"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://npm.pkg.github.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/verify-media/verify-client/"
-  },
-  "bugs": {
-    "url": "https://github.com/verify-media/verify-client/issues"
+    "url": "git+https://github.com/bclxyz/np-client"
   },
   "homepage": "https://www.verifymedia.com/",
   "devDependencies": {
@@ -98,9 +96,11 @@
   },
   "dependencies": {
     "@lit-protocol/lit-node-client": "^3.0.0",
+    "@types/jsdom": "^21.1.6",
     "ethers": "^5.7.0",
     "form-data": "^4.0.0",
     "joi": "^17.12.0",
+    "jsdom": "^24.0.0",
     "node-fetch": "^3.3.2",
     "pino": "^8.16.1",
     "siwe": "^2.0.5"

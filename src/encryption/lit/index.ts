@@ -18,8 +18,9 @@ import { getClient } from './connect'
 import { SiweMessage } from 'siwe'
 import { decryptToFile, encryptFile } from '@lit-protocol/lit-node-client'
 import { getDefaultAuth } from './access'
-import { SiweMessageParams, ReturnType, AuthSig } from './types'
+import { SiweMessageParams, EncryptAssetResponse, AuthSig } from './types'
 import { Wallet, ethers } from 'ethers'
+import { debugLogger } from '../../utils/logger'
 
 /**
  * Returns an instance of the Wallet.
@@ -73,6 +74,22 @@ export const generateSIWEMessage = async ({
 }
 
 /**
+ * @hidden
+ */
+export const signMessage = async (message: string): Promise<string> => {
+  const wallet = getWalletInstance()
+
+  return await wallet.signMessage(message)
+}
+
+const getIntermediateWalletAddress = async (): Promise<string> => {
+  const wallet = getWalletInstance()
+  debugLogger().debug('using wallet signer')
+
+  return wallet.address
+}
+
+/**
  * Signs an authentication message.
  *
  * @returns {Promise<AuthSig>} A promise that resolves with the signed authentication message.
@@ -82,19 +99,19 @@ export const generateSIWEMessage = async ({
  */
 export const signAuthMessage = async (): Promise<AuthSig> => {
   const { chainId } = getConfig()
-  const wallet = getWalletInstance()
+  const address = await getIntermediateWalletAddress()
   await getClient()
   const siweMessage = await generateSIWEMessage({
-    address: wallet.address,
+    address: address,
     chainId
   })
   const messageToSign = siweMessage.prepareMessage()
-  const signature = await wallet.signMessage(messageToSign)
+  const signature = await signMessage(messageToSign)
   const authSig = {
     sig: signature,
     derivedVia: 'web3.eth.personal.sign',
     signedMessage: messageToSign,
-    address: wallet.address
+    address: address
   }
 
   return authSig
@@ -103,11 +120,11 @@ export const signAuthMessage = async (): Promise<AuthSig> => {
 /**
  * Encrypts the provided asset using the LIT protocol.
  *
- * @param {Object} params - The parameters for the function.
- * @param {Blob} params.content - The content of the asset to encrypt.
- * @param {string} params.contentHash - The hash of the content.
+ * @param {Object} params - parameters for the function.
+ * @param {Blob} params.content - asset to encrypt as a Blob.
+ * @param {string} params.contentHash - hash of the content.
  *
- * @returns {Promise<{@link ReturnType}>} A promise that resolves with an object containing the encrypted content and the hash of the data to encrypt.
+ * @returns {Promise<{@link EncryptAssetResponse}>} A promise that resolves with an object of type {@link EncryptAssetResponse}.
  * @throws {Error} Throws an error if the LIT client is not initialized.
  */
 export const encryptAsset = async ({
@@ -116,7 +133,7 @@ export const encryptAsset = async ({
 }: {
   content: Blob
   contentHash: string
-}): Promise<ReturnType> => {
+}): Promise<EncryptAssetResponse> => {
   const { contractAddress, chain } = getConfig()
   const litClient = await getClient()
   if (!litClient) throw new Error('lit client not initialized')
@@ -147,12 +164,11 @@ export const encryptAsset = async ({
  * Decrypts the provided asset using the [LIT](https://developer.litprotocol.com/v3/) protocol.
  *
  * @param {Object} params - The parameters for the function.
- * @param {string} params.ciphertext - The encrypted content.
- * @param {string} params.dataToEncryptHash - The hash of the data to encrypt.
- * @param {string} params.contentHash - The hash of the content.
+ * @param {string} params.ciphertext
+ * @param {string} params.dataToEncryptHash
+ * @param {string} params.contentHash
  *
  * @returns {Promise<Uint8Array>} A promise that resolves with the decrypted asset.
- *
  * @throws {Error} Throws an error if the LIT client is not initialized.
  */
 export const decryptAsset = async ({
@@ -167,13 +183,12 @@ export const decryptAsset = async ({
   const { contractAddress, chain } = getConfig()
   const litClient = await getClient()
   if (!litClient) throw new Error('lit client not initialized')
-
   // get auth sig
   const authSig = await signAuthMessage()
 
   const authorization = getDefaultAuth(contentHash, chain, contractAddress)
 
-  const asset = decryptToFile(
+  const asset = await decryptToFile(
     {
       unifiedAccessControlConditions: authorization,
       ciphertext,

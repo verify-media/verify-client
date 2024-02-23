@@ -15,39 +15,26 @@ import {
   hashData,
   hashImage,
   signAssetNode,
-  signRequest,
-  submitRequest,
   buildAssetPayload,
   addEncryptionData,
   addIPFSData,
-  addSignatureData
+  addSignatureData,
+  buildArticleBody
 } from '../index'
-import { assetNode, mockArticle } from '../../__fixtures__/data'
+import { assetNode } from '../../__fixtures__/data'
 import { mockEnvVars } from '../../__fixtures__/env'
-import { init, unset } from '../../utils/config'
+import { init } from '../../utils/config'
 import fetchMock from 'jest-fetch-mock'
-import { Wallet } from 'ethers'
-import { LocationProtocol, Signature } from '../../types/schema'
 
-let config = init()
-
-jest.mock('ethers', () => {
-  const original = jest.requireActual('ethers')
-  const originalWallet = jest.requireActual('ethers').Wallet
-
-  return {
-    ...original,
-    Wallet: jest.fn().mockImplementation(() => ({
-      ...originalWallet,
-      address: '0x706Fe724eA8F05928e5Fce8fAd5584061FE586ec',
-      signMessage: jest.fn().mockImplementation(() => 'mockSignature'),
-      providers: {
-        JsonRpcProvider: jest.fn()
-      }
-    })),
-    JsonRpcProvider: jest.fn()
-  }
-})
+import {
+  Article,
+  Content,
+  ContentTypes,
+  LocationProtocol,
+  MIME_TYPES,
+  Signature
+} from '../../types/schema'
+import { ensureIPFS } from '../../utils/app'
 
 describe('write functions', () => {
   beforeEach(() => {
@@ -136,64 +123,6 @@ describe('write functions', () => {
   })
 })
 
-describe('signRequest function', () => {
-  it('should return a signature', async () => {
-    const origin = 'test origin'
-    const result = await signRequest(origin)
-    expect(result).not.toBe('')
-
-    expect(Wallet).toHaveBeenCalledWith(config.rootPvtKey)
-  })
-
-  it('should throw error if config is not set', async () => {
-    const origin = 'test origin'
-    unset('rootPvtKey')
-    await expect(signRequest(origin)).rejects.toThrow(
-      'rootPvtKey cannot be empty, either set and env var ROOT_PVT_KEY or pass a value to this function'
-    )
-    config = init()
-  })
-})
-
-describe('submitRequest', () => {
-  beforeEach(() => {
-    fetchMock.enableMocks()
-  })
-
-  afterEach(() => {
-    fetchMock.resetMocks()
-  })
-
-  it('should call signRequest with correct arguments and update body.message', async () => {
-    const article = mockArticle
-    const origin = 'test-origin'
-
-    fetchMock.mockResponseOnce(
-      JSON.stringify({
-        traceId: 'test traceId',
-        message: 'test response message'
-      })
-    )
-
-    const result = await submitRequest(article, origin)
-    expect(fetchMock).toHaveBeenCalledTimes(1)
-    expect(fetchMock.mock.calls[0][1]?.method).toBe('POST')
-    expect(result.message).toBe('test response message')
-    expect(result.traceId).toBe('test traceId')
-  })
-
-  it('should throw error if signRequest fails', async () => {
-    const article = mockArticle
-    const origin = 'test-origin'
-
-    fetchMock.mockRejectOnce(new Error('signRequest error'))
-
-    await expect(submitRequest(article, origin)).rejects.toThrow(
-      'signRequest error'
-    )
-  })
-})
-
 const assetHash = '0x0000000'
 
 describe('buildAssetPayload', () => {
@@ -219,7 +148,8 @@ describe('buildAssetPayload', () => {
         contentBinding: {
           algo: 'keccak256',
           hash: '0x0000000'
-        }
+        },
+        history: []
       },
       signature: {
         curve: 'secp256k1',
@@ -318,10 +248,20 @@ describe('addIPFSData', () => {
 
     expect(updatedAsset.data.locations).toEqual([
       {
-        uri: IpfsHash,
+        uri: ensureIPFS(IpfsHash),
         protocol: 'ipfs'
       }
     ])
+  })
+
+  it('should throw an error if ipfsHash is empty', () => {
+    const asset = buildAssetPayload(assetHash)
+    const IpfsHash = ''
+    try {
+      addIPFSData(asset, IpfsHash)
+    } catch (error) {
+      expect((error as Error).message).toBe('ipfs hash cannot be empty')
+    }
   })
 
   it('should not modify other properties of the AssetNode object', () => {
@@ -350,7 +290,7 @@ describe('addIPFSData', () => {
         protocol: 'ipfs'
       },
       {
-        uri: IpfsHash,
+        uri: ensureIPFS(IpfsHash),
         protocol: 'ipfs'
       }
     ])
@@ -405,5 +345,64 @@ describe('addSignatureData', () => {
     const updatedAsset = addSignatureData(asset, signature)
 
     expect(updatedAsset.signature).toEqual(signature)
+  })
+})
+
+describe('buildArticleBody', () => {
+  it('builds the XML body of an article', () => {
+    const otherContents: Array<Content & { hash: string }> = [
+      {
+        title: 'Image Title',
+        contentType: MIME_TYPES.JPEG,
+        description: 'Image Description',
+        creditedSource: 'Image Source',
+        hash: 'imageHash',
+        type: ContentTypes.IMAGE, // replace with actual type
+        uri: 'https://example.com/image', // replace with actual URI
+        id: 'imageId', // replace with actual ID
+        authority: { name: 'Image Authority', contact: 'contact@example.com' }, // replace with actual authority
+        published: new Date().toISOString(), // replace with actual published date
+        ownership: 'owned',
+        metadata: {}
+      }
+    ]
+
+    const article: Article = {
+      metadata: {
+        title: 'Article Title',
+        description: 'Article Description',
+        datePublished: '2022-01-01',
+        id: 'articleId',
+        uri: 'https://example.com/article',
+        origin: 'Publisher Name',
+        dateCreated: '',
+        dateUpdated: '',
+        authority: {
+          name: '',
+          contact: ''
+        }
+      },
+      contents: otherContents
+    }
+    const articleBody = 'Article Body'
+
+    const result = buildArticleBody(article, articleBody, otherContents)
+
+    expect(result).toContain('<title>Article Title</title>')
+    expect(result).toContain('<description>Article Description</description>')
+    expect(result).toContain('<datePublished>2022-01-01</datePublished>')
+    expect(result).toContain('<id>articleId</id>')
+    expect(result).toContain(
+      '<canonicalUrl>https://example.com/article</canonicalUrl>'
+    )
+    expect(result).toContain('<publishedBy>Publisher Name</publishedBy>')
+    expect(result).toContain(
+      '<section>\n        Article Body\n      </section>'
+    )
+    expect(result).toContain('<title>Image Title</title>')
+    expect(result).toContain('<contentType>image/jpeg</contentType>')
+    expect(result).toContain('<description>Image Description</description>')
+    expect(result).toContain('<creditedSource>Image Source</creditedSource>')
+    expect(result).toContain('<hash>imageHash</hash>')
   })
 })
