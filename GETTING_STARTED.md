@@ -79,7 +79,7 @@ console.log(config.STAGE)
   PINATA_SECRET=<PINATA_SECRET>
   ```
 
-_Note: if the RPC URL configured in this example fails, you can pick any other https based RPB URLSs from [here](https://chainlist.org/?search=mumbai&testnets=true)_
+_Note: if the RPC URL configured in this example fails, you can pick any other https based RPC URLs from [here](https://chainlist.org/?search=mumbai&testnets=true)_
 
 ## Publishing
 
