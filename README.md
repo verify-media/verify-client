@@ -18,15 +18,15 @@ VERIFY is a public library of signed digital assets with capabilities that allow
 
 ## Quick Start
 
-- Since verify client sdk supports javascript, start by installing [nodejs](https://nodejs.org/en) version 18 or higher.
-- Verify the node version `node --version` on your terminal.
+- Since VERIFY client sdk supports javascript, start by installing [nodejs](https://nodejs.org/en) version 18 or higher.
+- Confirm the node version `node --version` in your terminal.
 
   sdk requires:
     ```javascript
     "node": ">=18.15.0",
     "npm": "9.5.0"
     ```
-- Setup a test project
+- Set up a test project
 
   ```bash
   mkdir test-verifymedia-client
@@ -36,7 +36,7 @@ VERIFY is a public library of signed digital assets with capabilities that allow
   npm i @verify-media/verify-client
   ```
 
-- Open test-verifymedia-client/index.mjs in your favorite IDE and add the following snippet
+- Open `test-verifymedia-client/index.mjs` in your favorite IDE and add the following snippet
 
   ```javascript
   import { hashData } from '@verify-media/verify-client'
@@ -63,7 +63,7 @@ The repository hosts various [examples](https://github.com/verify-media/verify-c
 
 ## Tech Docs
 
-For the most up to date API documentation, check out the [verify-client sdk docs](https://sdk.verifymedia.com/)
+For the most up-to-date API documentation, check out the [verify-client sdk docs](https://sdk.verifymedia.com/)
 
 
 ## License

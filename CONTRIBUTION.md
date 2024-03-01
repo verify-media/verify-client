@@ -1,4 +1,4 @@
-**[WIP] this repository is under active development and hence not ready for contributions outside bcl**
+**[WIP] this repository is under active development and hence not ready for contributions outside Blockchain Creative Labs (BCL)**
 
 - [Compiling Typescript via Microbundle](#compiling-typescript-via-microbundle)
 - [Development code](#development-code)
@@ -25,11 +25,11 @@ Microbundle creates three bundles, `modern (es6)` `cjs` and `umd`. Also in the `
 
 ## Development code
 
-While in the development you have access to a few expressions, that will later be transformed via microbundle.
+While in the development, you have access to a few expressions that will later be transformed via Microbundle.
 
 `__DEV__` expression: Write code that will be stripped out from the production build.
 
-this code:
+This code:
 
 ```js
 if (__DEV__) {
@@ -37,7 +37,7 @@ if (__DEV__) {
 }
 ```
 
-will generate:
+Will generate:
 
 ```js
 if (process.env.NODE_ENV !== 'production') {
@@ -80,7 +80,7 @@ There are three tasks for running tests:
 
 ## Linting via ESLint
 
--ESLint is set up with a few plugins:
+ESLint is set up with a few plugins:
 
 - `@typescript-eslint/eslint-plugin` for linting Typescript.
 - `eslint-plugin-jest` for linting Jest test files
@@ -98,28 +98,28 @@ Prettier is set up not to conflict with `eslint`. You can run prettier via `form
 
 Github actions are used for continuous integration and testing.
 
-- ci
+- CI
 
-  - run on `push` to all branches
-  - run on `pull request` to `main` and `develop` branches
-  - run tests on node versions 18
-  - lint source
-  - build source
-  - run tests
-  - add banner
+  - Run on `push` to all branches
+  - Run on `pull request` to `main` and `develop` branches
+  - Run tests on node versions 18
+  - Lint source
+  - Build source
+  - Run tests
+  - Add banner
 
-- release
-  - run on `push` to `main` branch
-  - run tests on node versions 18
-  - lint source
-  - build source
-  - run tests
-  - add banner
+- Release
+  - Run on `push` to `main` branch
+  - Run tests on node versions 18
+  - Lint source
+  - Build source
+  - Run tests
+  - Add banner
   - ~~generate code coverage~~
-  - consume changesets
-    - bump package versions
-    - generate changelog
-    - publish to npm
+  - Consume changesets
+    - Bump package versions
+    - Generate changelog
+    - Publish to npm
   - ~~generate API docs (from source code, only if the package is published)~~
   - ~~make a commit with new API docs~~
 
@@ -134,11 +134,11 @@ For maintaining package versions I'm using [changesets](https://github.com/chang
 ## Generating API documentation
 
 You can generate API documentation from your source files via [typedoc](https://typedoc.org)(`npm gen:docs`).
-Currently, documentation will be generated into `docs/api` directory and it is generated in markdown so it can be displayed on Github.
+Currently, documentation will be generated into `docs/api` directory, and it is generated in markdown, so it can be displayed on Github.
 
-- Private class members are excluded.
-- Declarations with `@internal` are excluded.
-- Only exported properties are documented.
+- Private class members are excluded
+- Declarations with `@internal` are excluded
+- Only exported properties are documented
 
 ## Publishing to NPM
 
@@ -146,4 +146,4 @@ Manual publishing is done via `npm release` this task will go through regular NP
 
 ## Package manager
 
-.npmrc has been set to bcl internal registry, please setup an auth token with permissions of read packages and authorise bcl org on the auth token.
+`.npmrc` has been set to bcl internal registry, please set up an auth token with permissions of read packages and authorise bcl org on the auth token.
