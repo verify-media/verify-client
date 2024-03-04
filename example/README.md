@@ -78,7 +78,7 @@ Please refer the [getting started](https://github.com/verify-media/verify-client
   ```
 
 - ### transfer:
-  Transfer some amount of ether from one wallet to another
+  Transfer some amount from one wallet to another
   ```bash
   npm run transfer <to> <amount>
   ```

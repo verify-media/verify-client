@@ -37,7 +37,7 @@ console.log(config.STAGE)
 
 - Since content gets uploaded to ipfs and then published to blockchain you would need the following:
 
-  - A wallet funded with matic. (_a private / public key pair required to sign transactions on the blockchain_)
+  - A wallet funded with at least 0.1 matic. (_a private / public key pair required to sign transactions on the blockchain_)
   - [Pinata](https://www.pinata.cloud/) (an IPSF service) credentials. (_storage for the content_)
   - A rpc url for the polygon testnet. (_allows for a developer to interact with an Ethereum node via HTTP(S)_)
 
@@ -65,7 +65,7 @@ console.log(config.STAGE)
   **To perform any steps on blockchain you need matic in your intermediate wallet.**
 
 - You can check the funds in your intermediate wallet using
-  - MetaMask
+  - [MetaMask](https://metamask.io/)
   - https://mumbai.polygonscan.com/ (add your address in the search bar and hit enter).
   - Under examples folder
     ```bash
@@ -83,7 +83,7 @@ _Note: if the RPC URL configured in this example fails, you can pick any other h
 
 ## Publishing
 
-<b>Note: it's important to follow the workflow mentioned in these 2 examples since it publishes content with a certain hierarchy. This helps to maintain content provenance and context over a period of time.</b>
+<b>Note: It's essential to adhere to the workflows outlined in these two examples, as they provide a structured approach to publishing content. Following these workflows ensures that content is published with a specific hierarchy, facilitating the maintenance of content provenance and context over time.</b>
 
 
 - ### Setting up the publisher identities and org structure 
