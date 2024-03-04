@@ -141,7 +141,7 @@ _Note: if the RPC URL configured in this example fails, you can pick any other h
 * Refer to the [examples](https://github.com/verify-media/verify-client/blob/main/example/README.md) folder to see how operations are performed by the VERIFY client sdk.
 
 ## Content Hierarchy On Verify Protocol
-* TODO
+[Workflow](https://github.com/verify-media/verify-client/blob/main/workflowtemplates/index.md)
 
 ## Troubleshooting
 
