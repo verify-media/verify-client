@@ -1,4 +1,4 @@
-# verify client examples
+# VERIFY client examples
 
 ## Prerequisites
 
@@ -7,7 +7,7 @@
 "npm": "9.5.0"
 ```
 
-other critical dependencies
+Other critical dependencies
 
 ```javascript
 "siwe": "^2.0.5"
@@ -16,15 +16,13 @@ other critical dependencies
 
 ## Getting started
 
-install the sdk
+Install VERIFY client sdk
 
 ```bash
 npm i @verify-media/verify-client
 ```
 
-or
-
-use [npm-link](#https://docs.npmjs.com/cli/v10/commands/npm-link) to use sdk build as a node module in the example app
+Or use [npm-link](#https://docs.npmjs.com/cli/v10/commands/npm-link) to use sdk build as a node module in the example app
 
 ```bash
 git clone git@github.com:bclxyz/verify-client.git
@@ -37,11 +35,11 @@ npm link @verify-media/verify-client
 touch .env
 ```
 
-your environment should now be setup to use the sdk build as a node module in the example app. Copy contents of .env.test to .env and set the following environment variables as mentioned in the following guide
+Your environment should now be setup to use the VERIFY client sdk build as a node module in the example app. Copy contents of `.env.test` to `.env` and set the following environment variables as mentioned in the following guide
 
 # Setup
 
-please refer the [getting started](https://github.com/verify-media/verify-client/blob/public-release/GETTING_STARTED.md) guide.
+Please refer the [getting started](https://github.com/verify-media/verify-client/blob/public-release/GETTING_STARTED.md) guide.
 
 ## Examples
 
@@ -51,108 +49,108 @@ please refer the [getting started](https://github.com/verify-media/verify-client
   npm run init-publisher
   ```
 
-  this script registers the root and intermediate identities for a publisher and also initializes the org structure on verify protocol. During this process and org node and original material node are created on the protocol. This is a one time configuration for a publisher on the protocol, please update the orgNodeId and originalMaterialNodeId in the .env file for future use as follows:
+  This script registers the root and intermediate identities for a publisher and also initializes the org structure on VERIFY protocol. During this process and org node and original material node are created on the protocol. This is a one time configuration for a publisher on the protocol. Please update the `orgNodeId` and `originalMaterialNodeId` in the `.env` file for future use as follows:
   
-- ### Publish article
+- ### Publish an article
 
   ```bash
   npm run publish-article <orgNodeId> <ogNodeId>
   # npm run publish-article 0x20601de6e456a9819d83f58573beaa49315dfd3af31bb030e4d85e19c3beb07f 0xeb6a6499ad57495ca0687e648821fe3b64df8a3c661eea30c2aed2f00eb1fdd8
   ```
 
-  this script demonstrates publishing of an article and its contents using a workflow such that content's provenance and usage context is always maintained while considering ownership and licenses.
+  This script demonstrates publishing of an article and its contents using a workflow such that content's provenance and usage context is always maintained while considering ownership and licenses.
 
 
 ## Other Scripts
 
 - ### gen-wallet:
 
-  generates a set of public / pvt key pair
+  Generates a set of public / private key pair
 
   ```bash
   npm run gen-wallet
   ```
 
 - ### get-balance:
-  returns the balance of the wallet
+  Returns the balance of the wallet
   ```bash
   npm run get-balance
   ```
 
 - ### transfer:
-  transfer some amount of ether from one wallet to another
+  Transfer some amount of ether from one wallet to another
   ```bash
   npm run transfer <to> <amount>
   ```
-  example:
+  Example:
   ```bash
   npm run transfer 0x20601de6e456a9819d83f58573beaa49315dfd3af31bb030e4d85e19c3beb07f 0.1
   ```
 
 - ### org-nodes:
-  creates an org node and an original material node on the protocol for the configured root and intermediate identities
+  Creates an org node and an original material node on the protocol for the configured root and intermediate identities
   ```bash
   npm run org-nodes
   ```
 
 - ### read:
-  reads the content and hierarchy of an asset stored on the protocol
+  Reads the content and hierarchy of an asset stored on the protocol
   ```bash
   npm run read <assetId>
   ```
-  example:
+  Example:
   ```bash
   npm run read 0x20601de6e456a9819d83f58573beaa49315dfd3af31bb030e4d85e19c3beb07f
   ```  
 
 - ### children:
-  reads the content of all children nodes of the given node
+  Reads the content of all children nodes of the given node
   ```bash
   npm run children <nodeId>
   ```
-  example:
+  Example:
   ```bash
   npm run children 0x20601de6e456a9819d83f58573beaa49315dfd3af31bb030e4d85e19c3beb07f
   ```  
 
 - ### status:
-  gets the status of the configured root and intermediate identities
+  Gets the status of the configured root and intermediate identities
   ```bash
   npm run status
   ```
 
 - ### register-root:
-  registers the configured root identity on the protocol
+  Registers the configured root identity on the protocol
   ```bash
   npm run register-root
   ```
 
 - ### register:
-  registers and links the configured intermediate identity to the root identity on the protocol
+  Registers and links the configured intermediate identity to the root identity on the protocol
   ```bash
   npm run register
   ```
 
 - ### unregister-root:
-  un registers the configured root identity on the protocol
+  Unregisters the configured root identity on the protocol
   ```bash
   npm run unregister-root
   ```
 
 - ### unregister:
-  un registers and unlinks the configured intermediate identity to the root identity on the protocol
+  Unregisters and unlinks the configured intermediate identity to the root identity on the protocol
   ```bash
   npm run unregister
   ```
 
 - ### publish:
-  demonstrates a simple publish of asset on the protocol. <b>Note that this is a simple publish and does not maintain the provenance and usage context of the asset</b>
+  Demonstrates a simple publish of asset on the protocol. <b>Note: this is a simple publish, and does not maintain the provenance and usage context of the asset</b>
   ```bash
   npm run publish
   ```
 
 - ### consume:
-  demonstrates a simple consumption of asset from the protocol. Reads the asset details from chain and then from ipfs also decrypts the content and writes it to a file
+  Demonstrates a simple consumption of asset from the protocol. Reads the asset details from chain and then from IPFS also decrypts the content and writes it to a file
   ```bash
   npm run consume
   ```
