@@ -1,7 +1,3 @@
-The Verify protocol leverages [ERC6150](https://eips.ethereum.org/EIPS/eip-6150) to introduce a multi-layered, hierarchical structure for managing Non-Fungible Tokens (NFTs) in a manner similar to a filesystem. This hierarchical approach enables the organization of content to uphold its context, provenance, and usage integrity over time.
-
-Various workflows can be employed to cater to different use cases. Here, we outline the workflow utilized in this SDK for content publishing.
-
 ## Example
 Let's consider the case of a publisher, News24X7, aiming to publish articles via the Verify protocol. News24X7 both generates original content and licenses content from other publishers.
 
