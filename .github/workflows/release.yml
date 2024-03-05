@@ -78,7 +78,7 @@ jobs:
           publish: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           DEBUG: ${{ secrets.DEBUG }}
           STAGE: ${{ secrets.STAGE }}
           PVT_KEY: ${{ secrets.PVT_KEY }}
