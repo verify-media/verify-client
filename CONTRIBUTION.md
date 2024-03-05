@@ -1,4 +1,4 @@
-**[WIP] this repository is under active development and hence not ready for contributions outside Blockchain Creative Labs (BCL)**
+**To contribute, please submit a pull request (PR), and one of our dedicated BCL team members will review it. We value your input and look forward to collaborating with you!**
 
 - [Compiling Typescript via Microbundle](#compiling-typescript-via-microbundle)
 - [Development code](#development-code)
@@ -143,7 +143,3 @@ Currently, documentation will be generated into `docs/api` directory, and it is 
 ## Publishing to NPM
 
 Manual publishing is done via `npm release` this task will go through regular NPM publish steps and will call [`prepublishOnly` life cycle script](https://docs.npmjs.com/cli/v7/using-npm/scripts#life-cycle-scripts).
-
-## Package manager
-
-`.npmrc` has been set to bcl internal registry, please set up an auth token with permissions of read packages and authorise bcl org on the auth token.
