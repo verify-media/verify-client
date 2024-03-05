@@ -67,7 +67,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18.18.1
-          registry-url: https://registry.npmjs.org//
+          registry-url: https://registry.npmjs.org
       - run: npm ci
 
       - name: Create Release Pull Request or Publish to npm
