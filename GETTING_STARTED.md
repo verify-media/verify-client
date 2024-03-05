@@ -140,8 +140,12 @@ _Note: if the RPC URL configured in this example fails, you can pick any other h
 
 * Refer to the [examples](https://github.com/verify-media/verify-client/blob/main/example/README.md) folder to see how operations are performed by the VERIFY client sdk.
 
-## Content Hierarchy On Verify Protocol
-[Workflow](https://github.com/verify-media/verify-client/blob/main/workflowtemplates/index.md)
+## Workflow templates
+The Verify protocol leverages [ERC6150](https://eips.ethereum.org/EIPS/eip-6150) to introduce a multi-layered, hierarchical structure for managing Non-Fungible Tokens (NFTs) in a manner similar to a filesystem. This hierarchical approach enables the organization of content to uphold its context, provenance, and usage integrity over time.
+
+Various workflows can be employed to cater to different use cases. Here, we outline the workflow utilized in this SDK for content publishing.
+
+[AuditTrail](https://github.com/verify-media/verify-client/blob/main/workflowtemplates/index.md)
 
 ## Troubleshooting
 
