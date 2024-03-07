@@ -56,14 +56,14 @@ const encryptedAsset = await encryptAsset({
   content: blob,
   contentHash: hash
 })
-asset = addEncryptionData(asset, encryptedAsset)
+asset = addEncryptionData(asset)
 
 console.log('uploading asset to ipfs...')
 // upload the encrypted asset to ipfs
 const ipfsAssetUri = await uploadToPinata({
   data: {
     name: 'sandbox sample enc text asset',
-    body: new TextEncoder().encode(encryptedAsset.dataToEncryptHash) // since text needs to be converted to a blob
+    body: new TextEncoder().encode(JSON.stringify(encryptedAsset)) // since text needs to be converted to a blob
   },
   config: {
     pinataKey: process.env.PINATA_KEY || '',

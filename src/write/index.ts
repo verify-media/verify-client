@@ -23,7 +23,6 @@ import {
 } from '../types/schema'
 import { getConfig } from '../utils/config'
 import { hashData, hash, isValidAssetNode, ensureIPFS } from '../utils/app'
-import { EncryptAssetResponse } from '../encryption/lit/types'
 export { uploadToIPFS } from '../storage/ipfs'
 export { uploadToIPFS as uploadToPinata } from '../storage/pinata'
 export { encryptAsset } from '../encryption/lit'
@@ -106,8 +105,8 @@ export const signAssetNode = async (
   if (result.error) {
     throw new Error(result.error.message)
   }
-  if (assetNodeData?.encrypted && !litProtocol?.ciphertext) {
-    throw new Error('encrypted asset is missing ciphertext')
+  if (assetNodeData?.encrypted && !litProtocol?.version) {
+    throw new Error('encrypted asset is missing version')
   }
   const hash = hashData(JSON.stringify(assetNodeData))
   const signature = await sign(hash)
@@ -169,6 +168,7 @@ export const buildArticleBody = (
 ): string => {
   const xmlBody = `
   <article>
+    <version>1.0</version>   
     <header>
       <title>${article.metadata.title}</title>
       <description>${article.metadata.description}</description>
@@ -203,16 +203,12 @@ export const buildArticleBody = (
  * Adds encryption data to an {@link AssetNode} object.
  *
  * @param asset - The {@link AssetNode} object to add the encryption data to.
- * @param encryptedAsset - The encrypted asset data of type {@link EncryptAssetResponse}
  * @returns The {@link AssetNode} object with the added encryption data.
  */
-export const addEncryptionData = (
-  asset: AssetNode,
-  encryptedAsset: EncryptAssetResponse
-): AssetNode => {
+export const addEncryptionData = (asset: AssetNode): AssetNode => {
   asset.data.access = {
     'lit-protocol': {
-      ciphertext: encryptedAsset.ciphertext
+      version: 'v3'
     }
   }
   asset.data.encrypted = true

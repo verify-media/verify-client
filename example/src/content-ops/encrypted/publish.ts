@@ -72,7 +72,7 @@ async function publishText(): Promise<string> {
   })
   console.log('encrypted text asset using lit-protocol')
 
-  asset = addEncryptionData(asset, encryptedAsset)
+  asset = addEncryptionData(asset)
 
   console.log('uploading text asset to ipfs')
   const encoder = new TextEncoder()
@@ -80,7 +80,7 @@ async function publishText(): Promise<string> {
   const ipfsAssetUri = await uploadToPinata({
     data: {
       name: 'sandbox sample enc text asset',
-      body: encoder.encode(encryptedAsset.dataToEncryptHash)
+      body: encoder.encode(JSON.stringify(encryptedAsset))
     },
     config: {
       pinataKey: process.env.PINATA_KEY || '',
@@ -155,7 +155,7 @@ async function publishImage(): Promise<string> {
   })
   console.log('encrypted image asset using lit-protocol')
 
-  asset = addEncryptionData(asset, encryptedAsset)
+  asset = addEncryptionData(asset)
 
   console.log('uploading image asset to ipfs')
   const encoder = new TextEncoder()
@@ -163,7 +163,7 @@ async function publishImage(): Promise<string> {
   const ipfsAssetUri = await uploadToPinata({
     data: {
       name: 'sandbox sample enc image asset',
-      body: encoder.encode(encryptedAsset.dataToEncryptHash)
+      body: encoder.encode(JSON.stringify(encryptedAsset))
     },
     config: {
       pinataKey: process.env.PINATA_KEY || '',

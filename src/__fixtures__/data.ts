@@ -28,8 +28,7 @@ export const assetNode: AssetNodeData = {
   encrypted: true,
   access: {
     'lit-protocol': {
-      ciphertext:
-        '69d7507bab3ea242903cd6ebde6aa58f8286164a738637423b2db6e7b10dcc6396c9f148e58722d74b7c560148826e189332164835e64efa49520b07aafa5bd2706ce5814c550fb52b62f16caefd309d69da79840a222cda27f908c8995a4a8f45f165a1d794388b4ace666f204861ccab32b8ac8304510466525d497b21ecfe00000000000000205b69ca73033c783779cd05c24cd88be924e455ff93eecf8c3e9bbbd8262ffca37bd5785013d17d6d8161640c89cbcfab'
+      version: 'v3'
     }
   },
   locations: [
@@ -135,8 +134,7 @@ export const PublishedAsset: AssetNode = {
     encrypted: true,
     access: {
       'lit-protocol': {
-        ciphertext:
-          '0x530fd0f87ab05a6096e7eba481f4e8403bd174017d983d12d7d41af9b7d61abe'
+        version: 'v3'
       }
     },
     locations: [
@@ -241,8 +239,7 @@ export const mockAssetDetails = {
       encrypted: true,
       access: {
         'lit-protocol': {
-          ciphertext:
-            '0x530fd0f87ab05a6096e7eba481f4e8403bd174017d983d12d7d41af9b7d61abe'
+          version: 'v3'
         }
       },
       locations: [
@@ -293,8 +290,7 @@ export const mockArticleProvenance = [
       encrypted: true,
       access: {
         'lit-protocol': {
-          ciphertext:
-            '0x530fd0f87ab05a6096e7eba481f4e8403bd174017d983d12d7d41af9b7d61abe'
+          version: 'v3'
         }
       },
       locations: [
@@ -336,8 +332,7 @@ export const mockArticleProvenance = [
       encrypted: true,
       access: {
         'lit-protocol': {
-          ciphertext:
-            '0x530fd0f87ab05a6096e7eba481f4e8403bd174017d983d12d7d41af9b7d61abe'
+          version: 'v3'
         }
       },
       locations: [
@@ -379,8 +374,7 @@ export const mockArticleProvenance = [
       encrypted: true,
       access: {
         'lit-protocol': {
-          ciphertext:
-            '0x530fd0f87ab05a6096e7eba481f4e8403bd174017d983d12d7d41af9b7d61abe'
+          version: 'v3'
         }
       },
       locations: [

@@ -52,7 +52,7 @@ import {
   mockAssetDetails,
   mockArticleProvenance
 } from '../../../__fixtures__/data'
-import { AssetNode, LocationProtocol, MIME_TYPES } from '../../../types/schema'
+import { AssetNode, LocationProtocol } from '../../../types/schema'
 import { hashData } from '../../../utils/app'
 import { IDENTITY_ABI } from '../../identity/types'
 
@@ -521,54 +521,46 @@ describe('verifyAsset function', () => {
   const mockPublishedAsset: AssetNode = {
     data: {
       description:
-        'MFGzJ4dJf1f49WG2feOZhNd6bpRZT1zP1z1zObc1Jhn4XGHMiyApksdZ9c52',
-      type: MIME_TYPES.TEXT,
+        'OXEydQHilKRuSJJc9ASRDZxtdArqtaMwnjK5aen0RVT8BRCWY3YqXbLhSNed',
+      type: 'text/html',
       encrypted: true,
-      access: {
-        'lit-protocol': {
-          ciphertext:
-            'i/cQNEPrpc6tuhidGZvqZacedccbgcpp020fc77QdfhYXu/njeE7bb1K80QHewbJI50E33WMavYpIL4Y/N9dMhuiouvjwGjS3itRcXlS/g6tCTn6OK7O9DU0KsIzfZp0CHcOAMdiHE2DUpd8h1d0LIc0rv14A+vkV5hLYTdC8GeBdZbAaN34LDnWdVJzDdHKNIbFSKXanMgEk2urJHm99yVXAc/bKxg0B5kVzs+gKoo+6E+GcUbC6O114ZXNUncmtqEi9jZ9+0syZ46xoqek7Gb28iyqypz+UL6wxdGwwF7miZcbtRzmPAXP4tm6Zz0mh1FB1HUD5HvC3ANIM1zrfDT5OcCp6AokBzSp2d+DdZ3UGJ0K7NO5GBxIULFIGTF9inxxpda6jc8juWuttyvm0jMGxHdKOC6SROVCwmNSTvVaHyWc5l3b2U5kVWY4peMFcjsNsmFVZ7gN1j6y3jrF2kuKo165kGOh1L98kPiRY/4YeN+S8Z/nXUyA+cNcQ871xqcVxpjdrPiBGB8CwXF9KR9Z//VUgF7f2t0sWoCsB+8A0WSLo4UXrlKLoPXUiK/CFOG3YBETUkoW0GaH+rArdaMezrqfYtzm7FfUw079+LpcobqGdVa+JG0U+Oat/dMnZmVgrOWoRDXRIf4Ewvz1rH7mLUsOzXyC9CFeX1F9cjIMvzAUKJEVjW80yx1ksOl0uZPDg+xxXcnHHUxLGIvuxediwiLct4pIl6yz5Q17cnsVQcQkLxTrAlg0ziiWUQRBWa3HSPgsMsVN6UdTlIVVMPRuuwscJ0Xmo/Q4JEKMv5R1O5lsourboihLeCO4F2QsDuPXW4wWQb1v3t/SphHl+4gM69ficjvgVpFRZa9nZGY3rZOB8k0Xk88AP7RBktOxwTdBPxMy1vWxCWvNJBQCHIe/jBtkWgxeROBr2W8ynOYjGoOxdftSx4pq7yi0C8RY5LAbY8OyVhZfWtV+YbY6VENhDqSrbIiRL69nH9LFIRjQp/+nJi/tIgQznjRCf2acrGdXPOZgRqYQoMGHJBjokznBn35UZDlHIzWTvOlIksHpxmmyq9/Wm0vUontwVWhUTYkSb/6HAhUrZvKTWN189wTYQnATv9ReqjCm4jO+6mFgAZ6C3YTrTHM7Z5cfvHih85iTetqOUvhASA1zwNuHOQw7FhivMG/wPEG+yDfwSd/psRFkNw3yAhGOpp1NW3b+F/kvwTaRunA46Y15C1day2nuBBhyQSZQFC6KcyFH9wGCMkwYiHldS6IWA6fvYI3k81Qa4BTiZ1xbgikFlMAuyOX3o6mpa9Q5BdHHh9FlwMPs0j1Rluk0gepKTnGUhiiVIDXjFY9ZCAgO6CzIH67rf6bonBoRBOWefC3D8X2Oe8AHuXDkb7xsdMd1PTnfzSIWnG8qrqXApbFGLL+sK6MWQuazpeI0Z0mKrgxVJheE0oet625IlnK3KxRDHIXznBfaWI7yd1QAPv42wwQriNG8YbThqmBT9CjXt9jhMZXNaEiWOhpywTL9a8JkK74351Bl8n2JGKa8exPFgy+8Y/2CmZbXzU0K9eK7giVJAnef2036QVTZXurmc57Fj24a71ic8dWUkWLEYTVfBMPh/vZ53/3FtLkDHDa62QRWc7ACoAFFUJKHIrSuGmnZVkJnwb+PNXDyHIJFTOXmRMtgKwoL69uBc8h31zMdSN58UslJ4QM='
-        }
-      },
+      access: { 'lit-protocol': { version: 'v3' } },
       locations: [
         {
-          uri: 'ipfs://bafkreiga4gbrp3urpjql6pim6s75qbnn5t2xxowixn7qw2v4jc2l6jalhq',
+          uri: 'ipfs://bafkreibd74bgyzkj72ycdccrnioq5kooynwdkk6guun36d72mq7ajveh4y',
           protocol: LocationProtocol.IPFS
         }
       ],
       manifest: {
         uri: 'https://www.verifymedia.com/',
-        title: 'i1ah87534EpxIE3JSoFd27UAgdFomF',
+        title: 'vrAgIscjOxTWne03hxchjFFjKsdlO9',
         alt: '',
         description:
-          'MFGzJ4dJf1f49WG2feOZhNd6bpRZT1zP1z1zObc1Jhn4XGHMiyApksdZ9c52',
+          'OXEydQHilKRuSJJc9ASRDZxtdArqtaMwnjK5aen0RVT8BRCWY3YqXbLhSNed',
         caption: '',
         creditedSource: 'ORG_ABC',
         signingOrg: { name: 'ORG_ABC', unit: 'ORG_ABC' },
-        published: '2024-02-23T10:33:05.236Z'
+        published: '2024-03-07T05:47:38.489Z'
       },
       contentBinding: {
         algo: 'keccak256',
-        hash: '0x9b9e2b890d1776d62b60409661c5c3a2afa056d604e42d93375cf78b5d06563a'
+        hash: '0x177085d7804edd7e21adefd0773db4d3da963676c65c6c7c8d41b8805cf31537'
       },
       history: []
     },
     signature: {
       curve: 'sepc256k1',
       signature:
-        '0x03e0ece988b8fcb5caf5dbe2b006fec787aa4989171667939116d80e03e0a98b36e5be33bfd57f7e819aa1d8a6e888971d5f807bc751c5cf1388574f6ab277581b',
+        '0x1be13bad071f126ea93e33b3b442c1be0541682139cdeee6cd86a8d9c5e7ce2f25f02813d66e7539df35d88fec2d23aa676f525f58d540d619ef23ecc1e0b9f11c',
       message:
-        '0x78b81f82484a2f88113231671db59952d4d33b0bf9136242343a35d56820de89',
+        '0x953c5b7fdb3fc97d5c2eb6e8060b971b3129ffc631b05777c3ad92aa3c260465',
       description:
         'hex encoded sepc256k1 signature of the keccak256 hash of content field with the signers private key'
     }
   }
   const assetId = PublishedAsset.data.contentBinding.hash
   const asset = PublishedAsset
-  // mockRecoverAddress.mockImplementation(() => mockAddress)
-  // mockKecak256.mockImplementation(() => asset.signature.message)
 
-  // TODO update this example with new example for PublishedAsset
   test('should verify the asset signature and content binding', async () => {
     const validity = await verifyAsset(
       mockPublishedAsset.data.contentBinding.hash,

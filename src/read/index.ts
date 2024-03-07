@@ -129,14 +129,11 @@ export async function decrypt(
   if (assetMeta.data.type === 'text/html') {
     const decoder = new TextDecoder()
     const decoded = decoder.decode(encContent as Uint8Array)
-
-    const ciphertext = assetMeta.data.access
-      ? assetMeta.data.access['lit-protocol']['ciphertext']
-      : ''
+    const encryptedAsset = JSON.parse(decoded)
 
     const decryptedAsset = await decryptAsset({
-      ciphertext: ciphertext,
-      dataToEncryptHash: decoded,
+      ciphertext: encryptedAsset.ciphertext,
+      dataToEncryptHash: encryptedAsset.dataToEncryptHash,
       contentHash: assetMeta.data.contentBinding.hash
     })
     const decryptedString = decoder.decode(decryptedAsset as Uint8Array)
@@ -148,12 +145,10 @@ export async function decrypt(
   } else {
     const decoder = new TextDecoder()
     const decoded = decoder.decode(encContent as Uint8Array)
-    const ciphertext = assetMeta.data.access
-      ? assetMeta.data.access['lit-protocol']['ciphertext']
-      : ''
+    const encryptedAsset = JSON.parse(decoded)
     const decryptedAsset = await decryptAsset({
-      ciphertext: ciphertext,
-      dataToEncryptHash: decoded,
+      ciphertext: encryptedAsset.ciphertext,
+      dataToEncryptHash: encryptedAsset.dataToEncryptHash,
       contentHash: assetMeta.data.contentBinding.hash
     })
     const buffer = Buffer.from(decryptedAsset)
