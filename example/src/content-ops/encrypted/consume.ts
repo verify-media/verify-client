@@ -48,10 +48,6 @@ async function consumeContent(assetId: string): Promise<{
     throw new Error('asset is not encrypted')
   }
 
-  const litProtocol: {
-    ciphertext: string
-  } | null = asset.data.access ? asset.data.access['lit-protocol'] : null
-
   const assetUri = asset.data.locations.filter((location) => {
     return location.protocol === 'ipfs'
   })[0].uri
@@ -66,22 +62,22 @@ async function consumeContent(assetId: string): Promise<{
 
   if (asset.data.type === 'text/html') {
     const decoder = new TextDecoder()
-    const _dataToEncryptHash = decoder.decode(dataToEncryptHash as Uint8Array)
+    const decoded = decoder.decode(dataToEncryptHash as Uint8Array)
+    const encContent = JSON.parse(decoded)
     const decryptedAsset = await decryptAsset({
-      ciphertext:
-        litProtocol && litProtocol.ciphertext ? litProtocol.ciphertext : '',
-      dataToEncryptHash: _dataToEncryptHash,
+      ciphertext: encContent.ciphertext,
+      dataToEncryptHash: encContent.dataToEncryptHash,
       contentHash: asset.data.contentBinding.hash
     })
     const decryptedString = decoder.decode(decryptedAsset as Uint8Array)
     console.log('decryptedString ===> ', decryptedString)
   } else {
     const decoder = new TextDecoder()
-    const _dataToEncryptHash = decoder.decode(dataToEncryptHash as Uint8Array)
+    const decoded = decoder.decode(dataToEncryptHash as Uint8Array)
+    const encContent = JSON.parse(decoded)
     const decryptedAsset = await decryptAsset({
-      ciphertext:
-        litProtocol && litProtocol.ciphertext ? litProtocol.ciphertext : '',
-      dataToEncryptHash: _dataToEncryptHash,
+      ciphertext: encContent.ciphertext,
+      dataToEncryptHash: encContent.dataToEncryptHash,
       contentHash: asset.data.contentBinding.hash
     })
     const buffer = Buffer.from(decryptedAsset)

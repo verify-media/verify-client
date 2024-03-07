@@ -108,10 +108,10 @@ describe('write functions', () => {
     expect(sign.message).toBe(hashData(JSON.stringify(assetNode)))
   })
 
-  test('it throws error if asset has encrypted property true but ciphertext is absent', async () => {
-    assetNode.access && (assetNode.access['lit-protocol'].ciphertext = '')
+  test('it throws error if asset has encrypted property true but version is absent', async () => {
+    assetNode.access && (assetNode.access['lit-protocol'].version = '')
     await expect(signAssetNode(assetNode)).rejects.toThrow(
-      'encrypted asset is missing ciphertext'
+      'encrypted asset is missing version'
     )
   })
 
@@ -188,16 +188,12 @@ describe('buildAssetPayload', () => {
 describe('addEncryptionData', () => {
   it('should add encryption data to an AssetNode object', () => {
     const asset = buildAssetPayload(assetHash)
-    const encryptedAsset = {
-      ciphertext: 'encryptedData',
-      dataToEncryptHash: 'dataToEncryptHash'
-    }
 
-    const updatedAsset = addEncryptionData(asset, encryptedAsset)
+    const updatedAsset = addEncryptionData(asset)
 
     expect(updatedAsset.data.access).toEqual({
       'lit-protocol': {
-        ciphertext: 'encryptedData'
+        version: 'v3'
       }
     })
   })
@@ -205,12 +201,7 @@ describe('addEncryptionData', () => {
   it('should not modify other properties of the AssetNode object', () => {
     const asset = buildAssetPayload(assetHash)
     asset.data.description = 'Test description'
-    const encryptedAsset = {
-      ciphertext: 'encryptedData',
-      dataToEncryptHash: 'dataToEncryptHash'
-    }
-
-    const updatedAsset = addEncryptionData(asset, encryptedAsset)
+    const updatedAsset = addEncryptionData(asset)
 
     expect(updatedAsset.data.description).toBe('Test description')
   })
@@ -219,19 +210,15 @@ describe('addEncryptionData', () => {
     const asset = buildAssetPayload(assetHash)
     asset.data.access = {
       'lit-protocol': {
-        ciphertext: 'oldEncryptedData'
+        version: 'v3'
       }
     }
-    const encryptedAsset = {
-      ciphertext: 'newEncryptedData',
-      dataToEncryptHash: 'dataToEncryptHash'
-    }
 
-    const updatedAsset = addEncryptionData(asset, encryptedAsset)
+    const updatedAsset = addEncryptionData(asset)
 
     expect(updatedAsset.data.access).toEqual({
       'lit-protocol': {
-        ciphertext: 'newEncryptedData'
+        version: 'v3'
       }
     })
   })

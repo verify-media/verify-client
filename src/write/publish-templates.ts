@@ -39,7 +39,7 @@ export const constructAssetNode = (
         encrypted: true,
         access: {
           'lit-protocol': {
-            ciphertext: ''
+            version: 'v3'
           }
         },
         locations: [],
@@ -85,7 +85,7 @@ export const constructAssetNode = (
         encrypted: true,
         access: {
           'lit-protocol': {
-            ciphertext: ''
+            version: 'v3'
           }
         },
         locations: [],
@@ -192,9 +192,6 @@ const breakArticleToAssets = async (article: Article): Promise<Content[]> => {
 
 const genAssetMetaHash = (assetNode: AssetNode): string => {
   const _assetNode = JSON.parse(JSON.stringify(assetNode))
-  if (_assetNode.data.access) {
-    _assetNode.data.access['lit-protocol'].ciphertext = ''
-  }
   _assetNode.data.locations = []
   // since published date for non text assets is system date time which is different in every run
   // text assets are essentially publisher articles where publisher date is picked from the article itself
@@ -331,11 +328,11 @@ export const publishArticle = async (
       })
 
       // add encryption data to assetNode
-      assetNode = addEncryptionData(assetNode, encryptedAsset)
+      assetNode = addEncryptionData(assetNode)
 
       // upload encrypted asset to IPFS
       const encoder = new TextEncoder()
-      const encContent = encoder.encode(encryptedAsset.dataToEncryptHash)
+      const encContent = encoder.encode(JSON.stringify(encryptedAsset))
 
       const assetLocation = await uploadToPinata({
         data: {

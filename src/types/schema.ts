@@ -44,7 +44,7 @@ export type Location = {
 }
 
 export type AssetAccess = {
-  ciphertext: string
+  version: string
 }
 
 /**
