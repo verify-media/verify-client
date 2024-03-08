@@ -80,6 +80,7 @@ export type AssetNodeData = {
  * @remarks type definition for Asset Node
  */
 export type AssetNode = {
+  version: string
   /**
    * {@link AssetNodeData}
    */

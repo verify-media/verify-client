@@ -69,6 +69,7 @@ const mockSignature: Signature = {
 }
 
 export const AssetNodeWithSign: AssetNode = {
+  version: '1.0.0',
   data: assetNode,
   signature: mockSignature
 }
@@ -128,6 +129,7 @@ export const mockTransactionResponse: ethers.providers.TransactionResponse = {
 }
 
 export const PublishedAsset: AssetNode = {
+  version: '1.0.0',
   data: {
     description: 'sandbox sample string',
     type: 'image/jpg',
@@ -233,6 +235,7 @@ export const mockArticle: Article = {
 export const mockAssetDetails = {
   assetId: '0x1234',
   provenance: {
+    version: '1.0.0',
     data: {
       description: 'sandbox sample string',
       type: 'image/jpg',
@@ -284,6 +287,7 @@ export const mockAssetDetails = {
 
 export const mockArticleProvenance = [
   {
+    version: '1.0.0',
     data: {
       description: 'sandbox sample string',
       type: 'image/jpg',
@@ -326,6 +330,7 @@ export const mockArticleProvenance = [
     }
   },
   {
+    version: '1.0.0',
     data: {
       description: 'sandbox sample string',
       type: 'image/jpg',
@@ -368,6 +373,7 @@ export const mockArticleProvenance = [
     }
   },
   {
+    version: '1.0.0',
     data: {
       description: 'sandbox sample string',
       type: 'image/jpg',

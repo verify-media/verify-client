@@ -121,6 +121,7 @@ export const signAssetNode = async (
  */
 export const buildAssetPayload = (assetHash: string): AssetNode => {
   const asset: AssetNode = {
+    version: '1.0.0',
     data: {
       description: '',
       type: '',
