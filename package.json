@@ -97,6 +97,7 @@
   "dependencies": {
     "@lit-protocol/lit-node-client": "^3.0.0",
     "@types/jsdom": "^21.1.6",
+    "date-fns": "^3.3.1",
     "ethers": "^5.7.0",
     "form-data": "^4.0.0",
     "joi": "^17.12.0",

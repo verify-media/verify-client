@@ -159,7 +159,7 @@ export type ArticleMetadata = {
   dateUpdated: string
   authority: Authority
   id: string
-  optionalData?: Record<string, unknown>
+  additional?: Record<string, unknown>
 }
 
 export type Article = {
