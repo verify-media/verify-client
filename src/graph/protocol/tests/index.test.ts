@@ -519,6 +519,7 @@ test('should be able to getTokenToNode', async () => {
 
 describe('verifyAsset function', () => {
   const mockPublishedAsset: AssetNode = {
+    version: '1.0.0',
     data: {
       description:
         'OXEydQHilKRuSJJc9ASRDZxtdArqtaMwnjK5aen0RVT8BRCWY3YqXbLhSNed',

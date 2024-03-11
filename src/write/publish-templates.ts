@@ -33,6 +33,7 @@ export const constructAssetNode = (
 ): AssetNode => {
   if (content.type === 'text') {
     const asset: AssetNode = {
+      version: '1.0.0',
       data: {
         description: content.description,
         type: content.contentType,
@@ -79,6 +80,7 @@ export const constructAssetNode = (
       ? `an image owned by ${content.authority.name}`
       : `an image licensed from ${content.licensedFrom}`
     const asset: AssetNode = {
+      version: '1.0.0',
       data: {
         description: description,
         type: content.contentType,

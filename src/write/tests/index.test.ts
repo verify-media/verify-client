@@ -130,6 +130,7 @@ describe('buildAssetPayload', () => {
     const asset = buildAssetPayload(assetHash)
 
     expect(asset).toEqual({
+      version: '1.0.0',
       data: {
         description: '',
         type: '',
