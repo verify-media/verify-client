@@ -15,6 +15,13 @@ import { ethers } from 'ethers'
 import { debugLogger } from './logger'
 import { AssetNodeData } from '../types/schema'
 import Joi from 'joi'
+import { parseISO, isValid } from 'date-fns'
+
+function isISODateString(value: string): boolean {
+  const date = parseISO(value)
+
+  return isValid(date)
+}
 
 /**
  * Checks if an object is empty.
@@ -171,7 +178,15 @@ export function isValidAssetNode(asset: AssetNodeData): {
         name: Joi.string().required(),
         unit: Joi.string().required()
       }).required(),
-      published: Joi.string().isoDate().required()
+      published: Joi.string()
+        .required()
+        .custom((value, helpers) => {
+          if (!isISODateString(value)) {
+            return helpers.error('published.invalid')
+          }
+
+          return value
+        })
     }).required(),
     contentBinding: Joi.object({
       algo: Joi.string().valid('keccak256').required(),
