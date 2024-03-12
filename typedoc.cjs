@@ -10,6 +10,7 @@ module.exports = {
   skipErrorChecking: true,
   entryPoints: [
     './src/write/index.ts',
+    './src/write/publish-templates.ts',
     './src/read/index.ts',
     './src/storage/ipfs/index.ts',
     './src/storage/ipfs/types/index.ts',
