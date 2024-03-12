@@ -27,6 +27,13 @@ const ZeroHash =
 const isOwned = (content: Content): boolean => content.ownership === 'owned'
 
 //TODO maybe pass origin and BU separately
+/**
+ *
+ * @param content
+ * @param hash
+ * @returns
+ * @hidden
+ */
 export const constructAssetNode = (
   content: Content,
   hash: string
