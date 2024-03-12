@@ -14,7 +14,7 @@ VERIFY aims to be the central repository for content license and provenance, equ
 
 VERIFY is a public library of signed digital assets with capabilities that allow for a single DRM solution for digital assets. Every asset stored in VERIFY is signed by a real world entity that attests to the provenance of the asset. The publisher declares the asset’s license for access and reference through a smart contract module.
 
-[verifymedia/client](https://www.npmjs.com/verify-media) is a typesafe sdk for interacting with the [verify protocol](https://www.verifymedia.com/). It is written in typescript and is compiled to es6 and cjs bundles ensuring compatibility with nodejs.
+[verifymedia/client](https://www.npmjs.com/package/@verify-media/verify-client) is a typesafe sdk for interacting with the [verify protocol](https://www.verifymedia.com/). It is written in typescript and is compiled to es6 and cjs bundles ensuring compatibility with nodejs.
 
 ## Quick Start
 
