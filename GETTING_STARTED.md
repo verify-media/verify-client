@@ -103,7 +103,7 @@ _Note: if the RPC URL configured in this example fails, you can pick any other h
     ```
 
   #### Execute:
-  - env [setup](https://github.com/bclxyz/np-client/blob/master/example/README.md) for examples folder
+  - env [setup](https://github.com/verify-media/verify-client/blob/master/example/README.md) for examples folder
 
     ```bash
     npm run init-publisher
@@ -127,7 +127,7 @@ _Note: if the RPC URL configured in this example fails, you can pick any other h
 
 
   #### execute: 
-  env [setup](https://github.com/bclxyz/np-client/blob/master/example/README.md) for examples folder
+  env [setup](https://github.com/verify-media/verify-client/blob/master/example/README.md) for examples folder
 
   ```bash
   npm run publish-article <orgNodeId> <ogNodeId>
