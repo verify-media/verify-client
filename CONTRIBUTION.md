@@ -143,3 +143,14 @@ Currently, documentation will be generated into `docs/api` directory, and it is 
 ## Publishing to NPM
 
 Manual publishing is done via `npm release` this task will go through regular NPM publish steps and will call [`prepublishOnly` life cycle script](https://docs.npmjs.com/cli/v7/using-npm/scripts#life-cycle-scripts).
+
+## Troubleshooting
+
+If you encounter any issues while publishing, follow these steps:
+
+```bash
+npm uninstall siwe ethers
+npm i siwe@2.0.5 --save
+npm i ethers@5.7.0 --save
+```
+These packages should already be installed, but if you face any issues during the publishing process, you can try reinstalling them using the provided commands.
