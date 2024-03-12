@@ -147,12 +147,3 @@ Various workflows can be employed to cater to different use cases. Here, we outl
 
 [AuditTrail](https://github.com/verify-media/verify-client/blob/main/workflowtemplates/index.md)
 
-## Troubleshooting
-
-* If you run in to issues while publishing try doing the following
-
-```bash
-npm uninstall siwe ethers
-npm i siwe@2.0.5 --save
-npm i ethers@5.7.0 --save
-```
