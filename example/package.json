@@ -13,15 +13,15 @@
     "register": "npm run build && node ./src/identity-ops/register.js",
     "unregister": "npm run build && node ./src/identity-ops/unregister.js",
     "unregister-root": "npm run build && node ./src/identity-ops/unregister-root.js",
-    "status": "npm run build && node ./src/identity-ops/status.js",        
+    "status": "npm run build && node ./src/identity-ops/status.js",
     "publish-article": "npm run build && node ./src/sdk/publish-article.js",
     "init-publisher": "npm run build && node ./src/sdk/init.js",
     "gen-wallet": "npm run build && node ./src/utils/gen-wallet.js",
     "get-balance": "npm run build && node ./src/utils/get-balance.js",
     "transfer": "npm run build && node ./src/utils/transferfunds.js",
-    "org-nodes": "npm run build && node ./src/utils/org-nodes.js",    
+    "org-nodes": "npm run build && node ./src/utils/org-nodes.js",
     "read": "npm run build && node ./src/utils/read.js",
-    "children": "npm run build && node ./src/utils/children.js"    
+    "children": "npm run build && node ./src/utils/children.js"
   },
   "author": "bcl-eng",
   "license": "ISC",
@@ -29,6 +29,10 @@
   "dependencies": {
     "alchemy-sdk": "^3.1.2",
     "ethers": "^5.7.0",
-    "siwe": "^2.0.5"
+    "siwe": "^2.0.5",
+    "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5"
   }
 }
