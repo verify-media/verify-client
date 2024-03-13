@@ -8,7 +8,7 @@ To start publishing the sdk needs to be configured with some settings. It can be
 
 ```bash
 DEBUG=0 # 0 if false and 1 is true with default false. When true print debug logs
-RPC_URL=https://polygon-mumbai.g.alchemy.com/v2/demo # allows for a developer to interact with an Ethereum node via HTTP(S)
+RPC_URL=https://polygon-mumbai.blockpi.network/v1/rpc/public # allows for a developer to interact with an Ethereum node via HTTP(S)
 STAGE=testnet
 CHAIN_ID=80001
 CHAIN=mumbai
@@ -32,7 +32,7 @@ dotenv.config()
 import {init, getConfig} from '@verify-media/verify-client'
 init()
 const config = getConfig()
-console.log(config.STAGE)
+console.log(config.stage)
 ```
 
 - Since content gets uploaded to ipfs and then published to blockchain you would need the following:
@@ -71,7 +71,7 @@ console.log(config.STAGE)
     ```bash
       npm run get-balance
     ```
-- All content published on VERIFY Protocol are stored on IPFS. VERIFY client sdk supports this via [Pinata](https://www.pinata.cloud/) or your own IPFS cluster setup using [Kubo](https://github.com/ipfs/kubo).
+- All content published on VERIFY Protocol is stored on IPFS. VERIFY client sdk supports this via [Pinata](https://www.pinata.cloud/) or your own IPFS cluster setup using [Kubo](https://github.com/ipfs/kubo).
   For the purpose of this example we will set up a [free](https://www.pinata.cloud/pricing) Pinata account. Configure the Pinata API key and Pinata secret, and then add that to `.env` as
 
   ```bash
@@ -81,7 +81,11 @@ console.log(config.STAGE)
 
 _Note: if the RPC URL configured in this example fails, you can pick any other https based RPC URLs from [here](https://chainlist.org/?search=mumbai&testnets=true)_
 
+- Finally please set the ORG_NAME in the `.env` file to the name of the publisher
+
 ## Publishing
+
+To run these examples please follow the env [setup](https://github.com/verify-media/verify-client/blob/master/example/README.md) for examples folder
 
 <b>Note: It's essential to adhere to the workflows outlined in these two examples, as they provide a structured approach to publishing content. Following these workflows ensures that content is published with a specific hierarchy, facilitating the maintenance of content provenance and context over time.</b>
 
