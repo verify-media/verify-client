@@ -118,7 +118,7 @@ export enum ContentTypes {
   VIDEO = 'video'
 }
 
-type ContentMetadata = {
+export type ContentMetadata = {
   type: ContentTypes
   title: string
   description: string
