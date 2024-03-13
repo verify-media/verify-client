@@ -1,7 +1,7 @@
 ## Example
 Let's consider the case of a publisher, News24X7, aiming to publish articles via the Verify protocol. News24X7 both generates original content and licenses content from other publishers.
 
-_<b>Note: asset ownership has to be informed in the article payload by the publisher using the fields ownership and licensedFrom</b>_
+_<b>Note: asset ownership has to be informed in the article payload by the publisher using the fields ownership and licensedFrom: [ref](https://probable-adventure-1w929yl.pages.github.io/types/types_schema.ContentMetadata.html)</b>_
 
 ### Setting up the publisher identities and org structure
 Following the steps outlined in the  [getting started](https://github.com/verify-media/verify-client/blob/main/GETTING_STARTED.md) guide the initial phase involves setting up publisher identities and the organizational structure. This involves creating an orgNode and an OriginalMaterialNode.
