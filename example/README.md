@@ -25,7 +25,7 @@ npm i @verify-media/verify-client
 Or use [npm-link](#https://docs.npmjs.com/cli/v10/commands/npm-link) to use sdk build as a node module in the example app
 
 ```bash
-git clone git@github.com:bclxyz/verify-client.git
+git clone git@github.com:verify-media/verify-client.git
 cd verify-client
 npm i
 npm run build
