@@ -59,7 +59,7 @@ Please check the [getting started](https://github.com/verify-media/verify-client
 
 ## Examples
 
-The repository hosts various [examples](https://github.com/verify-media/verify-client/tree/master/example) of how to use the sdk.
+The repository hosts various [examples](https://github.com/verify-media/verify-client/tree/main/example) of how to use the sdk.
 
 ## Tech Docs
 

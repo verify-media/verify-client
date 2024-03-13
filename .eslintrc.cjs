@@ -27,7 +27,7 @@ module.exports = {
   reportUnusedDisableDirectives: true,
   parserOptions: {
     /* enabling "project" field is a performance hit
-      https://github.com/typescript-eslint/typescript-eslint/blob/master/docs/getting-started/linting/TYPED_LINTING.md#performance
+      https://github.com/typescript-eslint/typescript-eslint/blob/main/docs/getting-started/linting/TYPED_LINTING.md#performance
     */
     sourceType: 'module'
   },
