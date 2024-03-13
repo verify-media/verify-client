@@ -39,7 +39,7 @@ Your environment should now be setup to use the VERIFY client sdk build as a nod
 
 # Setup
 
-Please refer the [getting started](https://github.com/verify-media/verify-client/blob/public-release/GETTING_STARTED.md) guide.
+Please refer the [getting started](https://github.com/verify-media/verify-client/blob/main/GETTING_STARTED.md) guide.
 
 ## Examples
 

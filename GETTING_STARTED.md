@@ -8,11 +8,11 @@ To start publishing the sdk needs to be configured with some settings. It can be
 
 ```bash
 DEBUG=0 # 0 if false and 1 is true with default false. When true print debug logs
-RPC_URL=https://polygon-mumbai.g.alchemy.com/v2/demo # allows for a developer to interact with an Ethereum node via HTTP(S)
+RPC_URL=https://polygon-mumbai.blockpi.network/v1/rpc/public # allows for a developer to interact with an Ethereum node via HTTP(S)
 STAGE=testnet
 CHAIN_ID=80001
 CHAIN=mumbai
-MAX_GAS_PRICE=30000000000 #if set a transaction will not be performed if network gas is above this limit
+MAX_GAS_PRICE=0 #if set a transaction will not be performed if network gas is above this limit
 ROOT_PVT_KEY=<root_pvt_key> # private key for the root wallet which acts as the publishers identity
 PVT_KEY=<intermediate_pvt_key> # private key for the intermediate wallet which acts as the signer, there could be more than one signer wallets hence its preferred to pass this value as a parameter instead
 WALLET_EXPIRY_DAYS=3 # number for days for which the intermediate wallet is active and authorized
@@ -32,7 +32,7 @@ dotenv.config()
 import {init, getConfig} from '@verify-media/verify-client'
 init()
 const config = getConfig()
-console.log(config.STAGE)
+console.log(config.stage)
 ```
 
 - Since content gets uploaded to ipfs and then published to blockchain you would need the following:
@@ -71,7 +71,7 @@ console.log(config.STAGE)
     ```bash
       npm run get-balance
     ```
-- All content published on VERIFY Protocol are stored on IPFS. VERIFY client sdk supports this via [Pinata](https://www.pinata.cloud/) or your own IPFS cluster setup using [Kubo](https://github.com/ipfs/kubo).
+- All content published on VERIFY Protocol is stored on IPFS. VERIFY client sdk supports this via [Pinata](https://www.pinata.cloud/) or your own IPFS cluster setup using [Kubo](https://github.com/ipfs/kubo).
   For the purpose of this example we will set up a [free](https://www.pinata.cloud/pricing) Pinata account. Configure the Pinata API key and Pinata secret, and then add that to `.env` as
 
   ```bash
@@ -79,11 +79,15 @@ console.log(config.STAGE)
   PINATA_SECRET=<PINATA_SECRET>
   ```
 
-_Note: if the RPC URL configured in this example fails, you can pick any other https based RPC URLs from [here](https://chainlist.org/?search=mumbai&testnets=true)_
+_Note: if the RPC URL configured in this example fails, you can pick any other https based RPC URLs from [here](https://chainlist.org/?search=mumbai&testnets=true)_. Public RPC URLs might be rate limited or have other restrictions, so it's recommended to use a private RPC URL.
+
+- Finally please set the ORG_NAME in the `.env` file to the name of the publisher
 
 ## Publishing
 
-<b>Note: It's essential to adhere to the workflows outlined in these two examples, as they provide a structured approach to publishing content. Following these workflows ensures that content is published with a specific hierarchy, facilitating the maintenance of content provenance and context over time.</b>
+To run these examples please follow the env [setup](https://github.com/verify-media/verify-client/blob/master/example/README.md) for examples folder
+
+<b>Note: The examples provided below illustrate a specific workflow for publishing content. The Verify protocol does not endorse any particular workflow; publishers are free to implement processes based on their individual requirements. The following example is intended to showcase one possible workflow.</b>
 
 
 - ### Setting up the publisher identities and org structure 
