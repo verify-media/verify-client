@@ -69,7 +69,12 @@ export { LocationProtocol, ContentTypes, MIME_TYPES } from './types/schema'
 export { init, getConfig } from './utils/config'
 export { STAGE } from './types/app'
 export type { Config } from './types/app'
-export type { AssetNode, Signature, Article } from './types/schema'
+export type {
+  AssetNode,
+  Signature,
+  Article,
+  ContentMetadata
+} from './types/schema'
 export type { UploadRequest } from './storage/ipfs/types'
 export type {
   NodeType,
