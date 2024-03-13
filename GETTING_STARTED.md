@@ -85,7 +85,7 @@ _Note: if the RPC URL configured in this example fails, you can pick any other h
 
 ## Publishing
 
-To run these examples please follow the env [setup](https://github.com/verify-media/verify-client/blob/master/example/README.md) for examples folder
+To run these examples please follow the env [setup](https://github.com/verify-media/verify-client/blob/main/example/README.md) for examples folder
 
 <b>Note: The examples provided below illustrate a specific workflow for publishing content. The Verify protocol does not endorse any particular workflow; publishers are free to implement processes based on their individual requirements. The following example is intended to showcase one possible workflow.</b>
 
@@ -107,7 +107,7 @@ To run these examples please follow the env [setup](https://github.com/verify-me
     ```
 
   #### Execute:
-  - env [setup](https://github.com/verify-media/verify-client/blob/master/example/README.md) for examples folder
+  - env [setup](https://github.com/verify-media/verify-client/blob/main/example/README.md) for examples folder
 
     ```bash
     npm run init-publisher
@@ -131,7 +131,7 @@ To run these examples please follow the env [setup](https://github.com/verify-me
 
 
   #### execute: 
-  env [setup](https://github.com/verify-media/verify-client/blob/master/example/README.md) for examples folder
+  env [setup](https://github.com/verify-media/verify-client/blob/main/example/README.md) for examples folder
 
   ```bash
   npm run publish-article <orgNodeId> <ogNodeId>
