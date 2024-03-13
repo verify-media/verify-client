@@ -106,8 +106,8 @@ const pinataConfig = {
   pinataSecret: process.env.PINATA_SECRET || ''
 }
 
-const orgNodeId = process.env.ORG_NODE
-const ogNodeId = process.env.OG_NODE
+const orgNodeId = process.argv[2] || process.env.ORG_NODE_ID
+const ogNodeId = process.argv[3] || process.env.OG_NODE_ID
 
 if (!orgNodeId || !ogNodeId) {
   throw new Error('please pass org NodeId and Original Material NodeId')

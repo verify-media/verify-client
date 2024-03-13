@@ -12,7 +12,7 @@ RPC_URL=https://polygon-mumbai.blockpi.network/v1/rpc/public # allows for a deve
 STAGE=testnet
 CHAIN_ID=80001
 CHAIN=mumbai
-MAX_GAS_PRICE=30000000000 #if set a transaction will not be performed if network gas is above this limit
+MAX_GAS_PRICE=0 #if set a transaction will not be performed if network gas is above this limit
 ROOT_PVT_KEY=<root_pvt_key> # private key for the root wallet which acts as the publishers identity
 PVT_KEY=<intermediate_pvt_key> # private key for the intermediate wallet which acts as the signer, there could be more than one signer wallets hence its preferred to pass this value as a parameter instead
 WALLET_EXPIRY_DAYS=3 # number for days for which the intermediate wallet is active and authorized
@@ -79,7 +79,7 @@ console.log(config.stage)
   PINATA_SECRET=<PINATA_SECRET>
   ```
 
-_Note: if the RPC URL configured in this example fails, you can pick any other https based RPC URLs from [here](https://chainlist.org/?search=mumbai&testnets=true)_
+_Note: if the RPC URL configured in this example fails, you can pick any other https based RPC URLs from [here](https://chainlist.org/?search=mumbai&testnets=true)_. Public RPC URLs might be rate limited or have other restrictions, so it's recommended to use a private RPC URL.
 
 - Finally please set the ORG_NAME in the `.env` file to the name of the publisher
 
@@ -87,7 +87,7 @@ _Note: if the RPC URL configured in this example fails, you can pick any other h
 
 To run these examples please follow the env [setup](https://github.com/verify-media/verify-client/blob/master/example/README.md) for examples folder
 
-<b>Note: It's essential to adhere to the workflows outlined in these two examples, as they provide a structured approach to publishing content. Following these workflows ensures that content is published with a specific hierarchy, facilitating the maintenance of content provenance and context over time.</b>
+<b>Note: The examples provided below illustrate a specific workflow for publishing content. The Verify protocol does not endorse any particular workflow; publishers are free to implement processes based on their individual requirements. The following example is intended to showcase one possible workflow.</b>
 
 
 - ### Setting up the publisher identities and org structure 
