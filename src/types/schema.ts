@@ -68,6 +68,7 @@ export type AssetNodeData = {
       unit: string
     }
     published: string
+    additional?: Record<string, unknown>
   }
   contentBinding: {
     algo: HashingAlogs

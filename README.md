@@ -51,7 +51,7 @@ VERIFY is a public library of signed digital assets with capabilities that allow
   ```bash
   0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad
   ```
-  Congratulations you have the sdk up and running!!!
+  the sdk is up and running now.
 
 ## Getting started
 
