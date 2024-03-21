@@ -1,5 +1,11 @@
 # @verify-media/verify-client
 
+## 1.0.1
+
+### Patch Changes
+
+- fae36a1: add an optional field in the asset schema
+
 ## 0.0.3
 
 ### Patch Changes
