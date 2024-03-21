@@ -186,7 +186,8 @@ export function isValidAssetNode(asset: AssetNodeData): {
           }
 
           return value
-        })
+        }),
+      additional: Joi.object().optional()
     }).required(),
     contentBinding: Joi.object({
       algo: Joi.string().valid('keccak256').required(),
