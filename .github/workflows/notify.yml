@@ -18,7 +18,7 @@ jobs:
           fields: repo,commit,author,action,eventName,ref,workflow,job,took
           custom_payload: |
             {
-              "channel": "#C06NY2M2DAN",
+              "channel": "${{ vars.SLACK_CHANNEL}}",
               "username": "Release Notification",
               "icon_emoji": ":rocket:",
               "text": "A new release has been published in *${{ github.repository }}*: *${{ github.event.release.tag_name }}*",
