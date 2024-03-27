@@ -1,0 +1,33 @@
+name: Publish Release Notification to Slack
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  notifySlack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Notify Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          fields: repo,commit,author,action,eventName,ref,workflow,job,took
+          custom_payload: |
+            {
+              "channel": "${{ vars.SLACK_CHANNEL}}",
+              "username": "Release Notification",
+              "icon_emoji": ":rocket:",
+              "text": "A new release has been published in *${{ github.repository }}*: *${{ github.event.release.tag_name }}*",
+              "attachments": [
+                {
+                  "title": "Release Info",
+                  "text": "Repository: ${{ github.repository }}\nRelease Name: ${{ github.event.release.name }}\nPublished by: @${{ github.actor }}\nRelease Notes: ${{ github.event.release.body }}"
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
