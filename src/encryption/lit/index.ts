@@ -134,14 +134,21 @@ export const encryptAsset = async ({
   content: Blob
   contentHash: string
 }): Promise<EncryptAssetResponse> => {
+  debugLogger().debug(`read sdk config`)
   const { contractAddress, chain } = getConfig()
+
+  debugLogger().debug(`init lit client`)
   const litClient = await getClient()
   if (!litClient) throw new Error('lit client not initialized')
 
   // get auth sig
+  debugLogger().debug('sign auth message')
   const authSig = await signAuthMessage()
 
+  debugLogger().debug('get access control conditions')
   const authorization = getDefaultAuth(contentHash, chain, contractAddress)
+
+  debugLogger().debug('encrypt file')
   const encryptedContent = await encryptFile(
     {
       file: content,
@@ -180,14 +187,20 @@ export const decryptAsset = async ({
   dataToEncryptHash: string
   contentHash: string
 }): Promise<Uint8Array> => {
+  debugLogger().debug(`read sdk config`)
   const { contractAddress, chain } = getConfig()
+  debugLogger().debug(`init lit client`)
   const litClient = await getClient()
   if (!litClient) throw new Error('lit client not initialized')
+
   // get auth sig
+  debugLogger().debug('sign auth message')
   const authSig = await signAuthMessage()
 
+  debugLogger().debug('get access control conditions')
   const authorization = getDefaultAuth(contentHash, chain, contractAddress)
 
+  debugLogger().debug('decrypt file')
   const asset = await decryptToFile(
     {
       unifiedAccessControlConditions: authorization,

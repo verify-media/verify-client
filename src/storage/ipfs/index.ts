@@ -32,8 +32,11 @@ export const uploadToIPFS = async ({
   config,
   type
 }: UploadToIPFSParams): Promise<IPFSResponse | null> => {
+  debugLogger().debug(`read ipfs config`)
   const { rpcUri, creds } = config
   const { name, body } = data
+
+  debugLogger().debug(`prep form data`)
   const auth = Buffer.from(creds).toString('base64')
   const headers = new Headers()
 
@@ -91,10 +94,10 @@ export const fetchFromIPFS = async (
   type: string,
   ipfsGateway: string
 ): Promise<AssetNode | Uint8Array | null> => {
-  debugLogger().debug(cid)
+  debugLogger().debug(`fetching from IPFS ${cid}`)
   const _cid = ensureIPFS(cid).split('ipfs://')[1]
   const url = `${ipfsGateway}/${_cid}`
-  debugLogger().debug(url)
+  debugLogger().debug(`fetching from ${url}`)
   const response = await fetch(url)
   debugLogger().debug(response)
   let data: AssetNode | Uint8Array | null = null

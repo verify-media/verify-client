@@ -110,15 +110,20 @@ export async function decrypt(
   type: string
   content: string | Buffer
 }> {
+  debugLogger().debug(
+    `decrypting asset ${assetDetail.provenance.data.contentBinding.hash}`
+  )
   const assetMeta = assetDetail.provenance
   let encContent: Uint8Array | AssetNode | null = null
   if (pinataConfig?.pinataKey && pinataConfig?.pinataSecret) {
+    debugLogger().debug(`fetching asset from pinata`)
     encContent = (await fetchFileFromPinata(
       assetMeta.data.locations[0].uri,
       'asset',
       pinataConfig
     )) as AssetNode
   } else {
+    debugLogger().debug(`fetching asset from ipfs`)
     encContent = await fetchFromIPFS(
       assetMeta.data.locations[0].uri,
       'asset',
@@ -127,10 +132,11 @@ export async function decrypt(
   }
 
   if (assetMeta.data.type === 'text/html') {
+    debugLogger().debug(`decrypting html asset`)
     const decoder = new TextDecoder()
     const decoded = decoder.decode(encContent as Uint8Array)
     const encryptedAsset = JSON.parse(decoded)
-
+    debugLogger().debug(`decoding encrypted asset`)
     const decryptedAsset = await decryptAsset({
       ciphertext: encryptedAsset.ciphertext,
       dataToEncryptHash: encryptedAsset.dataToEncryptHash,
@@ -143,9 +149,11 @@ export async function decrypt(
       content: decryptedString
     }
   } else {
+    debugLogger().debug(`decrypting non-html asset`)
     const decoder = new TextDecoder()
     const decoded = decoder.decode(encContent as Uint8Array)
     const encryptedAsset = JSON.parse(decoded)
+    debugLogger().debug(`decoding encrypted asset`)
     const decryptedAsset = await decryptAsset({
       ciphertext: encryptedAsset.ciphertext,
       dataToEncryptHash: encryptedAsset.dataToEncryptHash,

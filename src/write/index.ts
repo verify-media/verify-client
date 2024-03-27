@@ -100,15 +100,21 @@ const sign = async (message: string): Promise<Signature> => {
 export const signAssetNode = async (
   assetNodeData: AssetNodeData
 ): Promise<Signature> => {
+  debugLogger().debug(`validate asset node data`)
   const { 'lit-protocol': litProtocol } = assetNodeData?.access || {}
   const result = isValidAssetNode(assetNodeData)
   if (result.error) {
     throw new Error(result.error.message)
   }
+  debugLogger().debug(`asset node data is valid`)
   if (assetNodeData?.encrypted && !litProtocol?.version) {
     throw new Error('encrypted asset is missing version')
   }
+  debugLogger().debug(`gen asset node data hash`)
+
   const hash = hashData(JSON.stringify(assetNodeData))
+
+  debugLogger().debug(`sign asset node data hash`)
   const signature = await sign(hash)
 
   return signature
