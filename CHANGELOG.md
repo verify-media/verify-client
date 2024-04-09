@@ -1,5 +1,11 @@
 # @verify-media/verify-client
 
+## 1.0.2
+
+### Patch Changes
+
+- abfb22f: add error parser for smart contract errors, add debug mode logs
+
 ## 1.0.1
 
 ### Patch Changes
