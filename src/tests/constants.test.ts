@@ -1,6 +1,6 @@
 // Copyright 2023 Blockchain Creative Labs LLC
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -13,29 +13,35 @@
 // limitations under the License.
 import {
   getIdentityContractAddress,
-  getGraphContractAddress
+  getGraphContractAddress,
+  getLitNetwork
 } from '../constants'
 
 describe('getIdentityContractAddress', () => {
   it('returns the correct contract address for testnet', () => {
     const result = getIdentityContractAddress('testnet')
-    expect(result).toBe('0x27BA7E931906FebA79dED5d32947b12f30379135')
+    expect(result).toBe('0xFC937a068c93e5878CcD5C20f2DBaEf95d7F1Cfe')
+  })
+
+  it('returns the correct contract address for sandbox', () => {
+    const result = getIdentityContractAddress('sandbox')
+    expect(result).toBe('0xdCE27c4a76bE1fF9F9C543E13FCC3591E33A0E25')
   })
 
   it('returns the correct contract address for mainnet', () => {
     const result = getIdentityContractAddress('mainnet')
-    expect(result).toBe('0xe2547fe5E99a08357083cFA42C6CDC0Cf5D65215')
+    expect(result).toBe('TBD')
   })
 
   it('throws an error for an invalid stage', () => {
     expect(() => getIdentityContractAddress('invalid')).toThrow(
-      'stage can be either testnet or mainnet'
+      'stage can be either sandbox, testnet or mainnet'
     )
   })
 
   it('throws an error for an empty stage', () => {
     expect(() => getIdentityContractAddress('')).toThrow(
-      'stage can be either testnet or mainnet'
+      'stage can be either sandbox, testnet or mainnet'
     )
   })
 })
@@ -43,23 +49,46 @@ describe('getIdentityContractAddress', () => {
 describe('getGraphContractAddress', () => {
   it('returns the correct contract address for testnet', () => {
     const result = getGraphContractAddress('testnet')
-    expect(result).toBe('0xEF2E371BaFAe46a116519F18A1cfF750570E8842')
+    expect(result).toBe('0xAE8c7c7e6819f425CE750CC7F7e72A13Ef3635E0')
+  })
+
+  it('returns the correct contract address for sandbox', () => {
+    const result = getGraphContractAddress('sandbox')
+    expect(result).toBe('0xEe586a3655EB0D017643551e9849ed828Fd7c7FA')
   })
 
   it('returns the correct contract address for mainnet', () => {
     const result = getGraphContractAddress('mainnet')
-    expect(result).toBe('0x41BC4B37093F156B1BAC7785e85fE5b25203f0C8')
+    expect(result).toBe('TBD')
   })
 
   it('throws an error for an invalid stage', () => {
     expect(() => getGraphContractAddress('invalid')).toThrow(
-      'stage can be either testnet or mainnet'
+      'stage can be either sandbox, testnet or mainnet'
     )
   })
 
   it('throws an error for an empty stage', () => {
     expect(() => getGraphContractAddress('')).toThrow(
-      'stage can be either testnet or mainnet'
+      'stage can be either sandbox, testnet or mainnet'
+    )
+  })
+})
+
+describe('getLitNetwork', () => {
+  it('returns the correct network name for testnet', () => {
+    const result = getLitNetwork('testnet')
+    expect(result).toBe('cayenne')
+  })
+
+  it('returns the correct network name for mainnet', () => {
+    const result = getLitNetwork('mainnet')
+    expect(result).toBe('habanero')
+  })
+
+  it('throws an error for an invalid stage', () => {
+    expect(() => getLitNetwork('invalid')).toThrow(
+      'stage can be either sandbox, testnet or mainnet'
     )
   })
 })

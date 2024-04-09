@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import { LitNodeClient } from '@lit-protocol/lit-node-client'
+import { getLitNetwork } from '../../constants'
+import { getConfig } from '../../utils/config'
 
 /**
  * This module exports an object containing two functions: `init` and `getClient`.
@@ -56,13 +58,14 @@ export const { init, getClient } = (() => {
     if (litClient) {
       return litClient
     }
-
+    const config = getConfig()
     const client = new LitNodeClient({
       alertWhenUnauthorized: false,
-      litNetwork: 'cayenne',
+      litNetwork: getLitNetwork(config.stage),
       debug: false
     })
     await client.connect()
+
     litClient = client
     csp.resolve && csp.resolve(litClient)
 

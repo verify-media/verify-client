@@ -14,22 +14,39 @@
 export const getIdentityContractAddress = (stage: string): string => {
   switch (stage) {
     case 'testnet':
-      return '0x27BA7E931906FebA79dED5d32947b12f30379135'
+      return '0xFC937a068c93e5878CcD5C20f2DBaEf95d7F1Cfe'
+    case 'sandbox':
+      return '0xdCE27c4a76bE1fF9F9C543E13FCC3591E33A0E25'
     case 'mainnet':
-      return '0xe2547fe5E99a08357083cFA42C6CDC0Cf5D65215'
+      return 'TBD'
     default:
-      throw new Error('stage can be either testnet or mainnet')
+      throw new Error('stage can be either sandbox, testnet or mainnet')
   }
 }
 
 export const getGraphContractAddress = (stage: string): string => {
   switch (stage) {
     case 'testnet':
-      return '0xEF2E371BaFAe46a116519F18A1cfF750570E8842'
+      return '0xAE8c7c7e6819f425CE750CC7F7e72A13Ef3635E0'
+    case 'sandbox':
+      return '0xEe586a3655EB0D017643551e9849ed828Fd7c7FA'
     case 'mainnet':
-      return '0x41BC4B37093F156B1BAC7785e85fE5b25203f0C8'
+      return 'TBD'
     default:
-      throw new Error('stage can be either testnet or mainnet')
+      throw new Error('stage can be either sandbox, testnet or mainnet')
+  }
+}
+
+export const getLitNetwork = (stage: string): string => {
+  switch (stage) {
+    case 'testnet':
+      return 'cayenne'
+    case 'sandbox':
+      return 'cayenne'
+    case 'mainnet':
+      return 'habanero'
+    default:
+      throw new Error('stage can be either sandbox, testnet or mainnet')
   }
 }
 

@@ -14,7 +14,8 @@
 // limitations under the License.
 export enum STAGE {
   testnet = 'testnet',
-  mainnet = 'mainnet'
+  mainnet = 'mainnet',
+  sandbox = 'sandbox'
 }
 
 /**

@@ -140,17 +140,28 @@ export const encryptAsset = async ({
 
   // get auth sig
   const authSig = await signAuthMessage()
-
   const authorization = getDefaultAuth(contentHash, chain, contractAddress)
+
+  // Set a timeout to throw an error after a fixed amount of time
+  const timeout = setTimeout(() => {
+    throw new Error('Operation timed out')
+  }, 60 * 1000) // 60 seconds
+
   const encryptedContent = await encryptFile(
     {
       file: content,
       chain,
       authSig,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
       unifiedAccessControlConditions: authorization
     },
     litClient
   )
+
+  await litClient.disconnect()
+  // If the operation completes before the timeout, clear the timeout
+  clearTimeout(timeout)
 
   const { ciphertext, dataToEncryptHash } = encryptedContent
 
@@ -185,11 +196,17 @@ export const decryptAsset = async ({
   if (!litClient) throw new Error('lit client not initialized')
   // get auth sig
   const authSig = await signAuthMessage()
-
   const authorization = getDefaultAuth(contentHash, chain, contractAddress)
+
+  // Set a timeout to throw an error after a fixed amount of time
+  const timeout = setTimeout(() => {
+    throw new Error('Operation timed out')
+  }, 60 * 1000) // 60 seconds
 
   const asset = await decryptToFile(
     {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
       unifiedAccessControlConditions: authorization,
       ciphertext,
       dataToEncryptHash,
@@ -198,6 +215,10 @@ export const decryptAsset = async ({
     },
     litClient
   )
+
+  await litClient.disconnect()
+  // If the operation completes before the timeout, clear the timeout
+  clearTimeout(timeout)
 
   return asset
 }

@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { readFileSync, writeFileSync } from 'fs'
 
 const packageJson = JSON.parse(readFileSync('./package.json', 'utf8'))

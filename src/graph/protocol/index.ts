@@ -204,6 +204,7 @@ export const getChildrenNodes = async (
   const graphContract = getContractInstance()
   const node = await getNode(nodeId)
   const childrenIds = await graphContract.childrenOf(node.token.toString())
+  console.log('childrenIds', childrenIds)
   const promises = childrenIds.map(async (childId: string) => {
     const node = await tokenToNode(childId)
 
@@ -262,7 +263,6 @@ export const verifyAsset = async (
   signer: string
   root: string
 }> => {
-  console.log(JSON.stringify(asset))
   const validity = {
     signatureVerified: false,
     contentBindingVerified: false,

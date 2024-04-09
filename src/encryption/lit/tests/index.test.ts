@@ -43,6 +43,7 @@ jest.mock('@lit-protocol/lit-node-client', () => {
   return {
     LitNodeClient: jest.fn().mockImplementation(() => {
       return {
+        disconnect: jest.fn().mockResolvedValue(true),
         connect: jest.fn().mockResolvedValue(true),
         ready: true,
         config: {
@@ -78,7 +79,7 @@ describe('test sign functions', () => {
 
     const _siweMessage = await generateSIWEMessage({
       address: '0x123',
-      chainId: 80001
+      chainId: 1833
     })
 
     expect(siweMessage.statement).toEqual(_siweMessage.statement)

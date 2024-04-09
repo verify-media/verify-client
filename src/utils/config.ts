@@ -56,7 +56,7 @@ export const { init, getConfig, clearConfig, unset, set } = (() => {
       )
     }
     if (!stages.includes(stage as unknown as STAGE)) {
-      throw new Error('stage can be either testnet or mainnet')
+      throw new Error('stage can be either sandbox, testnet or mainnet')
     }
 
     if (!_config.stage) _config.stage = stage
