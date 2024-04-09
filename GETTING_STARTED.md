@@ -45,7 +45,7 @@ console.log(config.stage)
 - **Wallets**
   - VERIFY Protocol expects a publisher to have a [root identity](https://docs.verifymedia.com/publishing/identity/#registering-a-root-identity) and an [intermediate identity](https://docs.verifymedia.com/publishing/identity/#creating-a-intermediate-identity) which are represented by [wallets](https://ethereum.org/wallets)
   - If you don't have a wallet already, you could set one up using
-    - [MetaMask](https://codehs.com/tutorial/jkeesh/how-to-set-up-an-ethereum-wallet-on-metamask) (_<b>Note: this is NOT recommended in production / Mainnet environments</b>_)
+    - [MetaMask](https://codehs.com/tutorial/jkeesh/how-to-set-up-an-ethereum-wallet-on-metamask) (_<b>Note: this is NOT recommended in production / mainnet environments</b>_)
     - OR gen-wallet script from the [examples folder](https://github.com/verify-media/verify-client/blob/main/example/README.md)
       ```bash
       npm run gen-wallet
