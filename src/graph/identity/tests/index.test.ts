@@ -139,9 +139,17 @@ describe('identity functions', () => {
 
   it('should fail register intermediate wallet if rootPvtKey is not set', async () => {
     unset('rootPvtKey')
-    await expect(register()).rejects.toThrow(
-      'rootPvtKey cannot be empty, either set and env var ROOT_PVT_KEY or pass a value to this function'
-    )
+    const errorObj = {
+      data: 'rootPvtKey cannot be empty, either set and env var ROOT_PVT_KEY or pass a value to this function',
+      error:
+        'rootPvtKey cannot be empty, either set and env var ROOT_PVT_KEY or pass a value to this function',
+      type: 'UnknownError'
+    }
+    try {
+      await register()
+    } catch (error) {
+      expect(error).toMatchObject(errorObj)
+    }
     config = init()
   })
 

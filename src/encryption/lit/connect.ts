@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import { LitNodeClient } from '@lit-protocol/lit-node-client'
+import { debugLogger } from '../../utils/logger'
 
 /**
  * This module exports an object containing two functions: `init` and `getClient`.
@@ -57,11 +58,20 @@ export const { init, getClient } = (() => {
       return litClient
     }
 
+    debugLogger().debug(
+      `lit client settings, ${{
+        alertWhenUnauthorized: false,
+        litNetwork: 'cayenne',
+        debug: false
+      }} `
+    )
+
     const client = new LitNodeClient({
       alertWhenUnauthorized: false,
       litNetwork: 'cayenne',
       debug: false
     })
+
     await client.connect()
     litClient = client
     csp.resolve && csp.resolve(litClient)

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import Pino from 'pino'
+import { version } from '../version'
 
 function enableDebug(): {
   setDebug: (debug: boolean) => void
@@ -53,5 +54,6 @@ export const debugLogger = (): Pino.Logger =>
     },
     enabled: !!(getDebug() || process.env.DEBUG === '1'),
     redact: ['key', 'pvtKey', 'rootPvtKey'],
-    timestamp: Pino.stdTimeFunctions.isoTime
+    timestamp: Pino.stdTimeFunctions.isoTime,
+    msgPrefix: `@verify-media/verify-client@${version} ==> `
   })

@@ -14,6 +14,7 @@
 export {
   hashData,
   hashImage,
+  hash,
   signAssetNode,
   uploadToIPFS,
   uploadToPinata,

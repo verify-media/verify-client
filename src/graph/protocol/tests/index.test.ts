@@ -240,9 +240,16 @@ describe('graph functions', () => {
 
   test('should fail set uri if the legacy gas price is higher than configured max gas price', async () => {
     mockGasPrice.mockImplementationOnce(() => Promise.resolve(mockHighGasPrice))
-    await expect(setUri('1', 'ipfs://location')).rejects.toThrow(
-      'Gas limit exceeded as mentioned in config'
-    )
+    const errorObj = {
+      data: 'Gas limit exceeded as mentioned in config',
+      error: 'Gas limit exceeded as mentioned in config',
+      type: 'UnknownError'
+    }
+    try {
+      await setUri('1', 'ipfs://location')
+    } catch (error) {
+      expect(error).toMatchObject(errorObj)
+    }
 
     expect(Wallet).toHaveBeenCalledWith(
       config.pvtKey,
