@@ -149,7 +149,8 @@ export const encryptAsset = async ({
   const authorization = getDefaultAuth(contentHash, chain, contractAddress)
 
   // Set a timeout to throw an error after a fixed amount of time
-  const timeout = setTimeout(() => {
+  const timeout = setTimeout(async () => {
+    await litClient.disconnect()
     throw new Error('Operation timed out')
   }, 60 * 1000) // 60 seconds
 
@@ -212,7 +213,8 @@ export const decryptAsset = async ({
   const authorization = getDefaultAuth(contentHash, chain, contractAddress)
 
   // Set a timeout to throw an error after a fixed amount of time
-  const timeout = setTimeout(() => {
+  const timeout = setTimeout(async () => {
+    await litClient.disconnect()
     throw new Error('Operation timed out')
   }, 60 * 1000) // 60 seconds
 
