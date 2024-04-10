@@ -54,7 +54,7 @@ export const { init, getClient } = (() => {
    *
    * @returns A promise that resolves with the `LitNodeClient` instance.
    */
-  const init = async (): Promise<LitNodeClient> => {
+  const init = async (debug?: boolean): Promise<LitNodeClient> => {
     if (litClient) {
       return litClient
     }
@@ -62,7 +62,7 @@ export const { init, getClient } = (() => {
     const client = new LitNodeClient({
       alertWhenUnauthorized: false,
       litNetwork: getLitNetwork(config.stage),
-      debug: false
+      debug: debug || process.env.LIT_DEBUG === '1' || false
     })
     await client.connect()
 

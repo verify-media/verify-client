@@ -8,8 +8,8 @@ import {
   setUri
 } from '../graph/protocol'
 import {
-  addEncryptionData,
   addIPFSData,
+  addEncryptionData,
   addSignatureData,
   hashData,
   hashImage,
@@ -315,6 +315,7 @@ export const publishArticle = async (
       uri: ''
     }
     // gen asset hash
+    console.log('gen asset hash')
     const assetHash = genHash(content)
 
     // check if asset exists on chain
@@ -328,9 +329,13 @@ export const publishArticle = async (
 
     //if asset is new
     if (isAssetNew) {
+      console.log('construct asset node')
       assetNode = constructAssetNode(content, assetHash)
+      assetNode.data.encrypted = false
       // encrypt asset
       const asset = await getAssetBlob(content)
+
+      console.log('encrypt asset')
       const encryptedAsset = await encryptAsset({
         content: asset as Blob,
         contentHash: assetHash
@@ -343,6 +348,7 @@ export const publishArticle = async (
       const encoder = new TextEncoder()
       const encContent = encoder.encode(JSON.stringify(encryptedAsset))
 
+      console.log('upload to ipfs')
       const assetLocation = await uploadToPinata({
         data: {
           name: assetHash,
@@ -361,10 +367,12 @@ export const publishArticle = async (
       // add encrypted asset location to assetNode
       assetNode = addIPFSData(assetNode, ensureIPFS(assetLocation.IpfsHash))
 
+      console.log('sign asset node')
       // sign assetNode
       const signature = await signAssetNode(assetNode.data)
       assetNode = addSignatureData(assetNode, signature)
 
+      console.log('upload asset meta to ipfs')
       // upload asset meta to IPFS
       const assetMetaLocation = await uploadToPinata({
         data: {
@@ -397,6 +405,7 @@ export const publishArticle = async (
       // construct new assetNode
       let newAssetNode = constructAssetNode(content, assetHash)
 
+      console.log('compare asset meta')
       // check if asset metadata has changed
       if (genAssetMetaHash(prevAssetNode) === genAssetMetaHash(newAssetNode)) {
         chainAction = 'NOOP'
@@ -451,6 +460,7 @@ export const publishArticle = async (
       if (content.type === 'text') {
         // text node is an article node and hence gets published as
         // orgNode ==> originalMaterialNode ==> articleNode ==> articleAsset
+        console.log('create article node')
         parentId = await createArticleNode(
           article.metadata.origin,
           article.metadata.id,
@@ -468,10 +478,13 @@ export const publishArticle = async (
       if (!content.licensedFrom)
         throw new Error('content.licensedFrom is required')
 
+      console.log('create license node')
       parentId = await createLicenseNode(content.licensedFrom, org.orgNodeId)
     }
 
     chainAction = chainAction.replace(/\s+/g, '').toUpperCase()
+
+    console.log('chain action', chainAction)
     switch (chainAction) {
       case 'PUBLISH':
         await publish(parentId, {
