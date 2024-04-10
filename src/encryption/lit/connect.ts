@@ -14,6 +14,7 @@
 import { LitNodeClient } from '@lit-protocol/lit-node-client'
 import { getLitNetwork } from '../../constants'
 import { getConfig } from '../../utils/config'
+import { debugLogger } from '../../utils/logger'
 
 /**
  * This module exports an object containing two functions: `init` and `getClient`.
@@ -60,6 +61,15 @@ export const { init, getClient } = (() => {
     }
 
     const config = getConfig()
+
+    debugLogger().debug(
+      `lit client settings, ${{
+        alertWhenUnauthorized: false,
+        litNetwork: getLitNetwork(config.stage),
+        debug: debug || process.env.LIT_DEBUG === '1' || false
+      }} `
+    )
+
     const client = new LitNodeClient({
       alertWhenUnauthorized: false,
       litNetwork: getLitNetwork(config.stage),

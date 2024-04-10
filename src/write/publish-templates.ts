@@ -20,6 +20,7 @@ import {
 import { ensureHttps, ensureIPFS } from '../utils/app'
 import path from 'path'
 import { fetchFileFromPinata } from '../read'
+import { debugLogger } from '../utils/logger'
 
 const ZeroHash =
   '0x0000000000000000000000000000000000000000000000000000000000000000'
@@ -305,6 +306,7 @@ export const publishArticle = async (
     type: string
   }[]
 > => {
+  debugLogger().debug(`breaking article to assets`)
   const contents = await breakArticleToAssets(article)
   const results = []
   for (const content of contents) {
@@ -315,10 +317,11 @@ export const publishArticle = async (
       uri: ''
     }
     // gen asset hash
-    console.log('gen asset hash')
+    debugLogger().debug(`generating asset hash`)
     const assetHash = genHash(content)
 
     // check if asset exists on chain
+    debugLogger().debug(`checking if asset exists on chain`)
     const {
       isAssetNew,
       existingAssetMetaUri,
@@ -329,9 +332,9 @@ export const publishArticle = async (
 
     //if asset is new
     if (isAssetNew) {
-      console.log('construct asset node')
+      debugLogger().debug(`constructing new asset node from content`)
       assetNode = constructAssetNode(content, assetHash)
-      assetNode.data.encrypted = false
+      debugLogger().debug(`encrypting asset`)
       // encrypt asset
       const asset = await getAssetBlob(content)
 
@@ -342,9 +345,11 @@ export const publishArticle = async (
       })
 
       // add encryption data to assetNode
+      debugLogger().debug(`adding encryption data to asset node`)
       assetNode = addEncryptionData(assetNode)
 
       // upload encrypted asset to IPFS
+      debugLogger().debug(`uploading encrypted asset to IPFS`)
       const encoder = new TextEncoder()
       const encContent = encoder.encode(JSON.stringify(encryptedAsset))
 
@@ -365,15 +370,19 @@ export const publishArticle = async (
         throw new Error('failed to upload asset to IPFS')
 
       // add encrypted asset location to assetNode
+      debugLogger().debug(`adding IPFS data to asset node`)
       assetNode = addIPFSData(assetNode, ensureIPFS(assetLocation.IpfsHash))
 
       console.log('sign asset node')
       // sign assetNode
+      debugLogger().debug(`signing asset node`)
       const signature = await signAssetNode(assetNode.data)
+      debugLogger().debug(`adding signature data to asset node`)
       assetNode = addSignatureData(assetNode, signature)
 
       console.log('upload asset meta to ipfs')
       // upload asset meta to IPFS
+      debugLogger().debug(`uploading asset meta to IPFS`)
       const assetMetaLocation = await uploadToPinata({
         data: {
           name: assetNode.data.contentBinding.hash,
@@ -392,10 +401,12 @@ export const publishArticle = async (
       assetDetails.id = assetNode.data.contentBinding.hash
       assetDetails.uri = ensureIPFS(assetMetaLocation.IpfsHash)
 
+      debugLogger().debug(`asset is new, publishing to chain`)
       chainAction = 'PUBLISH'
     } else {
       // if asset exists on chain
       // get existing assetNode
+      debugLogger().debug(`asset exists on chain, fetching asset node`)
       assetNode = _assetNode
       if (!assetNode)
         throw new Error('failed to construct asset node from onchain metadata')
@@ -403,27 +414,35 @@ export const publishArticle = async (
       const prevAssetNode = assetNode
 
       // construct new assetNode
+      debugLogger().debug(`constructing new asset node from content`)
       let newAssetNode = constructAssetNode(content, assetHash)
 
       console.log('compare asset meta')
       // check if asset metadata has changed
+      debugLogger().debug(`checking if asset metadata has changed`)
       if (genAssetMetaHash(prevAssetNode) === genAssetMetaHash(newAssetNode)) {
+        debugLogger().debug(`asset metadata has not changed`)
         chainAction = 'NOOP'
       } else {
+        debugLogger().debug(`asset metadata has changed`)
         // populate new assetNode with actual asset details
         newAssetNode.data.locations = prevAssetNode.data.locations
         newAssetNode.data.access = prevAssetNode.data.access
         if (content.type !== 'text') {
+          debugLogger().debug(`asset is not text, updating published date`)
           // update pub date since metadata changed // since pub date for all non text assets is system date
           newAssetNode.data.manifest.published = new Date().toISOString()
         }
+        debugLogger().debug(`adding history to asset node`)
         newAssetNode.data.history.push(ensureIPFS(existingAssetMetaUri))
 
         // sign assetNode
+        debugLogger().debug(`signing asset node`)
         const signature = await signAssetNode(newAssetNode.data)
         newAssetNode = addSignatureData(newAssetNode, signature)
 
         // upload asset meta to IPFS
+        debugLogger().debug(`uploading asset meta to IPFS`)
         const assetMetaLocation = await uploadToPinata({
           data: {
             name: assetNode.data.contentBinding.hash,
@@ -448,7 +467,9 @@ export const publishArticle = async (
             content.licensedFrom &&
             content.licensedFrom.trim() !== '')
         ) {
+          debugLogger().debug(`asset is owned/licensed, updating on chain`)
           chainAction = content.type === 'text' ? 'PUBLISH' : 'SET_URI'
+          debugLogger().debug(`chain action: ${chainAction}`)
         }
       }
     }
@@ -457,34 +478,40 @@ export const publishArticle = async (
 
     // assets owned by publisher
     if (content.ownership === 'owned') {
+      debugLogger().debug(`asset is owned by publisher`)
       if (content.type === 'text') {
+        debugLogger().debug(`asset is text`)
         // text node is an article node and hence gets published as
         // orgNode ==> originalMaterialNode ==> articleNode ==> articleAsset
-        console.log('create article node')
+        debugLogger().debug(`creating article node`)
         parentId = await createArticleNode(
           article.metadata.origin,
           article.metadata.id,
           org.ogNodeId
         )
+        debugLogger().debug(`parent id: ${parentId}`)
       } else {
         // non text nodes are assets and hence get published as
         // orgNode ==> originalMaterialNode ==> assetNode
+        debugLogger().debug(`asset is not text`)
         parentId = org.ogNodeId
+        debugLogger().debug(`parent id: ${parentId}`)
       }
     }
 
     // assets licensed from other publishers
     if (content.ownership === 'licensed') {
+      debugLogger().debug(`asset is licensed from another publisher`)
       if (!content.licensedFrom)
         throw new Error('content.licensedFrom is required')
 
       console.log('create license node')
       parentId = await createLicenseNode(content.licensedFrom, org.orgNodeId)
+      debugLogger().debug(`parent id: ${parentId}`)
     }
 
     chainAction = chainAction.replace(/\s+/g, '').toUpperCase()
-
-    console.log('chain action', chainAction)
+    debugLogger().debug(`chain action: ${chainAction}`)
     switch (chainAction) {
       case 'PUBLISH':
         await publish(parentId, {

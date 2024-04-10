@@ -17,6 +17,7 @@ import { IDENTITY_ABI } from './types'
 import { debugLogger } from '../../utils/logger'
 import { SIGNATURE_DEADLINE, getIdentityContractAddress } from '../../constants'
 import { getCurrentBlockTime } from '../../utils/chain'
+import { withErrorHandlingIdentity } from '../../utils/error/decode-ether-error'
 
 /**
  * @hidden
@@ -218,7 +219,7 @@ const getSignatureToRegister = async (
  * For more information, see [Ethers.js Documentation](https://docs.ethers.org/v5/api/providers/types/#providers-TransactionReceipt).
  * @throws {Error} If the intermediate wallet is not set.
  */
-export const register =
+export const register = withErrorHandlingIdentity(
   async (): Promise<ethers.providers.TransactionReceipt> => {
     const { walletExpiryDays, chainId } = getConfig()
     const rootWallet = getRootWalletInstance()
@@ -235,13 +236,14 @@ export const register =
 
     if (!address) throw new Error('intermediate wallet not set')
 
-    debugLogger().debug('getting signature')
-
     const now = (await getCurrentBlockTime()).getTime()
     debugLogger().debug(`block time ${now}`)
 
     const expiry = now + 60 * 60 * 24 * walletExpiryDays // 1 day: 60 secs by 60 mins by 24 hrs
     const deadline = now + SIGNATURE_DEADLINE
+
+    debugLogger().debug('get signature to register')
+
     const signature = await getSignatureToRegister(address, expiry, deadline)
 
     debugLogger().debug('signature: %s', signature)
@@ -265,7 +267,7 @@ export const register =
 
     return receipt
   }
-
+)
 /**
  *
  * @param intermediateWalletAddress
@@ -331,7 +333,7 @@ const getSignatureToUnRegister = async (
  * For more information, see [Ethers.js Documentation](https://docs.ethers.org/v5/api/providers/types/#providers-TransactionReceipt).
  * @throws {Error} If the intermediate wallet is not set.
  */
-export const unregister =
+export const unregister = withErrorHandlingIdentity(
   async (): Promise<ethers.providers.TransactionReceipt> => {
     const { chainId } = getConfig()
     const rootWallet = getRootWalletInstance()
@@ -346,7 +348,10 @@ export const unregister =
 
     const now = (await getCurrentBlockTime()).getTime()
     const deadline = now + SIGNATURE_DEADLINE
+
     debugLogger().debug(`block time ${now}`)
+
+    debugLogger().debug('get signature to unregister')
     const signature = await getSignatureToUnRegister(address, deadline)
 
     const txn: ethers.providers.TransactionResponse =
@@ -362,6 +367,7 @@ export const unregister =
 
     return receipt
   }
+)
 
 /**
  * Checks if a wallet is registered on chain.
@@ -394,20 +400,23 @@ export const whoIs = async (address: string): Promise<string> => {
  * For more information, see [Ethers.js Documentation](https://docs.ethers.org/v5/api/providers/types/#providers-TransactionReceipt).
  * @throws {Error} If the organization name is not provided.
  */
-export const registerRoot = async (
-  orgName: string
-): Promise<ethers.providers.TransactionReceipt> => {
-  if (!orgName) throw new Error('orgName cannot be empty')
-  const rootWallet = getRootWalletInstance()
-  const identityContract = getContractInstance()
-  debugLogger().debug('registering root wallet: %s', rootWallet.address)
-  const txn: ethers.providers.TransactionResponse =
-    await identityContract.registerRoot(rootWallet.address, orgName)
-  debugLogger().debug('root wallet registered: %s', txn.hash)
-  const receipt: ethers.providers.TransactionReceipt = await txn.wait()
+export const registerRoot = withErrorHandlingIdentity(
+  async (orgName: string): Promise<ethers.providers.TransactionReceipt> => {
+    if (!orgName) throw new Error('orgName cannot be empty')
+    const rootWallet = getRootWalletInstance()
+    const identityContract = getContractInstance()
+    debugLogger().debug(`rootWallet ${rootWallet.address}`)
+    debugLogger().debug(`identityContract ${identityContract.address}`)
 
-  return receipt
-}
+    debugLogger().debug('registering root wallet: %s', rootWallet.address)
+    const txn: ethers.providers.TransactionResponse =
+      await identityContract.registerRoot(rootWallet.address, orgName)
+    debugLogger().debug('root wallet registered: %s', txn.hash)
+    const receipt: ethers.providers.TransactionReceipt = await txn.wait()
+
+    return receipt
+  }
+)
 
 /**
  * Registers the root wallet.
@@ -417,21 +426,24 @@ export const registerRoot = async (
  * @throws {Error} If the organization name is not provided.
  * @hidden
  */
-export const registerRootWithVerify = async (
-  rootWalletAddress: string,
-  orgName: string
-): Promise<ethers.providers.TransactionReceipt> => {
-  if (!rootWalletAddress) throw new Error('root wallet address cannot be empty')
-  if (!orgName) throw new Error('orgName cannot be empty')
-  const identityContract = getContractInstance()
-  debugLogger().debug('registering root wallet: %s', rootWalletAddress)
-  const txn: ethers.providers.TransactionResponse =
-    await identityContract.registerRoot(rootWalletAddress, orgName)
-  debugLogger().debug('root wallet registered: %s', txn.hash)
-  const receipt: ethers.providers.TransactionReceipt = await txn.wait()
+export const registerRootWithVerify = withErrorHandlingIdentity(
+  async (
+    rootWalletAddress: string,
+    orgName: string
+  ): Promise<ethers.providers.TransactionReceipt> => {
+    if (!rootWalletAddress)
+      throw new Error('root wallet address cannot be empty')
+    if (!orgName) throw new Error('orgName cannot be empty')
+    const identityContract = getContractInstance()
+    debugLogger().debug('registering root wallet: %s', rootWalletAddress)
+    const txn: ethers.providers.TransactionResponse =
+      await identityContract.registerRoot(rootWalletAddress, orgName)
+    debugLogger().debug('root wallet registered: %s', txn.hash)
+    const receipt: ethers.providers.TransactionReceipt = await txn.wait()
 
-  return receipt
-}
+    return receipt
+  }
+)
 
 /**
  * Unregisters the root wallet.
@@ -439,7 +451,7 @@ export const registerRootWithVerify = async (
  * @returns {Promise<ethers.providers.TransactionReceipt>} A promise that resolves with the transaction receipt.
  * For more information, see [Ethers.js Documentation](https://docs.ethers.org/v5/api/providers/types/#providers-TransactionReceipt).
  */
-export const unRegisterRoot =
+export const unRegisterRoot = withErrorHandlingIdentity(
   async (): Promise<ethers.providers.TransactionReceipt> => {
     const rootWallet = getRootWalletInstance()
     const identityContract = getContractInstance()
@@ -455,6 +467,7 @@ export const unRegisterRoot =
 
     return receipt
   }
+)
 
 /**
  * Unregisters the root wallet.
@@ -463,22 +476,22 @@ export const unRegisterRoot =
  * For more information, see [Ethers.js Documentation](https://docs.ethers.org/v5/api/providers/types/#providers-TransactionReceipt).
  * @hidden
  */
-export const unRegisterRootFromVerify = async (
-  rootWallet: string
-): Promise<ethers.providers.TransactionReceipt> => {
-  const identityContract = getContractInstance()
+export const unRegisterRootFromVerify = withErrorHandlingIdentity(
+  async (rootWallet: string): Promise<ethers.providers.TransactionReceipt> => {
+    const identityContract = getContractInstance()
 
-  debugLogger().debug('unregistering root wallet: %s', rootWallet)
+    debugLogger().debug('unregistering root wallet: %s', rootWallet)
 
-  const txn: ethers.providers.TransactionResponse =
-    await identityContract.unregisterRoot(rootWallet)
+    const txn: ethers.providers.TransactionResponse =
+      await identityContract.unregisterRoot(rootWallet)
 
-  debugLogger().debug('root wallet unregistered: %s', txn.hash)
+    debugLogger().debug('root wallet unregistered: %s', txn.hash)
 
-  const receipt: ethers.providers.TransactionReceipt = await txn.wait()
+    const receipt: ethers.providers.TransactionReceipt = await txn.wait()
 
-  return receipt
-}
+    return receipt
+  }
+)
 
 /**
  * get nonce for the signing wallet
@@ -487,6 +500,7 @@ export const unRegisterRootFromVerify = async (
  */
 export const getSigningWalletNonce = async (): Promise<number> => {
   const address = await getIntermediateWalletAddress()
+  debugLogger().debug('fetching nonce for address: %s', address)
   const identityContract = getContractInstance()
 
   return await identityContract.nonces(address)

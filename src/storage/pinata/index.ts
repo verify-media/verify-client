@@ -15,6 +15,7 @@ import { PinataConfig, PinataPinResponse, UploadToPinataParams } from './types'
 import { AssetNode } from '../../types/schema'
 import { Readable } from 'stream'
 import NodeFormData from 'form-data'
+import { debugLogger } from '../../utils/logger'
 
 /**
  * Configuration object for the Pinata API.
@@ -47,8 +48,10 @@ export const uploadToIPFS = async ({
   type
 }: UploadToPinataParams): Promise<PinataPinResponse> => {
   try {
+    debugLogger().debug(`read pinata config`)
     const { name, body } = data
     const { pinataKey, pinataSecret } = config
+    debugLogger().debug(`prep api request`)
     pinataConfig.headers.pinata_api_key =
       pinataKey || process.env.PINATA_KEY || ''
     pinataConfig.headers.pinata_secret_api_key =
@@ -70,6 +73,9 @@ export const uploadToIPFS = async ({
       }
 
       const endpoint = `${pinataConfig.root}/pinning/pinJSONToIPFS`
+
+      debugLogger().debug(`upload asset meta to ${endpoint}`)
+
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -85,6 +91,7 @@ export const uploadToIPFS = async ({
       //TODO add validation on body type
       const endpoint = `${pinataConfig.root}/pinning/pinFileToIPFS`
       const formData = new NodeFormData()
+      debugLogger().debug(`prep formdata to upload asset to ${endpoint}`)
 
       const stream = new Readable({
         read() {
@@ -93,9 +100,13 @@ export const uploadToIPFS = async ({
         }
       })
 
+      debugLogger().debug(`append file stream to formdata`)
+
       formData.append('file', stream, {
         filename: name
       })
+
+      debugLogger().debug(`append metadata to formdata`)
 
       formData.append(
         'pinataMetadata',
@@ -104,12 +115,16 @@ export const uploadToIPFS = async ({
         })
       )
 
+      debugLogger().debug(`append pinata options to formdata`)
+
       formData.append(
         'pinataOptions',
         JSON.stringify({
           cidVersion: 1
         })
       )
+
+      debugLogger().debug(`upload asset to pinata`)
 
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -177,22 +192,29 @@ export const fetchFromIPFS = async (
   config: PinataConfig
 ): Promise<AssetNode | Uint8Array> => {
   const _cid = cid.replace('ipfs://', '')
+  debugLogger().debug(`fetch asset from IPFS via Pinata ${_cid}`)
   const { pinataKey, pinataSecret } = config
   const url = `https://gateway.pinata.cloud/ipfs/${_cid}`
+
+  debugLogger().debug(`prep api request`)
   pinataConfig.headers.pinata_api_key =
     pinataKey || process.env.PINATA_KEY || ''
   pinataConfig.headers.pinata_secret_api_key =
     pinataSecret || process.env.PINATA_SECRET || ''
+
+  debugLogger().debug(`fetch asset from ${url}`)
   const response = await fetch(url, {
     method: 'GET',
     headers: pinataConfig.headers
   })
 
   if (type === 'meta') {
+    debugLogger().debug(`parse asset meta`)
     const data = (await response.json()) as AssetNode
 
     return data
   } else {
+    debugLogger().debug(`parse asset binary data`)
     const resp = await response.arrayBuffer()
     const data = new Uint8Array(resp)
 

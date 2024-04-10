@@ -134,12 +134,18 @@ export const encryptAsset = async ({
   content: Blob
   contentHash: string
 }): Promise<EncryptAssetResponse> => {
+  debugLogger().debug(`read sdk config`)
   const { contractAddress, chain } = getConfig()
+
+  debugLogger().debug(`init lit client`)
   const litClient = await getClient()
   if (!litClient) throw new Error('lit client not initialized')
 
   // get auth sig
+  debugLogger().debug('sign auth message')
   const authSig = await signAuthMessage()
+
+  debugLogger().debug('get access control conditions')
   const authorization = getDefaultAuth(contentHash, chain, contractAddress)
 
   // Set a timeout to throw an error after a fixed amount of time
@@ -147,6 +153,7 @@ export const encryptAsset = async ({
     throw new Error('Operation timed out')
   }, 60 * 1000) // 60 seconds
 
+  debugLogger().debug('encrypt file')
   const encryptedContent = await encryptFile(
     {
       file: content,
@@ -191,11 +198,17 @@ export const decryptAsset = async ({
   dataToEncryptHash: string
   contentHash: string
 }): Promise<Uint8Array> => {
+  debugLogger().debug(`read sdk config`)
   const { contractAddress, chain } = getConfig()
+  debugLogger().debug(`init lit client`)
   const litClient = await getClient()
   if (!litClient) throw new Error('lit client not initialized')
+
   // get auth sig
+  debugLogger().debug('sign auth message')
   const authSig = await signAuthMessage()
+
+  debugLogger().debug('get access control conditions')
   const authorization = getDefaultAuth(contentHash, chain, contractAddress)
 
   // Set a timeout to throw an error after a fixed amount of time
@@ -203,6 +216,7 @@ export const decryptAsset = async ({
     throw new Error('Operation timed out')
   }, 60 * 1000) // 60 seconds
 
+  debugLogger().debug('decrypt file')
   const asset = await decryptToFile(
     {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
