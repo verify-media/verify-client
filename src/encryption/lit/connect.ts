@@ -58,12 +58,14 @@ export const { init, getClient } = (() => {
     if (litClient) {
       return litClient
     }
+
     const config = getConfig()
     const client = new LitNodeClient({
       alertWhenUnauthorized: false,
       litNetwork: getLitNetwork(config.stage),
       debug: debug || process.env.LIT_DEBUG === '1' || false
     })
+
     await client.connect()
 
     litClient = client
