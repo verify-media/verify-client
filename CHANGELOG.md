@@ -1,5 +1,11 @@
 # @verify-media/verify-client
 
+## 1.0.3
+
+### Patch Changes
+
+- c453a90: update to appchain
+
 ## 1.0.2
 
 ### Patch Changes
