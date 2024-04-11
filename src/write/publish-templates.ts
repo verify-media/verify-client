@@ -8,8 +8,8 @@ import {
   setUri
 } from '../graph/protocol'
 import {
-  addEncryptionData,
   addIPFSData,
+  addEncryptionData,
   addSignatureData,
   hashData,
   hashImage,
@@ -337,6 +337,8 @@ export const publishArticle = async (
       debugLogger().debug(`encrypting asset`)
       // encrypt asset
       const asset = await getAssetBlob(content)
+
+      console.log('encrypt asset')
       const encryptedAsset = await encryptAsset({
         content: asset as Blob,
         contentHash: assetHash
@@ -351,6 +353,7 @@ export const publishArticle = async (
       const encoder = new TextEncoder()
       const encContent = encoder.encode(JSON.stringify(encryptedAsset))
 
+      console.log('upload to ipfs')
       const assetLocation = await uploadToPinata({
         data: {
           name: assetHash,
@@ -370,12 +373,14 @@ export const publishArticle = async (
       debugLogger().debug(`adding IPFS data to asset node`)
       assetNode = addIPFSData(assetNode, ensureIPFS(assetLocation.IpfsHash))
 
+      console.log('sign asset node')
       // sign assetNode
       debugLogger().debug(`signing asset node`)
       const signature = await signAssetNode(assetNode.data)
       debugLogger().debug(`adding signature data to asset node`)
       assetNode = addSignatureData(assetNode, signature)
 
+      console.log('upload asset meta to ipfs')
       // upload asset meta to IPFS
       debugLogger().debug(`uploading asset meta to IPFS`)
       const assetMetaLocation = await uploadToPinata({
@@ -412,6 +417,7 @@ export const publishArticle = async (
       debugLogger().debug(`constructing new asset node from content`)
       let newAssetNode = constructAssetNode(content, assetHash)
 
+      console.log('compare asset meta')
       // check if asset metadata has changed
       debugLogger().debug(`checking if asset metadata has changed`)
       if (genAssetMetaHash(prevAssetNode) === genAssetMetaHash(newAssetNode)) {
@@ -499,6 +505,7 @@ export const publishArticle = async (
       if (!content.licensedFrom)
         throw new Error('content.licensedFrom is required')
 
+      console.log('create license node')
       parentId = await createLicenseNode(content.licensedFrom, org.orgNodeId)
       debugLogger().debug(`parent id: ${parentId}`)
     }

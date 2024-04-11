@@ -1,4 +1,4 @@
-_Note: this guide assumes publishing on testnet using a [sandbox](https://docs.verifymedia.com/smart-contracts/#sandbox) env_
+_Note: this guide assumes publishing on [verifyTestnet](https://docs.verifymedia.com/verify-testnet) using a [sandbox](https://docs.verifymedia.com/smart-contracts/#sandbox) env . Using testnet or mainnet requires a whitelist from the VERIFY team. Please reach out to [VERIFY](https://verifymedia.com/) for more information._
 
 ## Configure
 
@@ -8,10 +8,10 @@ To start publishing the sdk needs to be configured with some settings. It can be
 
 ```bash
 DEBUG=0 # 0 if false and 1 is true with default false. When true print debug logs
-RPC_URL=https://polygon-mumbai.blockpi.network/v1/rpc/public # allows for a developer to interact with an Ethereum node via HTTP(S)
-STAGE=testnet
-CHAIN_ID=80001
-CHAIN=mumbai
+RPC_URL=https://rpc.verify-testnet.gelato.digital # allows for a developer to interact with an Ethereum node via HTTP(S)
+STAGE=sandbox # stage of the VERIFY Protocol
+CHAIN_ID=1833 # chain id for the network
+CHAIN=verifyTestnet # network name
 MAX_GAS_PRICE=0 #if set a transaction will not be performed if network gas is above this limit
 ROOT_PVT_KEY=<root_pvt_key> # private key for the root wallet which acts as the publishers identity
 PVT_KEY=<intermediate_pvt_key> # private key for the intermediate wallet which acts as the signer, there could be more than one signer wallets hence its preferred to pass this value as a parameter instead
@@ -39,14 +39,13 @@ console.log(config.stage)
 
   - A wallet funded with at least 0.1 matic. (_a private / public key pair required to sign transactions on the blockchain_)
   - [Pinata](https://www.pinata.cloud/) (an IPSF service) credentials. (_storage for the content_)
-  - A rpc url for the polygon testnet. (_allows for a developer to interact with an Ethereum node via HTTP(S)_)
-
+  
 ## Setup
 
 - **Wallets**
   - VERIFY Protocol expects a publisher to have a [root identity](https://docs.verifymedia.com/publishing/identity/#registering-a-root-identity) and an [intermediate identity](https://docs.verifymedia.com/publishing/identity/#creating-a-intermediate-identity) which are represented by [wallets](https://ethereum.org/wallets)
   - If you don't have a wallet already, you could set one up using
-    - [MetaMask](https://codehs.com/tutorial/jkeesh/how-to-set-up-an-ethereum-wallet-on-metamask) (_<b>Note: this is NOT recommended in production / Mainnet environments</b>_)
+    - [MetaMask](https://codehs.com/tutorial/jkeesh/how-to-set-up-an-ethereum-wallet-on-metamask) (_<b>Note: this is NOT recommended in production / mainnet environments</b>_)
     - OR gen-wallet script from the [examples folder](https://github.com/verify-media/verify-client/blob/main/example/README.md)
       ```bash
       npm run gen-wallet
@@ -56,30 +55,15 @@ console.log(config.stage)
 - Repeat the same steps to add an intermediate wallet and configure the private key in `.env` against `PVT_KEY`
 
 - Now that the wallet is created, add funds to it.
-  **Note: funds always need to be added to the intermediate wallet (public key) only**, since this is all on testnet (**not real money**) the intermediate wallet (_<b>public key</b>_) can be funded using one of the following faucets:
+  **Note: funds always need to be added to the intermediate wallet (public key) only**, since this is all on testnet (**not real money**). The intermediate wallet (_<b>public key</b>_) can be funded using a bridge to transfer MATIC from AMOY to verifyTestnet. Please refer to the [bridge](https://dev-docs.verifymedia.com/verify-testnet#using-the-verify-testnet-network) documentation for more details.
 
-  - https://mumbaifaucet.com/
-  - https://faucet.polygon.technology/
-  - https://bwarelabs.com/faucets/polygon-testnet
-
-  **To perform any steps on blockchain you need matic in your intermediate wallet.**
-
-- You can check the funds in your intermediate wallet using
-  - [MetaMask](https://metamask.io/)
-  - https://mumbai.polygonscan.com/ (add your address in the search bar and hit enter).
-  - Under examples folder
-    ```bash
-      npm run get-balance
-    ```
 - All content published on VERIFY Protocol is stored on IPFS. VERIFY client sdk supports this via [Pinata](https://www.pinata.cloud/) or your own IPFS cluster setup using [Kubo](https://github.com/ipfs/kubo).
-  For the purpose of this example we will set up a [free](https://www.pinata.cloud/pricing) Pinata account. Configure the Pinata API key and Pinata secret, and then add that to `.env` as
+  For the purpose of this example please set up a [free](https://www.pinata.cloud/pricing) Pinata account. Configure the Pinata API key and Pinata secret, and then add that to `.env` as
 
   ```bash
   PINATA_KEY=<PINATA_KEY>
   PINATA_SECRET=<PINATA_SECRET>
   ```
-
-_Note: if the RPC URL configured in this example fails, you can pick any other https based RPC URLs from [here](https://chainlist.org/?search=mumbai&testnets=true)_. Public RPC URLs might be rate limited or have other restrictions, so it's recommended to use a private RPC URL.
 
 - Finally please set the ORG_NAME in the `.env` file to the name of the publisher
 

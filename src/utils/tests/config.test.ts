@@ -50,7 +50,7 @@ describe('test config operations', () => {
     }
   })
 
-  test('it throws error stage is not set as testnet or mainnet', () => {
+  test('it throws error stage is not set as sandbox, testnet or mainnet', () => {
     mockEmptyEnvVars()
     try {
       init({
@@ -66,7 +66,7 @@ describe('test config operations', () => {
         message = e.message
       }
     } finally {
-      expect(message).toBe('stage can be either testnet or mainnet')
+      expect(message).toBe('stage can be either sandbox, testnet or mainnet')
     }
   })
 

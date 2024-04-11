@@ -16,6 +16,20 @@ VERIFY is a public library of signed digital assets with capabilities that allow
 
 [verifymedia/client](https://www.npmjs.com/package/@verify-media/verify-client) is a typesafe sdk for interacting with the [verify protocol](https://www.verifymedia.com/). It is written in typescript and is compiled to es6 and cjs bundles ensuring compatibility with nodejs.
 
+## Network
+VERIFY Protocol is deployed on an Polygon CDK validium based appchain. 
+
+```
+Network Name: VERIFY Testnet
+RPC URL: https://rpc.verify-testnet.gelato.digital
+Chain ID: 1833
+Currency Symbol: MATIC
+Block Explorer URL: https://verify-testnet.blockscout.com/
+Settlement Layer: Amoy 
+```
+
+more details can be found [here](https://docs.verifymedia.com/verify-testnet).
+
 ## Quick Start
 
 - Since VERIFY client sdk supports javascript, start by installing [nodejs](https://nodejs.org/en) version 18 or higher.

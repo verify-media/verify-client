@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import { LitNodeClient } from '@lit-protocol/lit-node-client'
+import { getLitNetwork } from '../../constants'
+import { getConfig } from '../../utils/config'
 import { debugLogger } from '../../utils/logger'
 
 /**
@@ -53,26 +55,29 @@ export const { init, getClient } = (() => {
    *
    * @returns A promise that resolves with the `LitNodeClient` instance.
    */
-  const init = async (): Promise<LitNodeClient> => {
+  const init = async (debug?: boolean): Promise<LitNodeClient> => {
     if (litClient) {
       return litClient
     }
 
+    const config = getConfig()
+
     debugLogger().debug(
       `lit client settings, ${{
         alertWhenUnauthorized: false,
-        litNetwork: 'cayenne',
-        debug: false
+        litNetwork: getLitNetwork(config.stage),
+        debug: debug || process.env.LIT_DEBUG === '1' || false
       }} `
     )
 
     const client = new LitNodeClient({
       alertWhenUnauthorized: false,
-      litNetwork: 'cayenne',
-      debug: false
+      litNetwork: getLitNetwork(config.stage),
+      debug: debug || process.env.LIT_DEBUG === '1' || false
     })
 
     await client.connect()
+
     litClient = client
     csp.resolve && csp.resolve(litClient)
 

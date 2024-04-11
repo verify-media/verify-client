@@ -154,3 +154,10 @@ Please refer the [getting started](https://github.com/verify-media/verify-client
   ```bash
   npm run consume
   ```
+
+## Settings
+There are some additional settings within the `.env` file that can be used to debugging or information.
+```bash
+DEBUG=1 #enables the sdk's debug mode 
+LIT_DEBUG=1 #enables the lit sdk's debug mode 
+```

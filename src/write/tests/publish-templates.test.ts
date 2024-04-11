@@ -37,6 +37,7 @@ jest.mock('@lit-protocol/lit-node-client', () => {
   return {
     LitNodeClient: jest.fn().mockImplementation(() => {
       return {
+        disconnect: jest.fn().mockResolvedValue(true),
         connect: jest.fn().mockResolvedValue(true),
         ready: true,
         config: {

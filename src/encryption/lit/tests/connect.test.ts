@@ -12,7 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import { getClient, init as litConnect } from '../connect'
+import { init } from '../../../utils/config'
 import '@lit-protocol/lit-node-client'
+
+init({
+  stage: '',
+  pvtKey: '',
+  rpcUrl: '',
+  chainId: 0,
+  chain: '',
+  maxGasPrice: 2000000000000,
+  walletExpiryDays: 1
+})
 
 describe('connect', () => {
   beforeEach(() => {
@@ -24,6 +35,7 @@ describe('connect', () => {
     expect(client).toBeDefined()
     expect(client.config.litNetwork).toBe('cayenne')
     expect(client.ready).toBe(true)
+    await client.disconnect()
   })
 
   it('should be able to get the client once initialized', async () => {
@@ -31,5 +43,6 @@ describe('connect', () => {
     expect(client).toBeDefined()
     expect(client.config.litNetwork).toBe('cayenne')
     expect(client.ready).toBe(true)
+    await client.disconnect()
   })
 })
