@@ -445,8 +445,8 @@ export const publishArticle = async (
         debugLogger().debug(`uploading asset meta to IPFS`)
         const assetMetaLocation = await uploadToPinata({
           data: {
-            name: assetNode.data.contentBinding.hash,
-            body: assetNode
+            name: newAssetNode.data.contentBinding.hash,
+            body: newAssetNode
           },
           config: {
             pinataKey: ipfsConfig.pinataKey,
@@ -458,7 +458,7 @@ export const publishArticle = async (
         if (!assetMetaLocation?.IpfsHash)
           throw new Error('failed to upload asset to IPFS')
 
-        assetDetails.id = assetNode.data.contentBinding.hash
+        assetDetails.id = newAssetNode.data.contentBinding.hash
         assetDetails.uri = ensureIPFS(assetMetaLocation.IpfsHash)
 
         if (
