@@ -1,6 +1,6 @@
 {
   "name": "@verify-media/verify-client",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "a client sdk for interacting with the verify protocol",
   "keywords": [
     "bcl",

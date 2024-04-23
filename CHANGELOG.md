@@ -1,5 +1,11 @@
 # @verify-media/verify-client
 
+## 1.0.4
+
+### Patch Changes
+
+- 72a003e: fix: update newassetnode meta in publish article workflow example
+
 ## 1.0.3
 
 ### Patch Changes
