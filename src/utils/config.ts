@@ -62,7 +62,7 @@ export const { init, getConfig, clearConfig, unset, set } = (() => {
     _config.stage = stage
 
     const pvtKey = config?.pvtKey || process.env.PVT_KEY || ''
-    if (!_config.pvtKey) _config.pvtKey = pvtKey
+    _config.pvtKey = pvtKey
 
     const rpcUrl = config?.rpcUrl || process.env.RPC_URL || ''
     if (!rpcUrl) {
@@ -70,7 +70,7 @@ export const { init, getConfig, clearConfig, unset, set } = (() => {
         'rpcUrl cannot be empty, either set and env var RPC_URL or pass a value to this function'
       )
     }
-    if (!_config.rpcUrl) _config.rpcUrl = rpcUrl
+    _config.rpcUrl = rpcUrl
 
     const chainId = config?.chainId || process.env.CHAIN_ID || 0
     if (!chainId) {
@@ -79,7 +79,7 @@ export const { init, getConfig, clearConfig, unset, set } = (() => {
       )
     }
     //convert chainId to number
-    if (!_config.chainId) _config.chainId = parseInt(chainId.toString())
+    _config.chainId = parseInt(chainId.toString())
 
     const chain = config?.chain || process.env.CHAIN || ''
     if (!chain) {
@@ -87,25 +87,21 @@ export const { init, getConfig, clearConfig, unset, set } = (() => {
         'chain cannot be empty, either set and env var CHAIN or pass a value to this function'
       )
     }
-    if (!_config.chain) _config.chain = chain
+    _config.chain = chain
 
     const walletExpiry =
       config?.walletExpiryDays || process.env.WALLET_EXPIRY_DAYS || 1
 
-    if (!_config.walletExpiryDays)
-      _config.walletExpiryDays = Number(walletExpiry)
+    _config.walletExpiryDays = Number(walletExpiry)
 
     const maxGasPrice = config?.maxGasPrice || process.env.MAX_GAS_PRICE || 0
-    if (!_config.maxGasPrice) _config.maxGasPrice = Number(maxGasPrice)
+    _config.maxGasPrice = Number(maxGasPrice)
 
     const rootPvtKey = config?.rootPvtKey || process.env.ROOT_PVT_KEY || ''
-    if (!_config.rootPvtKey) _config.rootPvtKey = rootPvtKey
+    _config.rootPvtKey = rootPvtKey
 
-    if (!_config.contractAddress)
-      _config.contractAddress = getGraphContractAddress(stage)
-
-    if (!_config.identityContractAddress)
-      _config.identityContractAddress = getIdentityContractAddress(stage)
+    _config.contractAddress = getGraphContractAddress(stage)
+    _config.identityContractAddress = getIdentityContractAddress(stage)
 
     setDebug(config?.debug || process.env.DEBUG === '1')
 
