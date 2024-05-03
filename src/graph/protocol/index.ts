@@ -34,7 +34,10 @@ import { getGraphContractAddress } from '../../constants'
 import { fetchFromIPFS } from '../../storage/ipfs'
 import { fetchFileFromPinata } from '../../read'
 import { PinataConfig } from '../../storage/pinata/types'
-import { withErrorHandlingGraph } from '../../utils/error/decode-ether-error'
+import {
+  VerifyError,
+  withErrorHandlingGraph
+} from '../../utils/error/decode-ether-error'
 import { debugLogger } from '../../utils/logger'
 
 /**
@@ -638,10 +641,12 @@ export const registerOrg = withErrorHandlingGraph(
       '0x0000000000000000000000000000000000000000000000000000000000000000'
     // create org node
 
+    let incrBy = 1
+
     debugLogger().debug(`get nodes created for ${rootWalletAddress}`)
 
     let nodesCreated = (
-      (await getNodesCreated(rootWalletAddress)).toNumber() + 1
+      (await getNodesCreated(rootWalletAddress)).toNumber() + incrBy
     ).toString()
 
     debugLogger().debug(`nodesCreated ${nodesCreated}`)
@@ -653,12 +658,22 @@ export const registerOrg = withErrorHandlingGraph(
 
     debugLogger().debug(`orgId ${orgId}`)
 
-    const orgTransaction = await createNode({
-      id: orgId,
-      parentId: ZeroHash,
-      nodeType: NodeType.ORG,
-      referenceOf: ZeroHash
-    })
+    let orgTransaction = null
+    try {
+      orgTransaction = await createNode({
+        id: orgId,
+        parentId: ZeroHash,
+        nodeType: NodeType.ORG,
+        referenceOf: ZeroHash
+      })
+    } catch (error) {
+      if ((error as VerifyError).data === '0xe63231f6') {
+        incrBy = incrBy + 1
+        debugLogger().debug('org node already exists')
+      } else {
+        throw error
+      }
+    }
 
     //create og node
     nodesCreated = (
@@ -674,21 +689,30 @@ export const registerOrg = withErrorHandlingGraph(
 
     debugLogger().debug(`ogId ${ogId}`)
 
-    const ogTransaction = await createNode({
-      id: ogId,
-      parentId: orgId,
-      nodeType: NodeType.ORG,
-      referenceOf: ZeroHash
-    })
+    let ogTransaction = null
+    try {
+      ogTransaction = await createNode({
+        id: ogId,
+        parentId: orgId,
+        nodeType: NodeType.ORG,
+        referenceOf: ZeroHash
+      })
+    } catch (error) {
+      if ((error as VerifyError).data === '0xe63231f6') {
+        debugLogger().debug('og node already exists')
+      } else {
+        throw error
+      }
+    }
 
     return {
       org: {
         id: orgId,
-        txnHash: orgTransaction.transactionHash
+        txnHash: orgTransaction?.transactionHash || ''
       },
       originalMaterial: {
         id: ogId,
-        txnHash: ogTransaction.transactionHash
+        txnHash: ogTransaction?.transactionHash || ''
       }
     }
   }

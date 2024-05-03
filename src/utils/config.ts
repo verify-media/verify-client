@@ -59,7 +59,7 @@ export const { init, getConfig, clearConfig, unset, set } = (() => {
       throw new Error('stage can be either sandbox, testnet or mainnet')
     }
 
-    if (!_config.stage) _config.stage = stage
+    _config.stage = stage
 
     const pvtKey = config?.pvtKey || process.env.PVT_KEY || ''
     if (!_config.pvtKey) _config.pvtKey = pvtKey
