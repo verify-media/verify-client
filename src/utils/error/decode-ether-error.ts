@@ -15,6 +15,12 @@ interface NestedError {
   message?: string
 }
 
+export type VerifyError = {
+  type: string
+  error: string
+  data: string
+}
+
 function extractErrorDataFromErrorObject(error: unknown): string {
   let currentError: NestedError | undefined = error as NestedError
   let errorData: string | undefined
