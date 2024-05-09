@@ -1,5 +1,11 @@
 # @verify-media/verify-client
 
+## 1.0.5
+
+### Patch Changes
+
+- a9e4459: error handling for register org
+
 ## 1.0.4
 
 ### Patch Changes
