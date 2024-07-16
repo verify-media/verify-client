@@ -49,7 +49,11 @@ async function consumeContent(assetId: string): Promise<{
   }
 
   const assetUri = asset.data.locations.filter((location) => {
-    return location.protocol === 'ipfs'
+    return (
+      location.protocol === 'ipfs' ||
+      location.protocol === 'https' ||
+      location.protocol === 's3'
+    )
   })[0].uri
 
   console.log(`fetching actual asset from ipfs @ ${assetUri}`)

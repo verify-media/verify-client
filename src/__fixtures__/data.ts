@@ -234,7 +234,7 @@ export const mockArticle: Article = {
 
 export const mockAssetDetails = {
   assetId: '0x1234',
-  provenance: {
+  meta: {
     version: '1.0.0',
     data: {
       description: 'sandbox sample string',

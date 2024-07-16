@@ -15,7 +15,7 @@ import { init } from '../../../utils/config'
 import {
   changeParent,
   checkAuth,
-  checkGasgLimits,
+  checkGasLimits,
   checkRefAuth,
   createArticleNode,
   createLicenseNode,
@@ -55,6 +55,7 @@ import {
 import { AssetNode, LocationProtocol } from '../../../types/schema'
 import { hashData } from '../../../utils/app'
 import { IDENTITY_ABI } from '../../identity/types'
+import { LicenseType } from '../../../types/app'
 
 const config = init({
   stage: '',
@@ -160,14 +161,14 @@ describe('graph functions', () => {
   test('should fail if legacy gas is greater than maxgas set in config', async () => {
     mockGasPrice.mockImplementationOnce(() => Promise.resolve(mockHighGasPrice))
 
-    await expect(checkGasgLimits()).rejects.toThrow(
+    await expect(checkGasLimits()).rejects.toThrow(
       'Gas limit exceeded as mentioned in config'
     )
   })
 
   test('should not fail if legacy gas is lower than maxgas set in config', async () => {
     mockGasPrice.mockImplementationOnce(() => Promise.resolve(mockLowGasPrice))
-    await expect(checkGasgLimits()).resolves.toBe(mockLowGasPrice)
+    await expect(checkGasLimits()).resolves.toBe(mockLowGasPrice)
   })
 
   test('should pick default gas price if a fetch from network fails', async () => {
@@ -431,7 +432,7 @@ describe('graph functions', () => {
       Promise.resolve(mockDefaultGasPrice)
     )
     const mockReceipt = await mockTransactionResponse.wait()
-    const receipt = await setAccessAuth('1', 'addr1')
+    const receipt = await setAccessAuth('1', LicenseType.allowlist)
     expect(Wallet).toHaveBeenCalledWith(
       config.pvtKey,
       new ethers.providers.JsonRpcProvider(config.rpcUrl)
@@ -452,7 +453,7 @@ test('should be able to call setReferenceAuth', async () => {
     Promise.resolve(mockDefaultGasPrice)
   )
   const mockReceipt = await mockTransactionResponse.wait()
-  const receipt = await setReferenceAuth('1', 'addr1')
+  const receipt = await setReferenceAuth('1', LicenseType.public)
   expect(Wallet).toHaveBeenCalledWith(
     config.pvtKey,
     new ethers.providers.JsonRpcProvider(config.rpcUrl)

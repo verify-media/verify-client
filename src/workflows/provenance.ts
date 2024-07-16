@@ -16,7 +16,7 @@ import {
   signAssetNode,
   buildArticleBody,
   uploadToPinata
-} from '.'
+} from '../write'
 import { ensureHttps, ensureIPFS } from '../utils/app'
 import path from 'path'
 import { fetchFileFromPinata } from '../read'

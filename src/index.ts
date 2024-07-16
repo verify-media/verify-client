@@ -36,10 +36,20 @@ export {
   buildArticleBody,
   registerOrg,
   createArticleNode,
-  createLicenseNode
+  createLicenseNode,
+  processAsset,
+  processBlob,
+  createOrgNode,
+  createHierarchicalNode,
+  genCid,
+  setAllowList,
+  setAuthorizer,
+  setEmbargo,
+  setPurchaseAccess
 } from './write'
 
-export { publishArticle } from './write/publish-templates'
+export { publishArticle } from './workflows/provenance'
+export { publishAssets } from './workflows/default'
 
 export {
   fetchFromIPFS,
@@ -62,13 +72,22 @@ export {
   getParentNode,
   getChildrenNodes,
   getAssetDetails,
-  decrypt
+  decrypt,
+  getData,
+  getWalletBalance,
+  checkAllowListAuth,
+  checkAuthorizerAuth,
+  checkEmbargoAuth,
+  getAuthorizerNode,
+  getAuthorizerRoot,
+  getEmbargo,
+  getAssetPrice
 } from './read'
 
 export { NodeType as NODE_TYPE } from './graph/protocol/types'
 export { LocationProtocol, ContentTypes, MIME_TYPES } from './types/schema'
 export { init, getConfig } from './utils/config'
-export { STAGE } from './types/app'
+export { STAGE, LicenseType } from './types/app'
 export type { Config } from './types/app'
 export type {
   AssetNode,
