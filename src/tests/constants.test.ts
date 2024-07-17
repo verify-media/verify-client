@@ -14,8 +14,12 @@
 import {
   getIdentityContractAddress,
   getGraphContractAddress,
-  getLitNetwork
+  getLitNetwork,
+  getLicense,
+  SIGNATURE_DEADLINE,
+  PROTOCOL_ERRORS
 } from '../constants'
+import { LicenseType } from '../types/app'
 
 describe('getIdentityContractAddress', () => {
   it('returns the correct contract address for testnet', () => {
@@ -90,5 +94,69 @@ describe('getLitNetwork', () => {
     expect(() => getLitNetwork('invalid')).toThrow(
       'stage can be either sandbox, testnet or mainnet'
     )
+  })
+})
+
+describe('getLicense', () => {
+  it('returns the correct contract address for allowlist license on sandbox', () => {
+    const result = getLicense(LicenseType.allowlist, 'sandbox')
+    expect(result).toBe('0xb98068e0DA0Da5b9a50461F3B99473a3417dFf62')
+  })
+
+  it('returns the correct contract address for allowlist license on testnet', () => {
+    const result = getLicense(LicenseType.allowlist, 'testnet')
+    expect(result).toBe('0xAa800342cC635FC8D9c394981120CcAf65321b15')
+  })
+
+  it('returns the correct contract address for public license on sandbox', () => {
+    const result = getLicense(LicenseType.public, 'sandbox')
+    expect(result).toBe('0xB4D05978AfC8a03A1D8e91314186fBd3A9E513b3')
+  })
+
+  it('returns the correct contract address for public license on testnet', () => {
+    const result = getLicense(LicenseType.public, 'testnet')
+    expect(result).toBe('0x6Cf8374a13b48070b600be33F16370Ab3e557600')
+  })
+
+  it('returns the correct contract address for private license on sandbox', () => {
+    const result = getLicense(LicenseType.private, 'sandbox')
+    expect(result).toBe('0xEab65FD2aBF9b14C08187aa69bD6A74B7993eAf3')
+  })
+
+  it('returns the correct contract address for private license on testnet', () => {
+    const result = getLicense(LicenseType.private, 'testnet')
+    expect(result).toBe('0xd4547af11c8296Bc9B3d79Fd9a680b2163D419C')
+  })
+
+  it('returns the correct contract address for timebased license on sandbox', () => {
+    const result = getLicense(LicenseType.timebased, 'sandbox')
+    expect(result).toBe('0x55B03c3025901F391bb787FeFB83f23450e7c909')
+  })
+
+  it('returns the correct contract address for authorizer license on sandbox', () => {
+    const result = getLicense(LicenseType.authorizer, 'sandbox')
+    expect(result).toBe('0x4d18eE1343165E74fe8de53700ee62FDB0810cDb')
+  })
+
+  // Repeat the above test case for each license type and stage combination
+
+  it('throws an error for an invalid license type', () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    expect(() => getLicense('invalid', 'sandbox')).toThrow(
+      'Invalid license type, only allowed types are allowlist,public,private,timebased,authorizer'
+    )
+  })
+})
+
+describe('SIGNATURE_DEADLINE', () => {
+  it('equals 86400', () => {
+    expect(SIGNATURE_DEADLINE).toBe(86400)
+  })
+})
+
+describe('PROTOCOL_ERRORS', () => {
+  it('NODE_EXISTS equals 0xe63231f6', () => {
+    expect(PROTOCOL_ERRORS.NODE_EXISTS).toBe('0xe63231f6')
   })
 })

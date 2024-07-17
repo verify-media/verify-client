@@ -431,6 +431,7 @@ export const registerRootWithVerify = withErrorHandlingIdentity(
     rootWalletAddress: string,
     orgName: string
   ): Promise<ethers.providers.TransactionReceipt> => {
+    console.log('rootWalletAddress: ', rootWalletAddress)
     if (!rootWalletAddress)
       throw new Error('root wallet address cannot be empty')
     if (!orgName) throw new Error('orgName cannot be empty')

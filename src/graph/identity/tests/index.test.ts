@@ -320,6 +320,7 @@ describe('identity functions', () => {
   it('should register root using the rootwallet address passed as a parameter and return transaction hash', async () => {
     const mockReceipt = await mockTransactionResponse.wait()
     const receipt = await registerRootWithVerify(mockRootAddress, mockOrgName)
+
     expect(Wallet).not.toHaveBeenCalledWith(
       config.rootPvtKey,
       new ethers.providers.JsonRpcProvider(config.rpcUrl)
@@ -337,6 +338,24 @@ describe('identity functions', () => {
     )
 
     expect(JSON.stringify(receipt)).toBe(JSON.stringify(mockReceipt))
+  })
+
+  it('throws an error when root wallet address is not passed', async () => {
+    try {
+      await registerRootWithVerify('', mockOrgName)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      expect(e.error).toBe('root wallet address cannot be empty')
+    }
+  })
+
+  it('throws an error when root orgName is not passed', async () => {
+    try {
+      await registerRootWithVerify(mockRootAddress, '')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      expect(e.error).toBe('orgName cannot be empty')
+    }
   })
 
   it('should instantiate contract when pvtKey is set', async () => {
