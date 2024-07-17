@@ -180,34 +180,3 @@ export type Article = {
   metadata: ArticleMetadata
   contents: Content[]
 }
-
-type AssetMetadata = {
-  type: ContentTypes
-  title: string
-  description: string
-  uri: string
-  creditedSource: string
-  id: string
-  authority: Authority
-  contentType: MIME_TYPES // only supported mime types
-  published: string
-}
-
-type TextAssetMetadata = {
-  body?: string
-} & AssetMetadata
-
-type ImageAssetMetadata = {
-  alt?: string
-  caption?: string
-} & AssetMetadata
-
-type VideoAssetMetadata = {
-  thumbnail?: ImageMetadata
-  duration?: number
-} & AssetMetadata
-
-/**
- * @hidden
- */
-export type Asset = TextAssetMetadata | ImageAssetMetadata | VideoAssetMetadata

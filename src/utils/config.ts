@@ -17,6 +17,7 @@ import {
 } from '../constants'
 import { Config, Settings, STAGE } from '../types/app'
 import { setDebug } from './logger'
+import { version } from '../version'
 
 export const { init, getConfig, clearConfig, unset, set } = (() => {
   let _config: Config = {
@@ -102,6 +103,8 @@ export const { init, getConfig, clearConfig, unset, set } = (() => {
 
     _config.contractAddress = getGraphContractAddress(stage)
     _config.identityContractAddress = getIdentityContractAddress(stage)
+
+    console.log(`sdk version ${version} is ready`)
 
     setDebug(config?.debug || process.env.DEBUG === '1')
 

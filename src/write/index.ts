@@ -184,7 +184,7 @@ export const buildArticleBody = (
   otherContents: Array<Content & { hash: string }>
 ): string => {
   const xmlBody = `
-  <article>
+  <article> 
     <version>1.0</version>   
     <header>
       <title>${article.metadata.title}</title>
@@ -200,15 +200,17 @@ export const buildArticleBody = (
       </section>
     </main>
     <contents>
-      ${otherContents.map((content) => {
-        return `<image>
-                  <title>${content.title}</title>
-                  <contentType>${content.contentType}</contentType>
-                  <description>${content.description}</description>
-                  <creditedSource>${content.creditedSource}</creditedSource>
-                  <hash>${content.hash}</hash>
-                </image>`
-      })}
+      ${otherContents
+        .map((content) => {
+          return `<${content.type}>
+          <title>${content.title}</title>
+          <contentType>${content.contentType}</contentType>
+          <description>${content.description}</description>
+          <creditedSource>${content.creditedSource}</creditedSource>
+          <hash>${content.hash}</hash>
+        </${content.type}>`
+        })
+        .join('')}      
     </contents>
   </article>
 `

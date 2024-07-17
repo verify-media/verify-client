@@ -81,7 +81,8 @@ export {
   getAuthorizerNode,
   getAuthorizerRoot,
   getEmbargo,
-  getAssetPrice
+  getAssetPrice,
+  decodeEtherError
 } from './read'
 
 export { NodeType as NODE_TYPE } from './graph/protocol/types'
