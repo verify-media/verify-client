@@ -64,8 +64,7 @@ export const constructAssetNode = (
         contentBinding: {
           algo: 'keccak256',
           hash: hash
-        },
-        history: []
+        }
       },
       signature: {
         curve: 'secp256k1',
@@ -115,8 +114,7 @@ export const constructAssetNode = (
         contentBinding: {
           algo: 'keccak256',
           hash: hash
-        },
-        history: []
+        }
       },
       signature: {
         curve: 'secp256k1',

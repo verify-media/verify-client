@@ -549,20 +549,20 @@ describe('verifyAsset function', () => {
         caption: '',
         creditedSource: 'ORG_ABC',
         signingOrg: { name: 'ORG_ABC', unit: 'ORG_ABC' },
-        published: '2024-03-07T05:47:38.489Z'
+        published: '2024-03-07T05:47:38.489Z',
+        history: []
       },
       contentBinding: {
         algo: 'keccak256',
         hash: '0x177085d7804edd7e21adefd0773db4d3da963676c65c6c7c8d41b8805cf31537'
-      },
-      history: []
+      }
     },
     signature: {
       curve: 'sepc256k1',
       signature:
         '0x1be13bad071f126ea93e33b3b442c1be0541682139cdeee6cd86a8d9c5e7ce2f25f02813d66e7539df35d88fec2d23aa676f525f58d540d619ef23ecc1e0b9f11c',
       message:
-        '0x953c5b7fdb3fc97d5c2eb6e8060b971b3129ffc631b05777c3ad92aa3c260465',
+        '0x2f840dfe89dd7e4a556e49ed0d40457c7433e522bbd69f778124766d48dc8a17',
       description:
         'hex encoded sepc256k1 signature of the keccak256 hash of content field with the signers private key'
     }

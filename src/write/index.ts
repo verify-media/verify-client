@@ -151,13 +151,13 @@ export const buildAssetPayload = (assetHash: string): AssetNode => {
           name: '',
           unit: ''
         },
-        published: ''
+        published: '',
+        history: []
       },
       contentBinding: {
         algo: 'keccak256',
         hash: assetHash
-      },
-      history: []
+      }
     },
     signature: {
       curve: 'secp256k1',

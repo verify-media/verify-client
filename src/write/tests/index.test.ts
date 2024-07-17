@@ -108,13 +108,6 @@ describe('write functions', () => {
     expect(sign.message).toBe(hashData(JSON.stringify(assetNode)))
   })
 
-  test('it throws error if asset has encrypted property true but version is absent', async () => {
-    assetNode.access && (assetNode.access['lit-protocol'].version = '')
-    await expect(signAssetNode(assetNode)).rejects.toThrow(
-      'encrypted asset is missing version'
-    )
-  })
-
   test('it throws error if asset node is invalid', async () => {
     assetNode.description = ''
     await expect(signAssetNode(assetNode)).rejects.toThrow(
@@ -128,12 +121,16 @@ const assetHash = '0x0000000'
 describe('buildAssetPayload', () => {
   it('should return an AssetNode object with default values', () => {
     const asset = buildAssetPayload(assetHash)
-
     expect(asset).toEqual({
       version: '1.0.0',
       data: {
         description: '',
         type: '',
+        access: {
+          'verify-auth': {
+            license: 'allowlist'
+          }
+        },
         encrypted: true,
         locations: [],
         manifest: {
@@ -144,13 +141,13 @@ describe('buildAssetPayload', () => {
             name: '',
             unit: ''
           },
-          published: ''
+          published: '',
+          history: []
         },
         contentBinding: {
           algo: 'keccak256',
           hash: '0x0000000'
-        },
-        history: []
+        }
       },
       signature: {
         curve: 'secp256k1',

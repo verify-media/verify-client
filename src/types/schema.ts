@@ -86,7 +86,6 @@ export type AssetNodeData = {
     algo: HashingAlogs
     hash: string
   }
-  history: string[]
 }
 
 /**

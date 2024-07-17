@@ -300,6 +300,7 @@ export const verifyAsset = async (
   debugLogger().debug(
     `compare asset signature message and calculated message ${calculatedMessage}`
   )
+
   if (calculatedMessage === asset.signature.message) {
     debugLogger().debug(`message verified`)
     validity.signatureVerified = true

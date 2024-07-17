@@ -20,7 +20,7 @@ import {
 describe('getIdentityContractAddress', () => {
   it('returns the correct contract address for testnet', () => {
     const result = getIdentityContractAddress('testnet')
-    expect(result).toBe('0xFC937a068c93e5878CcD5C20f2DBaEf95d7F1Cfe')
+    expect(result).toBe('0x27BA7E931906FebA79dED5d32947b12f30379135')
   })
 
   it('returns the correct contract address for sandbox', () => {
