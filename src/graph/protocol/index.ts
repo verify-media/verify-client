@@ -1004,7 +1004,7 @@ export async function getArticleProvenance(
 }
 
 /**
- * Returns the signer wallet balance
+ * Returns the intermediate wallet balance
  * @returns {Promise<BigNumber>} A promise that resolves with the balance of the wallet.
  */
 export const getWalletBalance = async (): Promise<BigNumber> => {

@@ -204,18 +204,10 @@ export async function getData(
   const { ipfsGateway, pinataConfig } = ipfsConfig
 
   const assetMeta = await getAssetDetails(assetId, ipfsGateway, pinataConfig)
-  // check schema version and lit version
+  // check schema version
   if (assetMeta.meta.version !== '1.0.0') {
     throw new Error('Unsupported schema version, expected 1.0.0')
   }
-
-  // if (
-  //   assetMeta.meta.data.encrypted &&
-  //   assetMeta.meta.data.access &&
-  //   assetMeta.meta.data.access['lit-protocol'].version !== 'v3'
-  // ) {
-  //   throw new Error('Unsupported lit protocol version, expected v3')
-  // }
 
   const assetUri = assetMeta.meta.data.locations.filter((location) => {
     return (

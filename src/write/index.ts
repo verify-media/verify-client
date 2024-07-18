@@ -208,6 +208,9 @@ export const buildArticleBody = (
           <description>${content.description}</description>
           <creditedSource>${content.creditedSource}</creditedSource>
           <hash>${content.hash}</hash>
+          <cid>${content.metadata?.cid}</cid>
+          ${content.metadata?.datePublished ? `<datePublished>${content.metadata.datePublished}</datePublished>` : ''}
+          <datePublished>2024-06-26T16:20:53.000Z</datePublished>
         </${content.type}>`
         })
         .join('')}      

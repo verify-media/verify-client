@@ -44,7 +44,7 @@ async function consumeContent(assetId: string): Promise<{
     'meta',
     pinataConfig
   )) as AssetNode
-  if (!asset.data.access || !asset.data.access['lit-protocol']) {
+  if (!asset.data.access) {
     throw new Error('asset is not encrypted')
   }
 

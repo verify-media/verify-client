@@ -396,7 +396,10 @@ describe('buildArticleBody', () => {
         authority: { name: 'Image Authority', contact: 'contact@example.com' }, // replace with actual authority
         published: new Date().toISOString(), // replace with actual published date
         ownership: 'owned',
-        metadata: {}
+        metadata: {
+          hash: 'imageHash',
+          cid: 'imageCID'
+        }
       }
     ]
 

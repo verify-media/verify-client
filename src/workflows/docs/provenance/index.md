@@ -61,6 +61,8 @@ The article body and metadata, along with asset references (asset node IDs), are
         <description>${description}</description>
         <creditedSource>${creditedSource}</creditedSource>
         <hash>${Asset#1}</hash>
+        <cid>${ASsetCid#1}</cid>
+        <datePublished>${AssetPublishedDate}</datePublished>
       </image>`
       <image>
         <title>${title}</title>
@@ -68,6 +70,8 @@ The article body and metadata, along with asset references (asset node IDs), are
         <description>${description}</description>
         <creditedSource>${creditedSource}</creditedSource>
         <hash>${Asset#2}</hash>
+        <cid>${ASsetCid#2}</cid>
+        <datePublished>${AssetPublishedDate}</datePublished>
       </image>`
     </contents>
   </article>
