@@ -43,23 +43,40 @@ Please refer the [getting started](https://github.com/verify-media/verify-client
 
 ## Examples
 
-- ### Register the publisher and Init Org Structure
+- ### Register the publisher
 
   ```bash
-  npm run init-publisher
+  npm run init-wf
   ```
 
-  This script registers the root and intermediate identities for a publisher and also initializes the org structure on VERIFY protocol. During this process and org node and original material node are created on the protocol. This is a one time configuration for a publisher on the protocol. Please update the `orgNodeId` and `originalMaterialNodeId` in the `.env` file for future use as follows:
+  This script registers the root and intermediate identities for a publisher and also initializes the org structure on VERIFY protocol. During this process and org node is created on the protocol. This is a one time configuration for a publisher on the protocol. Please update the `orgNodeId` in the `.env` file for future use as follows:
   
-- ### Publish an article
+- ### Publish assets
 
   ```bash
-  npm run publish-article <orgNodeId> <ogNodeId>
-  # npm run publish-article 0x20601de6e456a9819d83f58573beaa49315dfd3af31bb030e4d85e19c3beb07f 0xeb6a6499ad57495ca0687e648821fe3b64df8a3c661eea30c2aed2f00eb1fdd8
+  npm run publish-assets
   ```
 
-  This script demonstrates publishing of an article and its contents using a workflow such that content's provenance and usage context is always maintained while considering ownership and licenses.
+  This script demonstrates publishing of assets and its contents using a basic workflow.
 
+- ### Content Licensing
+  ```bash
+    npm run allowlist <asset_id> <consumer_wallet_address>
+  ```
+
+  This script demonstrates the content licensing using the [allowlist license](https://docs.verifymedia.com/licensing/license-types/allowlist).
+
+  ```bash
+    npm run authorizer <asset_id>
+  ```
+
+  This script demonstrates the content licensing using the [authorizer](https://docs.verifymedia.com/licensing/license-types/authorizer).
+
+  ```bash
+    npm run embargo <asset_id>
+  ```
+
+  This script demonstrates the content licensing using the [timebased](https://docs.verifymedia.com/licensing/license-types/timebased).
 
 ## Other Scripts
 

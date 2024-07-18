@@ -30,6 +30,13 @@ Settlement Layer: Amoy
 
 more details can be found [here](https://docs.verifymedia.com/verify-testnet).
 
+## Content Licensing
+
+Each node in the ContentGraph can have a license specified for access and for reference. These licenses are smart contracts and hence can be programmatically enforced as per customer needs.
+
+more details can be found [here](https://docs.verifymedia.com/licensing).
+
+
 ## Quick Start
 
 - Since VERIFY client sdk supports javascript, start by installing [nodejs](https://nodejs.org/en) version 18 or higher.
