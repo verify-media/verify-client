@@ -107,6 +107,7 @@ export const signAssetNode = async (
   assetNodeData: AssetNodeData
 ): Promise<Signature> => {
   debugLogger().debug(`validate asset node data`)
+  console.log(JSON.stringify(assetNodeData))
   const result = isValidAssetNode(assetNodeData)
   if (result.error) {
     throw new Error(result.error.message)

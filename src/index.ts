@@ -85,6 +85,8 @@ export {
   decodeEtherError
 } from './read'
 
+export { getLicense } from './constants'
+
 export { NodeType as NODE_TYPE } from './graph/protocol/types'
 export { LicenseType as LICENSE_TYPES } from './types/app'
 export { LocationProtocol, ContentTypes, MIME_TYPES } from './types/schema'
@@ -107,3 +109,8 @@ export type {
 } from './graph/protocol/types'
 
 export { version } from './version'
+
+export {
+  EmbargoPricingFunction,
+  EmbargoTime
+} from './graph/licenses/timebased/types'
