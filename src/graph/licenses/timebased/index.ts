@@ -67,7 +67,7 @@ export const setEmbargo = withErrorHandlingGraph(
     embargo: Embargo
   ): Promise<ethers.providers.TransactionReceipt> => {
     if (!assetId) {
-      throw new Error('assetId')
+      throw new Error('assetId is required')
     }
 
     if (
@@ -134,16 +134,17 @@ export const getEmbargo = withErrorHandlingGraph(
 
 /**
  * @param assetId: string id representing the asset
+ * @param time: time unit in milliseconds
  * @returns {Promise<@link accessPrice>} A promise that resolves with the accessPrice.
  */
 export const getAssetPrice = withErrorHandlingGraph(
-  async (assetId: string): Promise<number> => {
-    if (!assetId) {
-      throw new Error('assetId is required')
+  async (assetId: string, time: number): Promise<number> => {
+    if (!assetId || !time) {
+      throw new Error('assetId and time is required')
     }
 
     const { contract } = await getContractInstance()
-    const accessPrice = await contract.getEmbargo(assetId)
+    const accessPrice = await contract.price(assetId, time)
 
     return accessPrice
   }

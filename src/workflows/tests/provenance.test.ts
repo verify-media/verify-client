@@ -6,7 +6,7 @@ import {
 } from '../../__fixtures__/data'
 import { init } from '../../utils/config'
 import fetchMock from 'jest-fetch-mock'
-import { publishArticle } from '../../workflows/provenance'
+import { publishArticle } from '../provenance'
 
 init({
   stage: '',

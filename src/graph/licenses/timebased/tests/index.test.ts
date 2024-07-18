@@ -1,30 +1,39 @@
 import {
   getContractInstance,
-  setAuth,
+  setPurchaseAccess,
+  setEmbargo,
   checkAuth,
-  getNode,
-  getRoot
+  getEmbargo,
+  getAssetPrice
 } from '../index'
 import { init } from '../../../../utils/config'
-import { Contract, Wallet, ethers } from 'ethers'
-import { AUTHORIZER_ABI } from '../types'
+import { BigNumber, Contract, Wallet, ethers } from 'ethers'
+import {
+  Embargo,
+  EmbargoPricingFunction,
+  EmbargoTime,
+  TIMEBASED_LICENSE_ABI
+} from '../types'
 import {
   mockDefaultGasPrice,
-  mockNodeData,
+  // mockNodeData,
   mockTransactionResponse
 } from '../../../../__fixtures__/data'
 import { getLicense } from '../../../../constants'
 import { LicenseType } from '../../../../types/app'
 
 const mockRootAddress = '0x706Fe724eA8F05928e5Fce8fAd5584061FE586ec'
-const mockGetNode = jest.fn().mockImplementation(() => mockNodeData)
 const config = init()
 const mockGasPrice = jest.fn()
-
-const authorizerLicenses = [
-  '0xB4D05978AfC8a03A1D8e91314186fBd3A9E513b3',
-  '0x55B03c3025901F391bb787FeFB83f23450e7c909'
-]
+const sampleEmbargo: Embargo = {
+  embargoDate: BigNumber.from(
+    Math.floor(new Date().setDate(new Date().getDate() + 1) / 1000)
+  ), // Convert to BigNumber
+  retailPrice: ethers.utils.parseEther('0.01'),
+  premium: ethers.utils.parseEther('0.001'),
+  timeDenom: EmbargoTime.DAYS,
+  priceFunc: EmbargoPricingFunction.LINEAR
+}
 
 jest.mock('ethers', () => {
   const original = jest.requireActual('ethers')
@@ -46,16 +55,19 @@ jest.mock('ethers', () => {
     })),
     Contract: jest.fn().mockImplementation(() => ({
       ...originalContract,
-      getNode: mockGetNode,
-      getRoot: mockGetNode,
-      setAuth: jest.fn().mockImplementation(() => mockTransactionResponse),
-      auth: jest.fn().mockImplementation(() => true)
+      purchaseAccess: jest
+        .fn()
+        .mockImplementation(() => mockTransactionResponse),
+      setEmbargo: jest.fn().mockImplementation(() => mockTransactionResponse),
+      auth: jest.fn().mockImplementation(() => true),
+      getEmbargo: jest.fn().mockImplementation(() => sampleEmbargo),
+      price: jest.fn().mockImplementation(() => '1')
     }))
   }
 })
 
-describe('Authorizer License', () => {
-  describe('get Authorizer license contract instance', () => {
+describe('TimeBased License', () => {
+  describe('get TimeBased license contract instance', () => {
     it('should return contract instance and wallet address', async () => {
       await getContractInstance()
       expect(Wallet).toHaveBeenCalledWith(
@@ -64,35 +76,57 @@ describe('Authorizer License', () => {
       )
 
       expect(Contract).toHaveBeenCalledWith(
-        getLicense(LicenseType.authorizer, config.stage),
-        AUTHORIZER_ABI,
+        getLicense(LicenseType.timebased, config.stage),
+        TIMEBASED_LICENSE_ABI,
         expect.anything()
       )
     })
   })
 
-  describe('setAuth', () => {
+  describe('setPurchaseAccess', () => {
     const errorObj = {
-      data: 'assetId, evalExpression and authContracts  are required',
-      error: 'assetId, evalExpression and authContracts  are required',
+      data: 'assetId and amount is required',
+      error: 'assetId and amount is required',
       type: 'UnknownError'
     }
-    it('should throw error if assetId or address is not provided', async () => {
+    it('should throw error if assetId or amount is not provided', async () => {
       try {
-        await setAuth('', 'address', authorizerLicenses)
+        await setPurchaseAccess('', 1)
       } catch (error) {
         expect(error).toMatchObject(errorObj)
       }
 
       try {
-        await setAuth('assetId', '', authorizerLicenses)
+        await setPurchaseAccess('assetId', 0)
       } catch (error) {
         expect(error).toMatchObject(errorObj)
       }
     })
 
     it('should return transaction receipt', async () => {
-      const result = await setAuth('assetId', 'address', authorizerLicenses)
+      const result = await setPurchaseAccess('assetId', 1)
+      const mockReceipt = await mockTransactionResponse.wait()
+      expect(result).toEqual(mockReceipt)
+    })
+  })
+
+  describe('setEmbargo', () => {
+    const errorObj = {
+      data: 'assetId is required',
+      error: 'assetId is required',
+      type: 'UnknownError'
+    }
+
+    it('should throw error if assetId is not provided', async () => {
+      try {
+        await setEmbargo('', sampleEmbargo)
+      } catch (error) {
+        expect(error).toMatchObject(errorObj)
+      }
+    })
+
+    it('should return transaction receipt', async () => {
+      const result = await setEmbargo('assetId', sampleEmbargo)
       const mockReceipt = await mockTransactionResponse.wait()
       expect(result).toEqual(mockReceipt)
     })
@@ -119,36 +153,36 @@ describe('Authorizer License', () => {
   })
 
   describe('other utility functions', () => {
-    test('should be able to call getNode', async () => {
-      const node = await getNode('1')
+    test('should be able to call getEmbargo', async () => {
+      const embargo = await getEmbargo('1')
       expect(Wallet).toHaveBeenCalledWith(
         config.pvtKey,
         new ethers.providers.JsonRpcProvider(config.rpcUrl)
       )
 
       expect(Contract).toHaveBeenCalledWith(
-        getLicense(LicenseType.authorizer, config.stage),
-        AUTHORIZER_ABI,
+        getLicense(LicenseType.timebased, config.stage),
+        TIMEBASED_LICENSE_ABI,
         expect.anything()
       )
 
-      expect(JSON.stringify(node)).toBe(JSON.stringify(mockNodeData))
+      expect(JSON.stringify(embargo)).toBe(JSON.stringify(sampleEmbargo))
     })
 
-    test('should be able to call getRoot', async () => {
-      const node = await getRoot('1')
+    test('should be able to call getAssetPrice', async () => {
+      const price = await getAssetPrice('1', new Date().getTime())
       expect(Wallet).toHaveBeenCalledWith(
         config.pvtKey,
         new ethers.providers.JsonRpcProvider(config.rpcUrl)
       )
 
       expect(Contract).toHaveBeenCalledWith(
-        getLicense(LicenseType.authorizer, config.stage),
-        AUTHORIZER_ABI,
+        getLicense(LicenseType.timebased, config.stage),
+        TIMEBASED_LICENSE_ABI,
         expect.anything()
       )
 
-      expect(JSON.stringify(node)).toBe(JSON.stringify(mockNodeData))
+      expect(price).toBe('1')
     })
   })
 })

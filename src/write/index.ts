@@ -347,6 +347,7 @@ export async function processBlob(blob: Blob): Promise<ProcessedAsset> {
  * @returns The {@link AssetNode} object with the added cid.
  */
 export const addCID = (asset: AssetNode, cid: string): AssetNode => {
+  console.log('cid >>>>> ', cid)
   if (!cid) throw new Error('cid cannot be empty')
 
   asset.data.manifest.cid = cid

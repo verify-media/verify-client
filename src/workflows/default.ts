@@ -12,7 +12,8 @@ import {
   signAssetNode,
   uploadToPinata,
   processAsset,
-  addCID
+  addCID,
+  genCid
 } from '../write'
 import { ensureHttps, ensureIPFS } from '../utils/app'
 import path from 'path'
@@ -28,7 +29,6 @@ export const constructAssetNode = (
   hash: string,
   license: LicenseType
 ): AssetNode => {
-  console.log(hash, license)
   if (content.type === 'text') {
     const asset: AssetNode = {
       version: '1.0.0',
@@ -155,6 +155,11 @@ const genHash = async (
     // @ts-ignore
     const { body: textBody } = content
     assetHash = hashData(textBody || '')
+    const buffer = Buffer.from(textBody, 'utf-8')
+    assetCid = await genCid({
+      body: new Uint8Array(Buffer.from(buffer)),
+      name: 'text body'
+    })
   } else {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -248,7 +253,9 @@ export const publishAssets = async (
     //if asset is new
     if (isAssetNew) {
       console.log(`new asset`)
+      console.log('add cid to asset node >>> ', assetCid)
       assetNode = constructAssetNode(content, assetHash, license)
+      console.log('add cid to asset node >>> ', assetCid)
       addCID(assetNode, assetCid)
 
       console.log('sign asset node.....')
