@@ -113,7 +113,11 @@ export async function getImageData(url: string): Promise<Uint8Array> {
 }
 
 /**
- * @hidden
+ * returns decrypted asset content basis the asset details passed
+ * @param assetDetail {@link AssetDetails}
+ * @param ipfsGateway ipfs gateway url
+ * @param pinataConfig pinata config
+ * @returns <Promise<{type: string, content: string | Buffer}>}
  */
 /* istanbul ignore next */
 export async function decrypt(

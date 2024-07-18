@@ -86,15 +86,17 @@ export {
 } from './read'
 
 export { NodeType as NODE_TYPE } from './graph/protocol/types'
+export { LicenseType as LICENSE_TYPES } from './types/app'
 export { LocationProtocol, ContentTypes, MIME_TYPES } from './types/schema'
 export { init, getConfig } from './utils/config'
-export { STAGE, LicenseType } from './types/app'
-export type { Config } from './types/app'
+export { STAGE } from './types/app'
+export type { Config, LicenseType } from './types/app'
 export type {
   AssetNode,
   Signature,
   Article,
-  ContentMetadata
+  ContentMetadata,
+  Content
 } from './types/schema'
 export type { UploadRequest } from './storage/ipfs/types'
 export type {

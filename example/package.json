@@ -21,7 +21,8 @@
     "transfer": "npm run build && node ./src/utils/transferfunds.js",
     "org-nodes": "npm run build && node ./src/utils/org-nodes.js",
     "read": "npm run build && node ./src/utils/read.js",
-    "children": "npm run build && node ./src/utils/children.js"
+    "children": "npm run build && node ./src/utils/children.js",
+    "allowlist": "npm run build && node ./src/licenses/allow-list.js"
   },
   "author": "bcl-eng",
   "license": "ISC",
