@@ -1,5 +1,11 @@
 # @verify-media/verify-client
 
+## 1.0.6
+
+### Patch Changes
+
+- 90aab58: add content licenses
+
 ## 1.0.5
 
 ### Patch Changes
