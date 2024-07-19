@@ -49,34 +49,35 @@ Please refer the [getting started](https://github.com/verify-media/verify-client
   npm run init-wf
   ```
 
-  This script registers the root and intermediate identities for a publisher and also initializes the org structure on VERIFY protocol. During this process and org node is created on the protocol. This is a one time configuration for a publisher on the protocol. Please update the `orgNodeId` in the `.env` file for future use as follows:
+  This script registers the root and intermediate identities for a publisher on VERIFY protocol. During this process an org node is created on the protocol. This is a one time configuration for a publisher on the protocol. Please update the `orgNodeId` in the `.env` file for future use as follows:
   
-- ### Publish assets
+- ### Publish Content
 
   ```bash
-  npm run publish-assets
+  npm run publish-content
   ```
 
-  This script demonstrates publishing of assets and its contents using a basic workflow.
+  This script demonstrates publishing of content using a standard workflow.
 
 - ### Content Licensing
   ```bash
     npm run allowlist <asset_id> <consumer_wallet_address>
   ```
 
-  This script demonstrates the content licensing using the [allowlist license](https://docs.verifymedia.com/licensing/license-types/allowlist).
+  This script demonstrates content licensing using the [allowlist license](https://docs.verifymedia.com/licensing/license-types/allowlist).
+
 
   ```bash
     npm run authorizer <asset_id>
   ```
 
-  This script demonstrates the content licensing using the [authorizer](https://docs.verifymedia.com/licensing/license-types/authorizer).
+  This script demonstrates content licensing using the [authorizer](https://docs.verifymedia.com/licensing/license-types/authorizer).
 
   ```bash
     npm run embargo <asset_id>
   ```
 
-  This script demonstrates the content licensing using the [timebased](https://docs.verifymedia.com/licensing/license-types/timebased).
+  This script demonstrates content licensing using the [timebased](https://docs.verifymedia.com/licensing/license-types/timebased).
 
 ## Other Scripts
 
@@ -111,7 +112,7 @@ Please refer the [getting started](https://github.com/verify-media/verify-client
   ```
 
 - ### read:
-  Reads the content and hierarchy of an asset stored on the protocol
+  Reads the content and hierarchy of content stored on the protocol
   ```bash
   npm run read <assetId>
   ```
@@ -161,13 +162,13 @@ Please refer the [getting started](https://github.com/verify-media/verify-client
   ```
 
 - ### publish:
-  Demonstrates a simple publish of asset on the protocol. <b>Note: this is a simple publish, and does not maintain the provenance and usage context of the asset</b>
+  Demonstrates a simple publish of content on the protocol. <b>Note: this is a simple publish, and does not maintain the provenance and usage context of the content</b>
   ```bash
   npm run publish
   ```
 
 - ### consume:
-  Demonstrates a simple consumption of asset from the protocol. Reads the asset details from chain and then from IPFS also decrypts the content and writes it to a file
+  Demonstrates a simple consumption of content from the protocol. Reads the content details from chain and then from IPFS also decrypts the content and writes it to a file
   ```bash
   npm run consume
   ```
