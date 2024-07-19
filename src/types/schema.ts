@@ -10,6 +10,9 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
+
+import { LicenseType } from './app'
+
 // limitations under the License.
 export type EncryptionProtocols = 'lit-protocol'
 
@@ -22,7 +25,8 @@ export type HashingAlogs = 'keccak256'
 
 export enum LocationProtocol {
   IPFS = 'ipfs',
-  HTTPS = 'https'
+  HTTPS = 'https',
+  S3 = 's3'
 }
 
 /**
@@ -47,6 +51,10 @@ export type AssetAccess = {
   version: string
 }
 
+export type AssetLicense = {
+  license: LicenseType
+}
+
 /**
  * @remarks type definition for Asset Node Data
  */
@@ -54,7 +62,9 @@ export type AssetNodeData = {
   description: string
   type: string
   encrypted: boolean
-  access?: Record<EncryptionProtocols, AssetAccess>
+  access:
+    | Record<'lit-protocol', AssetAccess>
+    | Record<'verify-auth', AssetLicense>
   locations: Array<Location>
   manifest: {
     uri: string
@@ -69,12 +79,13 @@ export type AssetNodeData = {
     }
     published: string
     additional?: Record<string, unknown>
+    history?: string[]
+    cid?: string
   }
   contentBinding: {
     algo: HashingAlogs
     hash: string
   }
-  history: string[]
 }
 
 /**
@@ -107,7 +118,8 @@ export enum MIME_TYPES {
   SVG = 'image/svg',
   WEBP = 'image/webp',
   TEXT = 'text/html',
-  GIF = 'image/gif'
+  GIF = 'image/gif',
+  MP4 = 'video/mp4'
 }
 
 export enum ContentTypes {

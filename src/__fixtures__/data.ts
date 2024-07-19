@@ -50,15 +50,13 @@ export const assetNode: AssetNodeData = {
       name: 'FOX',
       unit: 'FOXNEWS'
     },
-    published: '2023-11-09T20:59:31.000Z'
+    published: '2023-11-09T20:59:31.000Z',
+    history: []
   },
   contentBinding: {
     algo: 'keccak256',
     hash: '0xc46c96f13a8a9f8b3ce4cf0a373d21fc6a9dee207a3d8935593d03e3bf41b0ea'
-  },
-  history: [
-    'ipfs://bafkreibffjveulscu6vpp7w6mdlsbha2zyyhdt6zgtafgldghsydcrz5xy'
-  ]
+  }
 }
 
 const mockSignature: Signature = {
@@ -153,13 +151,13 @@ export const PublishedAsset: AssetNode = {
         name: 'FOX',
         unit: 'FOX'
       },
+      history: [],
       published: '2023-12-20T14:14:48.310Z'
     },
     contentBinding: {
       algo: 'keccak256',
       hash: '0x530fd0f87ab05a6096e7eba481f4e8403bd174017d983d12d7d41af9b7d61abe'
-    },
-    history: []
+    }
   },
   signature: {
     curve: 'sepc256k1',
@@ -234,7 +232,7 @@ export const mockArticle: Article = {
 
 export const mockAssetDetails = {
   assetId: '0x1234',
-  provenance: {
+  meta: {
     version: '1.0.0',
     data: {
       description: 'sandbox sample string',
@@ -259,13 +257,13 @@ export const mockAssetDetails = {
           name: 'FOX',
           unit: 'FOX'
         },
+        history: [],
         published: '2023-12-20T14:14:48.310Z'
       },
       contentBinding: {
         algo: 'keccak256',
         hash: 'differentHash'
-      },
-      history: []
+      }
     },
     signature: {
       curve: 'sepc256k1',
@@ -311,13 +309,13 @@ export const mockArticleProvenance = [
           name: 'FOX',
           unit: 'FOX'
         },
+        history: [],
         published: '2023-12-20T14:14:48.310Z'
       },
       contentBinding: {
         algo: 'keccak256',
         hash: 'differentHash'
-      },
-      history: []
+      }
     },
     signature: {
       curve: 'sepc256k1',
@@ -354,13 +352,13 @@ export const mockArticleProvenance = [
           name: 'FOX',
           unit: 'FOX'
         },
+        history: [],
         published: '2023-12-20T14:14:48.310Z'
       },
       contentBinding: {
         algo: 'keccak256',
         hash: 'differentHash'
-      },
-      history: []
+      }
     },
     signature: {
       curve: 'sepc256k1',
@@ -397,13 +395,13 @@ export const mockArticleProvenance = [
           name: 'FOX',
           unit: 'FOX'
         },
+        history: [],
         published: '2023-12-20T14:14:48.310Z'
       },
       contentBinding: {
         algo: 'keccak256',
         hash: 'differentHash'
-      },
-      history: []
+      }
     },
     signature: {
       curve: 'sepc256k1',

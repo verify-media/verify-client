@@ -19,7 +19,10 @@ import {
   addEncryptionData,
   addIPFSData,
   addSignatureData,
-  buildArticleBody
+  buildArticleBody,
+  processAsset,
+  processBlob,
+  addCID
 } from '../index'
 import { assetNode } from '../../__fixtures__/data'
 import { mockEnvVars } from '../../__fixtures__/env'
@@ -108,18 +111,56 @@ describe('write functions', () => {
     expect(sign.message).toBe(hashData(JSON.stringify(assetNode)))
   })
 
-  test('it throws error if asset has encrypted property true but version is absent', async () => {
-    assetNode.access && (assetNode.access['lit-protocol'].version = '')
-    await expect(signAssetNode(assetNode)).rejects.toThrow(
-      'encrypted asset is missing version'
-    )
-  })
-
   test('it throws error if asset node is invalid', async () => {
     assetNode.description = ''
     await expect(signAssetNode(assetNode)).rejects.toThrow(
       '"description" is not allowed to be empty'
     )
+  })
+
+  it('processAsset should throw error if url is not passed', async () => {
+    await expect(processAsset('')).rejects.toThrow('image url was not passed')
+  })
+
+  it('processAsset should return ProcessedAsset object', async () => {
+    const imageUrl =
+      'https://fastly.picsum.photos/id/270/800/900.jpg?hmac=sV_J_B7YYHDLBUVn9bqsMj1wv18GJIzoMvb84vrMYgY'
+
+    const result = await processAsset(imageUrl)
+    expect(result).toHaveProperty('hash')
+    expect(result).toHaveProperty('sizeInMb')
+    expect(result).toHaveProperty('blob')
+    expect(result).toHaveProperty('cid')
+  })
+
+  it('processBlob should throw error if blob is not passed', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await expect(processBlob(null as any)).rejects.toThrow(
+      'blob was not passed'
+    )
+  })
+
+  it('processBlob should return ProcessedAsset object', async () => {
+    const mockBlob = new Blob(['test data'], { type: 'text/plain' })
+
+    const result = await processBlob(mockBlob)
+    expect(result).toHaveProperty('hash')
+    expect(result).toHaveProperty('sizeInMb')
+    expect(result).toHaveProperty('blob')
+    expect(result).toHaveProperty('cid')
+  })
+
+  it('addCID should throw error if cid is not passed', () => {
+    const asset = { data: { manifest: {} } }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect(() => addCID(asset as any, '')).toThrow('cid cannot be empty')
+  })
+
+  it('addCID should return AssetNode object with added cid', () => {
+    const asset = { data: { manifest: {} } }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = addCID(asset as any, 'cid')
+    expect(result.data.manifest.cid).toBe('cid')
   })
 })
 
@@ -128,12 +169,16 @@ const assetHash = '0x0000000'
 describe('buildAssetPayload', () => {
   it('should return an AssetNode object with default values', () => {
     const asset = buildAssetPayload(assetHash)
-
     expect(asset).toEqual({
       version: '1.0.0',
       data: {
         description: '',
         type: '',
+        access: {
+          'verify-auth': {
+            license: 'allowlist'
+          }
+        },
         encrypted: true,
         locations: [],
         manifest: {
@@ -144,13 +189,13 @@ describe('buildAssetPayload', () => {
             name: '',
             unit: ''
           },
-          published: ''
+          published: '',
+          history: []
         },
         contentBinding: {
           algo: 'keccak256',
           hash: '0x0000000'
-        },
-        history: []
+        }
       },
       signature: {
         curve: 'secp256k1',
@@ -351,7 +396,10 @@ describe('buildArticleBody', () => {
         authority: { name: 'Image Authority', contact: 'contact@example.com' }, // replace with actual authority
         published: new Date().toISOString(), // replace with actual published date
         ownership: 'owned',
-        metadata: {}
+        metadata: {
+          hash: 'imageHash',
+          cid: 'imageCID'
+        }
       }
     ]
 

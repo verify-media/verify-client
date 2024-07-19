@@ -152,14 +152,14 @@ export function isValidAssetNode(asset: AssetNodeData): {
     description: Joi.string().required(),
     type: Joi.string().required(),
     encrypted: Joi.boolean().required(),
-    access: Joi.object().pattern(Joi.string(), Joi.object()).optional(),
+    access: Joi.object().pattern(Joi.string(), Joi.object()),
     locations: Joi.array()
       .items(
         Joi.object({
           uri: Joi.string()
-            .pattern(/^(https:\/\/|ipfs:\/\/)/)
+            .pattern(/^(https:\/\/|ipfs:\/\/|s3:\/\/)/)
             .required(),
-          protocol: Joi.string().valid('https', 'ipfs').required()
+          protocol: Joi.string().valid('https', 'ipfs', 's3').required()
         })
       )
       .required()
@@ -167,7 +167,7 @@ export function isValidAssetNode(asset: AssetNodeData): {
     manifest: Joi.object({
       uri: Joi.string()
         .uri()
-        .pattern(/^https:\/\//)
+        .pattern(/^https:\/\/|s3:\/\//)
         .required(),
       alt: Joi.string().allow('').optional(),
       caption: Joi.string().allow('').optional(),
@@ -187,13 +187,14 @@ export function isValidAssetNode(asset: AssetNodeData): {
 
           return value
         }),
-      additional: Joi.object().optional()
+      additional: Joi.string().allow('').optional(),
+      cid: Joi.string().allow('').optional(),
+      history: Joi.array().items(Joi.string()).optional()
     }).required(),
     contentBinding: Joi.object({
       algo: Joi.string().valid('keccak256').required(),
       hash: Joi.string().required()
-    }).required(),
-    history: Joi.array().items(Joi.string()).optional()
+    }).required()
   })
 
   return AssetNodeDataSchema.validate(asset)
@@ -201,3 +202,7 @@ export function isValidAssetNode(asset: AssetNodeData): {
 
 export const trimLowerCase = (str = ''): string =>
   str && str.replace(/\s/g, '').toLowerCase()
+
+export function delay(milliseconds: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds))
+}

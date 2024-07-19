@@ -15,7 +15,7 @@ import { init } from '../../../utils/config'
 import {
   changeParent,
   checkAuth,
-  checkGasgLimits,
+  checkGasLimits,
   checkRefAuth,
   createArticleNode,
   createLicenseNode,
@@ -55,6 +55,7 @@ import {
 import { AssetNode, LocationProtocol } from '../../../types/schema'
 import { hashData } from '../../../utils/app'
 import { IDENTITY_ABI } from '../../identity/types'
+import { LicenseType } from '../../../types/app'
 
 const config = init({
   stage: '',
@@ -160,14 +161,14 @@ describe('graph functions', () => {
   test('should fail if legacy gas is greater than maxgas set in config', async () => {
     mockGasPrice.mockImplementationOnce(() => Promise.resolve(mockHighGasPrice))
 
-    await expect(checkGasgLimits()).rejects.toThrow(
+    await expect(checkGasLimits()).rejects.toThrow(
       'Gas limit exceeded as mentioned in config'
     )
   })
 
   test('should not fail if legacy gas is lower than maxgas set in config', async () => {
     mockGasPrice.mockImplementationOnce(() => Promise.resolve(mockLowGasPrice))
-    await expect(checkGasgLimits()).resolves.toBe(mockLowGasPrice)
+    await expect(checkGasLimits()).resolves.toBe(mockLowGasPrice)
   })
 
   test('should pick default gas price if a fetch from network fails', async () => {
@@ -431,7 +432,7 @@ describe('graph functions', () => {
       Promise.resolve(mockDefaultGasPrice)
     )
     const mockReceipt = await mockTransactionResponse.wait()
-    const receipt = await setAccessAuth('1', 'addr1')
+    const receipt = await setAccessAuth('1', LicenseType.allowlist)
     expect(Wallet).toHaveBeenCalledWith(
       config.pvtKey,
       new ethers.providers.JsonRpcProvider(config.rpcUrl)
@@ -452,7 +453,7 @@ test('should be able to call setReferenceAuth', async () => {
     Promise.resolve(mockDefaultGasPrice)
   )
   const mockReceipt = await mockTransactionResponse.wait()
-  const receipt = await setReferenceAuth('1', 'addr1')
+  const receipt = await setReferenceAuth('1', LicenseType.public)
   expect(Wallet).toHaveBeenCalledWith(
     config.pvtKey,
     new ethers.providers.JsonRpcProvider(config.rpcUrl)
@@ -548,20 +549,20 @@ describe('verifyAsset function', () => {
         caption: '',
         creditedSource: 'ORG_ABC',
         signingOrg: { name: 'ORG_ABC', unit: 'ORG_ABC' },
-        published: '2024-03-07T05:47:38.489Z'
+        published: '2024-03-07T05:47:38.489Z',
+        history: []
       },
       contentBinding: {
         algo: 'keccak256',
         hash: '0x177085d7804edd7e21adefd0773db4d3da963676c65c6c7c8d41b8805cf31537'
-      },
-      history: []
+      }
     },
     signature: {
       curve: 'sepc256k1',
       signature:
         '0x1be13bad071f126ea93e33b3b442c1be0541682139cdeee6cd86a8d9c5e7ce2f25f02813d66e7539df35d88fec2d23aa676f525f58d540d619ef23ecc1e0b9f11c',
       message:
-        '0x953c5b7fdb3fc97d5c2eb6e8060b971b3129ffc631b05777c3ad92aa3c260465',
+        '0x2f840dfe89dd7e4a556e49ed0d40457c7433e522bbd69f778124766d48dc8a17',
       description:
         'hex encoded sepc256k1 signature of the keccak256 hash of content field with the signers private key'
     }

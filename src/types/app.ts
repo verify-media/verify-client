@@ -18,6 +18,14 @@ export enum STAGE {
   sandbox = 'sandbox'
 }
 
+export enum LicenseType {
+  allowlist = 'allowlist',
+  public = 'public',
+  private = 'private',
+  timebased = 'timebased',
+  authorizer = 'authorizer'
+}
+
 /**
  * @remarks
  * type definition for sdk config
@@ -49,4 +57,11 @@ export type Settings = {
   maxGasPrice?: number
   walletExpiryDays?: number
   rootPvtKey?: string
+}
+
+export type ProcessedAsset = {
+  hash: string
+  sizeInMb: number
+  blob: Blob
+  cid: string
 }

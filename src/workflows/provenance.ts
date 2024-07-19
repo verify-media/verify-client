@@ -16,7 +16,7 @@ import {
   signAssetNode,
   buildArticleBody,
   uploadToPinata
-} from '.'
+} from '../write'
 import { ensureHttps, ensureIPFS } from '../utils/app'
 import path from 'path'
 import { fetchFileFromPinata } from '../read'
@@ -63,13 +63,13 @@ export const constructAssetNode = (
             name: content.authority.name,
             unit: content.authority.name
           },
-          published: content.published
+          published: content.published,
+          history: []
         },
         contentBinding: {
           algo: 'keccak256',
           hash: hash
-        },
-        history: []
+        }
       },
       signature: {
         curve: 'secp256k1',
@@ -113,13 +113,13 @@ export const constructAssetNode = (
             name: content.authority.name,
             unit: content.authority.name
           },
-          published: new Date().toISOString()
+          published: new Date().toISOString(),
+          history: []
         },
         contentBinding: {
           algo: 'keccak256',
           hash: hash
-        },
-        history: []
+        }
       },
       signature: {
         curve: 'secp256k1',
@@ -434,7 +434,18 @@ export const publishArticle = async (
           newAssetNode.data.manifest.published = new Date().toISOString()
         }
         debugLogger().debug(`adding history to asset node`)
-        newAssetNode.data.history.push(ensureIPFS(existingAssetMetaUri))
+        if (
+          newAssetNode &&
+          newAssetNode.data &&
+          newAssetNode.data.manifest &&
+          newAssetNode.data.manifest.history
+        ) {
+          newAssetNode.data.manifest.history.push(
+            ensureIPFS(existingAssetMetaUri)
+          )
+        } else {
+          // Handle the case where newAssetNode.data.manifest.history is undefined
+        }
 
         // sign assetNode
         debugLogger().debug(`signing asset node`)

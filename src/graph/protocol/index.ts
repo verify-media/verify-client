@@ -30,7 +30,11 @@ import {
 import { ensureIPFS, hashData, trimLowerCase } from '../../utils/app'
 import { AssetNode } from '../../types/schema'
 import { whoIs } from '../identity'
-import { getGraphContractAddress } from '../../constants'
+import {
+  PROTOCOL_ERRORS,
+  getGraphContractAddress,
+  getLicense
+} from '../../constants'
 import { fetchFromIPFS } from '../../storage/ipfs'
 import { fetchFileFromPinata } from '../../read'
 import { PinataConfig } from '../../storage/pinata/types'
@@ -39,6 +43,7 @@ import {
   withErrorHandlingGraph
 } from '../../utils/error/decode-ether-error'
 import { debugLogger } from '../../utils/logger'
+import { LicenseType } from '../../types/app'
 
 /**
  * @hidden
@@ -89,7 +94,7 @@ export const getLegacyGas = async (): Promise<BigNumber> => {
  * @hidden
  * @returns
  */
-export async function checkGasgLimits(): Promise<BigNumber> {
+export async function checkGasLimits(): Promise<BigNumber> {
   const { maxGasPrice } = getConfig()
   /* istanbul ignore next */
   if (!maxGasPrice) {
@@ -241,7 +246,7 @@ export const setUri = withErrorHandlingGraph(
   ): Promise<ethers.providers.TransactionReceipt> => {
     debugLogger().debug('check gas limits')
 
-    const gas = await checkGasgLimits()
+    const gas = await checkGasLimits()
     const graphContract = getContractInstance()
 
     debugLogger().debug(`setting uri ${uri} for ${id} on chain`)
@@ -295,6 +300,7 @@ export const verifyAsset = async (
   debugLogger().debug(
     `compare asset signature message and calculated message ${calculatedMessage}`
   )
+
   if (calculatedMessage === asset.signature.message) {
     debugLogger().debug(`message verified`)
     validity.signatureVerified = true
@@ -339,7 +345,7 @@ export const publish = withErrorHandlingGraph(
 
     debugLogger().debug('check gas limits')
 
-    const gas = await checkGasgLimits()
+    const gas = await checkGasLimits()
 
     const contentNode: ContentNode = {
       ...publishParams,
@@ -374,7 +380,7 @@ export const publishRef = withErrorHandlingGraph(
     publishParams: PublishParam
   ): Promise<ethers.providers.TransactionReceipt> => {
     const graphContract = getContractInstance()
-    const gas = await checkGasgLimits()
+    const gas = await checkGasLimits()
     const contentNode: RefContentNode = {
       ...publishParams,
       nodeType: NodeType.REFERENCE
@@ -407,7 +413,7 @@ export const publishBulk = withErrorHandlingGraph(
     publishParams: PublishParams
   ): Promise<ethers.providers.TransactionReceipt> => {
     const graphContract = getContractInstance()
-    const gas = await checkGasgLimits()
+    const gas = await checkGasLimits()
     const contentNodes: ContentNodes = publishParams.map((publishParam) => {
       return { ...publishParam, nodeType: NodeType.ASSET }
     })
@@ -445,7 +451,7 @@ export const createNode = withErrorHandlingGraph(
 
     debugLogger().debug('check gas limits')
 
-    const gas = await checkGasgLimits()
+    const gas = await checkGasLimits()
 
     debugLogger().debug(`create node ${node.id} on chain`)
 
@@ -482,7 +488,7 @@ export const changeParent = withErrorHandlingGraph(
 
     debugLogger().debug('check gas limits')
 
-    const gas = await checkGasgLimits()
+    const gas = await checkGasLimits()
 
     debugLogger().debug(`move parent for ${assetId} to new parent ${parentId}`)
 
@@ -501,31 +507,35 @@ export const changeParent = withErrorHandlingGraph(
 )
 
 /**
- * Sets the access authorization contract on the node with the given ID.
+ * Sets the access authorization contract for the node at id. [ref](https://docs.verifymedia.com/publishing/graph/contract/#setaccessauthbytes32-id-address-accessauth)
  * @param assetId
- * @param accessAuthAddress
+ * @param licenseType
  * @returns {Promise<ethers.providers.TransactionReceipt>} A promise that resolves with the transaction receipt.
  * For more information, see [Ethers.js Documentation](https://docs.ethers.org/v5/api/providers/types/#providers-TransactionReceipt).
  */
 export const setAccessAuth = withErrorHandlingGraph(
   async (
     assetId: string,
-    accessAuthAddress: string
+    licenseType: LicenseType
   ): Promise<ethers.providers.TransactionReceipt> => {
+    const { stage } = getConfig()
+    const license = getLicense(licenseType, stage)
+    if (!license) {
+      throw new Error(
+        `Invalid license type, only allowed types are ${Object.values(LicenseType)}`
+      )
+    }
     const graphContract = getContractInstance()
+    const gas = await checkGasLimits()
 
-    debugLogger().debug('check gas limits')
-
-    const gas = await checkGasgLimits()
-
-    debugLogger().debug(
-      `set access auth ${accessAuthAddress} for ${assetId} on chain`
-    )
+    debugLogger().debug(`setting access auth for ${assetId} with ${license}`)
 
     const txn: ethers.providers.TransactionResponse =
-      await graphContract.setAccessAuth(assetId, accessAuthAddress, {
+      await graphContract.setAccessAuth(assetId, license, {
         gasPrice: gas
       })
+
+    debugLogger().debug(`${license} applied to ${assetId}`)
 
     const receipt: ethers.providers.TransactionReceipt = await txn.wait()
 
@@ -543,20 +553,24 @@ export const setAccessAuth = withErrorHandlingGraph(
 export const setReferenceAuth = withErrorHandlingGraph(
   async (
     assetId: string,
-    refAccessAuthAddress: string
+    licenseType: LicenseType
   ): Promise<ethers.providers.TransactionReceipt> => {
+    const { stage } = getConfig()
+    const license = getLicense(licenseType, stage)
+    if (!license) {
+      throw new Error(
+        `Invalid license type, only allowed types are ${Object.values(LicenseType)}`
+      )
+    }
+
     const graphContract = getContractInstance()
-
     debugLogger().debug('check gas limits')
+    const gas = await checkGasLimits()
 
-    const gas = await checkGasgLimits()
-
-    debugLogger().debug(
-      `set reference auth ${refAccessAuthAddress} for ${assetId} on chain`
-    )
+    debugLogger().debug(`set reference auth ${license} for ${assetId} on chain`)
 
     const txn: ethers.providers.TransactionResponse =
-      await graphContract.setReferenceAuth(assetId, refAccessAuthAddress, {
+      await graphContract.setReferenceAuth(assetId, license, {
         gasPrice: gas
       })
 
@@ -578,14 +592,14 @@ export const checkAuth = async (
 ): Promise<boolean> => {
   const graphContract = getContractInstance()
   debugLogger().debug('check gas limits')
-  const gas = await checkGasgLimits()
+  const gas = await checkGasLimits()
 
   debugLogger().debug(`check auth for ${assetId} by ${userAddress}`)
-  const isAuthorised = await graphContract.auth(assetId, userAddress, {
+  const isAuthorized = await graphContract.auth(assetId, userAddress, {
     gasPrice: gas
   })
 
-  return isAuthorised
+  return isAuthorized
 }
 
 /**
@@ -600,14 +614,14 @@ export const checkRefAuth = async (
 ): Promise<ethers.providers.TransactionReceipt> => {
   const graphContract = getContractInstance()
   debugLogger().debug('check gas limits')
-  const gas = await checkGasgLimits()
+  const gas = await checkGasLimits()
 
   debugLogger().debug(`check ref auth for ${assetId} by ${userAddress}`)
-  const isAuthorised = await graphContract.refAuth(assetId, userAddress, {
+  const isAuthorized = await graphContract.refAuth(assetId, userAddress, {
     gasPrice: gas
   })
 
-  return isAuthorised
+  return isAuthorized
 }
 
 /**
@@ -620,7 +634,7 @@ export const getTokenToNode = async (
 ): Promise<ContentGraphNode> => {
   const graphContract = getContractInstance()
   debugLogger().debug('check gas limits')
-  const gas = await checkGasgLimits()
+  const gas = await checkGasLimits()
 
   debugLogger().debug(`get node for token ${tokenId}`)
   const node: ContentGraphNode = await graphContract.tokenToNode(tokenId, {
@@ -667,7 +681,7 @@ export const registerOrg = withErrorHandlingGraph(
         referenceOf: ZeroHash
       })
     } catch (error) {
-      if ((error as VerifyError).data === '0xe63231f6') {
+      if ((error as VerifyError).data === PROTOCOL_ERRORS.NODE_EXISTS) {
         incrBy = incrBy + 1
         debugLogger().debug('org node already exists')
       } else {
@@ -698,7 +712,7 @@ export const registerOrg = withErrorHandlingGraph(
         referenceOf: ZeroHash
       })
     } catch (error) {
-      if ((error as VerifyError).data === '0xe63231f6') {
+      if ((error as VerifyError).data === PROTOCOL_ERRORS.NODE_EXISTS) {
         debugLogger().debug('og node already exists')
       } else {
         throw error
@@ -788,6 +802,103 @@ export const createArticleNode = withErrorHandlingGraph(
 )
 
 /**
+ * Creates an org node under the given the root wallet address.
+ * @param {string} rootWalletAddress - The address of the root wallet.
+ * @returns {Promise<{org: {
+ *  id: string
+ *  txnHash: string
+ * }}>} A promise that resolves with the org node id and transaction hash.
+ */
+export const createOrgNode = withErrorHandlingGraph(
+  async (
+    rootWalletAddress: string
+  ): Promise<{
+    org: {
+      id: string
+      txnHash: string
+    }
+  }> => {
+    let incrBy = 1
+    const ZeroHash =
+      '0x0000000000000000000000000000000000000000000000000000000000000000'
+    // create org node
+    const nodesCreated = (
+      (await getNodesCreated(rootWalletAddress)).toNumber() + incrBy
+    ).toString()
+
+    debugLogger().debug(`nodes created ${rootWalletAddress}`)
+    debugLogger().debug(nodesCreated)
+
+    const orgId = ethers.utils.solidityKeccak256(
+      ['address', 'uint256'],
+      [rootWalletAddress, nodesCreated]
+    )
+
+    debugLogger().debug(`creating org node with orgId ${orgId}`)
+    let orgTransaction = null
+    try {
+      orgTransaction = await createNode({
+        id: orgId,
+        parentId: ZeroHash,
+        nodeType: NodeType.ORG,
+        referenceOf: ZeroHash
+      })
+    } catch (error) {
+      if ((error as VerifyError).data === PROTOCOL_ERRORS.NODE_EXISTS) {
+        incrBy = incrBy + 1
+        debugLogger().debug('org node already exists')
+      } else {
+        throw error
+      }
+    }
+
+    debugLogger().debug('org node created')
+    debugLogger().debug(orgTransaction?.transactionHash)
+
+    return {
+      org: {
+        id: orgId,
+        txnHash: orgTransaction?.transactionHash || ''
+      }
+    }
+  }
+)
+
+/**
+ * Creates an org node node under the given org node.
+ * @param orgNode - Publishers Organization node id.
+ * @param id - The id of the node.
+ * @param parentId - The parent id of the node. {@link NodeType} NodeType.ORG
+ */
+export const createHierarchicalNode = withErrorHandlingGraph(
+  async (orgNode: string, id: string, parentId: string): Promise<string> => {
+    const ZeroHash =
+      '0x0000000000000000000000000000000000000000000000000000000000000000'
+
+    if (!id) {
+      throw new Error('id is required basis which the node will be created')
+    }
+
+    const nodeId = hashData(trimLowerCase(`${orgNode}_${id}`))
+    try {
+      await getNode(nodeId)
+      debugLogger().debug(`${id} node already exists`)
+    } catch (error) {
+      debugLogger().debug(`creating ${id} node`)
+      // create license node under org node
+      await createNode({
+        id: nodeId,
+        parentId: parentId.toString(),
+        nodeType: NodeType.ORG,
+        referenceOf: ZeroHash
+      })
+    }
+
+    return nodeId
+  }
+)
+
+/**
  * Gets the asset details and the hierarchy with which it has been stored on chain for the given asset id.
  * @param assetId
  * @param ipfsGateway ipfs gateway url in case a self hosted or a public ipfs gateway is used. Default is ''
@@ -819,7 +930,11 @@ export async function getAssetDetails(
   }
 
   const assetUri = assetMeta.data.locations.filter((location) => {
-    return location.protocol === 'ipfs'
+    return (
+      location.protocol === 'ipfs' ||
+      location.protocol === 'https' ||
+      location.protocol === 's3'
+    )
   })[0].uri
 
   const assetType = assetMeta.data.type
@@ -828,7 +943,7 @@ export async function getAssetDetails(
 
   const assetDetails: AssetDetails = {
     assetId,
-    provenance: assetMeta,
+    meta: assetMeta,
     type: assetType,
     location: assetUri,
     orgStruct: []
@@ -886,4 +1001,16 @@ export async function getArticleProvenance(
   })
 
   return await Promise.all(promises)
+}
+
+/**
+ * Returns the intermediate wallet balance
+ * @returns {Promise<BigNumber>} A promise that resolves with the balance of the wallet.
+ */
+export const getWalletBalance = async (): Promise<BigNumber> => {
+  let balance: BigNumber | undefined = undefined
+  const wallet = getWalletInstance()
+  balance = await wallet.provider.getBalance(wallet.address)
+
+  return balance
 }

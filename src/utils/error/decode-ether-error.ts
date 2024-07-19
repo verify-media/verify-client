@@ -169,7 +169,6 @@ export function withErrorHandlingGraph<T extends unknown[], R>(
     try {
       return await fn(...args)
     } catch (error) {
-      console.log('Error in function:', error)
       debugLogger().error('Error in function:', error)
       const decodedError = decodeEtherError(error, GRAPH_V2_ABI)
       const _error = {

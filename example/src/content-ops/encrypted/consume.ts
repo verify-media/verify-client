@@ -44,12 +44,16 @@ async function consumeContent(assetId: string): Promise<{
     'meta',
     pinataConfig
   )) as AssetNode
-  if (!asset.data.access || !asset.data.access['lit-protocol']) {
+  if (!asset.data.access) {
     throw new Error('asset is not encrypted')
   }
 
   const assetUri = asset.data.locations.filter((location) => {
-    return location.protocol === 'ipfs'
+    return (
+      location.protocol === 'ipfs' ||
+      location.protocol === 'https' ||
+      location.protocol === 's3'
+    )
   })[0].uri
 
   console.log(`fetching actual asset from ipfs @ ${assetUri}`)
