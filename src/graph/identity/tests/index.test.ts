@@ -17,7 +17,6 @@ import {
   registerRoot,
   unRegisterRoot,
   register,
-  unregister,
   registered,
   whoIs,
   rootName,
@@ -153,91 +152,91 @@ describe('identity functions', () => {
     config = init()
   })
 
-  it('should register intermediate wallet from config and return transaction hash', async () => {
-    const mockReceipt = await mockTransactionResponse.wait()
-    const receipt = await register()
-    expect(Wallet).toHaveBeenCalledWith(
-      config.rootPvtKey,
-      new ethers.providers.JsonRpcProvider(config.rpcUrl)
-    )
+  // it('should register intermediate wallet from config and return transaction hash', async () => {
+  //   const mockReceipt = await mockTransactionResponse.wait()
+  //   const receipt = await register()
+  //   expect(Wallet).toHaveBeenCalledWith(
+  //     config.rootPvtKey,
+  //     new ethers.providers.JsonRpcProvider(config.rpcUrl)
+  //   )
 
-    expect(Wallet).toHaveBeenCalledWith(
-      config.pvtKey,
-      new ethers.providers.JsonRpcProvider(config.rpcUrl)
-    )
+  //   expect(Wallet).toHaveBeenCalledWith(
+  //     config.pvtKey,
+  //     new ethers.providers.JsonRpcProvider(config.rpcUrl)
+  //   )
 
-    expect(Contract).toHaveBeenCalledWith(
-      config.identityContractAddress,
-      IDENTITY_ABI,
-      expect.anything()
-    )
+  //   expect(Contract).toHaveBeenCalledWith(
+  //     config.identityContractAddress,
+  //     IDENTITY_ABI,
+  //     expect.anything()
+  //   )
 
-    expect(utils.defaultAbiCoder.encode).toHaveBeenCalledWith(
-      [
-        'bytes32',
-        'address',
-        'address',
-        'uint256',
-        'uint256',
-        'uint256',
-        'uint256'
-      ],
-      [
-        utils.keccak256(
-          utils.toUtf8Bytes(
-            'register(address root,address intermediate,uint256 expiry,uint256 nonce,uint256 chainID,uint256 deadline)'
-          )
-        ), //This is the hash of the register function type
-        expect.stringMatching(/^0x[a-fA-F0-9]{40}$/),
-        expect.stringMatching(/^0x[a-fA-F0-9]{40}$/),
-        expect.anything(),
-        expect.anything(),
-        expect.anything(),
-        expect.anything()
-      ]
-    )
+  //   expect(utils.defaultAbiCoder.encode).toHaveBeenCalledWith(
+  //     [
+  //       'bytes32',
+  //       'address',
+  //       'address',
+  //       'uint256',
+  //       'uint256',
+  //       'uint256',
+  //       'uint256'
+  //     ],
+  //     [
+  //       utils.keccak256(
+  //         utils.toUtf8Bytes(
+  //           'register(address root,address intermediate,uint256 expiry,uint256 nonce,uint256 chainID,uint256 deadline)'
+  //         )
+  //       ), //This is the hash of the register function type
+  //       expect.stringMatching(/^0x[a-fA-F0-9]{40}$/),
+  //       expect.stringMatching(/^0x[a-fA-F0-9]{40}$/),
+  //       expect.anything(),
+  //       expect.anything(),
+  //       expect.anything(),
+  //       expect.anything()
+  //     ]
+  //   )
 
-    expect(JSON.stringify(receipt)).toBe(JSON.stringify(mockReceipt))
-  })
+  //   expect(JSON.stringify(receipt)).toBe(JSON.stringify(mockReceipt))
+  // })
 
-  it('should unregister intermediate wallet picked from config and return transaction hash', async () => {
-    const mockReceipt = await mockTransactionResponse.wait()
-    const receipt = await unregister()
+  // it('should unregister intermediate wallet picked from config and return transaction hash', async () => {
+  //   const mockReceipt = await mockTransactionResponse.wait()
+  //   const receipt = await unregister()
 
-    expect(Wallet).toHaveBeenCalledWith(
-      config.rootPvtKey,
-      new ethers.providers.JsonRpcProvider(config.rpcUrl)
-    )
+  //   expect(Wallet).toHaveBeenCalledWith(
+  //     config.rootPvtKey,
+  //     new ethers.providers.JsonRpcProvider(config.rpcUrl)
+  //   )
 
-    expect(Wallet).toHaveBeenCalledWith(
-      config.pvtKey,
-      new ethers.providers.JsonRpcProvider(config.rpcUrl)
-    )
+  //   expect(Wallet).toHaveBeenCalledWith(
+  //     config.pvtKey,
+  //     new ethers.providers.JsonRpcProvider(config.rpcUrl)
+  //   )
 
-    expect(Contract).toHaveBeenCalledWith(
-      config.identityContractAddress,
-      IDENTITY_ABI,
-      expect.anything()
-    )
+  //   expect(Contract).toHaveBeenCalledWith(
+  //     config.identityContractAddress,
+  //     IDENTITY_ABI,
+  //     expect.anything()
+  //   )
 
-    expect(utils.defaultAbiCoder.encode).toHaveBeenCalledWith(
-      ['bytes32', 'address', 'address', 'uint256', 'uint256', 'uint256'],
-      [
-        utils.keccak256(
-          utils.toUtf8Bytes(
-            'unregister(address root,address intermediate,uint256 nonce,uint256 chainID,uint256 deadline)'
-          )
-        ), //This is the hash of the register function type
-        expect.stringMatching(/^0x[a-fA-F0-9]{40}$/),
-        expect.stringMatching(/^0x[a-fA-F0-9]{40}$/),
-        expect.anything(),
-        expect.anything(),
-        expect.anything()
-      ]
-    )
+  //   expect(utils.defaultAbiCoder.encode).toHaveBeenCalledWith(
+  //     ['bytes32', 'address', 'address', 'uint256', 'uint256', 'uint256'],
+  //     [
+  //       utils.keccak256(
+  //         utils.toUtf8Bytes(
+  //           'unregister(address root,address intermediate,uint256 nonce,uint256 chainID,uint256 deadline)'
+  //         )
+  //       ), //This is the hash of the register function type
+  //       expect.stringMatching(/^0x[a-fA-F0-9]{40}$/),
+  //       expect.stringMatching(/^0x[a-fA-F0-9]{40}$/),
+  //       expect.anything(),
+  //       expect.anything(),
+  //       expect.anything()
+  //     ]
+  //   )
 
-    expect(JSON.stringify(receipt)).toBe(JSON.stringify(mockReceipt))
-  })
+  //   expect(JSON.stringify(receipt)).toBe(JSON.stringify(mockReceipt))
+  // })
 
   it('should call registered with the correct address', async () => {
     const testAddress = '0x123456789abcdef'

@@ -134,9 +134,24 @@ export const genTypedSignatureHash = async (
     )
   )
 
+  // const wallet = new Wallet(
+  //   rootPvtKey,
+  //   new ethers.providers.JsonRpcProvider(rpcUrl)
+  // )
+
   const signingKey = new utils.SigningKey(rootPvtKey)
   const signature = signingKey.signDigest(digest)
   const serializedSignature = utils.joinSignature(signature)
+
+  // const signingAddress = ethers.utils.recoverAddress(digest, signature)
+  // if (signingAddress !== wallet.address) {
+  //   throw new Error('Invalid signature')
+  // } else {
+  //   debugLogger().debug(
+  //     'signature is valid and is signed by  %s',
+  //     signingAddress
+  //   )
+  // }
 
   return serializedSignature
 }
