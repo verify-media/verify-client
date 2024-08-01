@@ -12,10 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import { IPFSResponse, UploadToIPFSParams } from './types'
-import fetch, { Headers, FormData } from 'node-fetch'
+import fetch, { Headers } from 'node-fetch'
 import { debugLogger } from '../../utils/logger'
 import { AssetNode } from '../../types/schema'
 import { ensureIPFS } from '../../utils/app'
+import NodeFormData from 'form-data'
+import { Readable } from 'stream'
 
 //TODO explore https://github.com/ipfs/js-kubo-rpc-client
 /**
@@ -32,45 +34,67 @@ export const uploadToIPFS = async ({
   config,
   type
 }: UploadToIPFSParams): Promise<IPFSResponse | null> => {
-  debugLogger().debug(`read ipfs config`)
   const { rpcUri, creds } = config
   const { name, body } = data
-
-  debugLogger().debug(`prep form data`)
   const auth = Buffer.from(creds).toString('base64')
   const headers = new Headers()
+  let response = null
 
   headers.set('Authorization', 'Basic ' + auth)
   headers.set('Accept', 'application/json')
-  const formData = new FormData()
 
   debugLogger().debug('headers set')
 
+  debugLogger().debug(`uploading to ${rpcUri}`)
   if (type === 'meta') {
+    const formData = new NodeFormData()
     //TODO add validation on body type
     debugLogger().debug('uploading meta')
-    formData.set('file-upload', JSON.stringify(body))
+    formData.append('file-upload', JSON.stringify(body))
+    debugLogger().debug(JSON.stringify(body))
+
+    response = await fetch(rpcUri, {
+      method: 'POST',
+      body: formData,
+      headers
+    })
+
+    debugLogger().debug(JSON.stringify(response))
   } else {
+    const formData = new NodeFormData()
     //TODO add validation on body type
     debugLogger().debug('uploading file')
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
-    formData.set('file-upload', body, name)
+    const stream = new Readable({
+      read() {
+        this.push(body)
+        this.push(null)
+      }
+    })
+
+    debugLogger().debug('append stream')
+
+    formData.append('file', stream, {
+      filename: name
+    })
+
+    debugLogger().debug('make fetch request')
+
+    response = await fetch(rpcUri, {
+      method: 'POST',
+      body: formData,
+      headers
+    })
   }
 
-  debugLogger().debug(`uploading to ${rpcUri}`)
+  debugLogger().debug(JSON.stringify(response))
 
-  const response = await fetch(rpcUri, {
-    method: 'POST',
-    body: formData,
-    headers
-  })
-
-  debugLogger().debug(response)
+  if (!response.ok) {
+    throw new Error('failed to upload to IPFS')
+  }
 
   const responseData = await response.json()
 
-  debugLogger().debug(responseData)
+  debugLogger().debug(JSON.stringify(responseData))
 
   if (!(responseData as IPFSResponse)?.cid) {
     throw new Error('failed to upload to IPFS')
@@ -94,10 +118,11 @@ export const fetchFromIPFS = async (
   type: string,
   ipfsGateway: string
 ): Promise<AssetNode | Uint8Array | null> => {
-  debugLogger().debug(`fetching from IPFS ${cid}`)
+  debugLogger().debug(cid)
+  if (!ipfsGateway) throw new Error('IPFS gateway is not provided')
   const _cid = ensureIPFS(cid).split('ipfs://')[1]
   const url = `${ipfsGateway}/${_cid}`
-  debugLogger().debug(`fetching from ${url}`)
+  debugLogger().debug(url)
   const response = await fetch(url)
   debugLogger().debug(response)
   let data: AssetNode | Uint8Array | null = null

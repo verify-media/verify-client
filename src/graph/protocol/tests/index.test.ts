@@ -678,8 +678,8 @@ describe('createArticleNode', () => {
 })
 
 const mockConfig = {
-  pinataKey: '',
-  pinataSecret: ''
+  pinataKey: 'abc',
+  pinataSecret: 'xyz'
 }
 
 describe('getAssetDetails', () => {
