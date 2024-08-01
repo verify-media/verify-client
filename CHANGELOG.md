@@ -1,5 +1,11 @@
 # @verify-media/verify-client
 
+## 1.0.7
+
+### Patch Changes
+
+- 00bfc0d: misc changes
+
 ## 1.0.6
 
 ### Patch Changes
