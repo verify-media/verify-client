@@ -91,5 +91,5 @@ For the most up-to-date API documentation, check out the [verify-client sdk docs
 
 Apache License Version 2.0
 
-## Known Issues
-This sdk uses node-fetch version 3.x which is esm compatible only. Hence to use this sdk the consumer application should ideally be esm compatible as well. To do this, the consumer application should have `"type": "module"` in its package.json file. If using typescript, the tsconfig.json should have `"module": "ESNext"` and `"moduleResolution": "node"`.
+## Note
+This SDK uses node-fetch version 3.x, which is only compatible with ECMAScript modules (ESM). Therefore, to use this SDK, the consumer application should ideally be ESM compatible as well. To achieve this, the consumer application should include "type": "module" in its package.json file. Additionally, if using TypeScript, the tsconfig.json should have "module": "ESNext" and "moduleResolution": "node".
