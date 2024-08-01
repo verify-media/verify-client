@@ -107,7 +107,6 @@ export const signAssetNode = async (
   assetNodeData: AssetNodeData
 ): Promise<Signature> => {
   debugLogger().debug(`validate asset node data`)
-  console.log(JSON.stringify(assetNodeData))
   const result = isValidAssetNode(assetNodeData)
   if (result.error) {
     throw new Error(result.error.message)
@@ -209,9 +208,8 @@ export const buildArticleBody = (
           <description>${content.description}</description>
           <creditedSource>${content.creditedSource}</creditedSource>
           <hash>${content.hash}</hash>
-          <cid>${content.metadata?.cid}</cid>
-          ${content.metadata?.datePublished ? `<datePublished>${content.metadata.datePublished}</datePublished>` : ''}
-          <datePublished>2024-06-26T16:20:53.000Z</datePublished>
+          ${content.cid ? `<cid>${content.cid}</cid>` : ''}
+          ${content.published ? `<datePublished>${content.published}</datePublished>` : ''}
         </${content.type}>`
         })
         .join('')}      
@@ -351,7 +349,6 @@ export async function processBlob(blob: Blob): Promise<ProcessedAsset> {
  * @returns The {@link AssetNode} object with the added cid.
  */
 export const addCID = (asset: AssetNode, cid: string): AssetNode => {
-  console.log('cid >>>>> ', cid)
   if (!cid) throw new Error('cid cannot be empty')
 
   asset.data.manifest.cid = cid

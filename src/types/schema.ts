@@ -143,7 +143,8 @@ export type ContentMetadata = {
   published: string
   ownership: 'owned' | 'licensed' | 'referenced'
   licensedFrom?: string
-  metadata: Record<string, unknown>
+  verifyLicense: LicenseType
+  cid?: string
 }
 
 type TextMetadata = {

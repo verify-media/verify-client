@@ -80,8 +80,7 @@ const dummyArticle = {
       id: generateRandomString(10),
       ownership: 'licensed',
       licensedFrom: creditedSource,
-      title: generateRandomString(30),
-      metadata: {}
+      title: generateRandomString(30)
     },
     {
       published: pubDate,
@@ -95,8 +94,7 @@ const dummyArticle = {
       ownership: 'owned',
       licensedFrom: origin,
       title: generateRandomString(30),
-      uri: 'https://www.verifymedia.com/',
-      metadata: {}
+      uri: 'https://www.verifymedia.com/'
     }
   ]
 }

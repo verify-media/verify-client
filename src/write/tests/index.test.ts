@@ -38,6 +38,7 @@ import {
   Signature
 } from '../../types/schema'
 import { ensureIPFS } from '../../utils/app'
+import { LicenseType } from '../../types/app'
 
 describe('write functions', () => {
   beforeEach(() => {
@@ -396,10 +397,7 @@ describe('buildArticleBody', () => {
         authority: { name: 'Image Authority', contact: 'contact@example.com' }, // replace with actual authority
         published: new Date().toISOString(), // replace with actual published date
         ownership: 'owned',
-        metadata: {
-          hash: 'imageHash',
-          cid: 'imageCID'
-        }
+        verifyLicense: LicenseType.public
       }
     ]
 

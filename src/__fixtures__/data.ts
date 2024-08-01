@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import { LicenseType } from '../types/app'
 import {
   Article,
   AssetNode,
@@ -27,8 +28,8 @@ export const assetNode: AssetNodeData = {
   description: 'test description',
   encrypted: true,
   access: {
-    'lit-protocol': {
-      version: 'v3'
+    'verify-auth': {
+      license: LicenseType.allowlist
     }
   },
   locations: [
@@ -208,9 +209,9 @@ export const mockArticle: Article = {
       authority: { name: 'FOX', contact: origin },
       id: generateRandomString(12),
       title: 'some headline',
-      metadata: {},
       ownership: 'licensed',
-      licensedFrom: 'getty'
+      licensedFrom: 'getty',
+      verifyLicense: LicenseType.public
     },
     {
       published: new Date().toISOString(),
@@ -223,9 +224,9 @@ export const mockArticle: Article = {
       id: generateRandomString(12),
       title: 'some headline',
       uri: 'https://somepublisher.com/somearticle',
-      metadata: {},
       ownership: 'owned',
-      licensedFrom: ''
+      licensedFrom: '',
+      verifyLicense: LicenseType.public
     }
   ]
 }
