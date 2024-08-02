@@ -148,12 +148,6 @@ export const encryptAsset = async ({
   debugLogger().debug('get access control conditions')
   const authorization = getDefaultAuth(contentHash, chain, contractAddress)
 
-  // Set a timeout to throw an error after a fixed amount of time
-  const timeout = setTimeout(async () => {
-    await litClient.disconnect()
-    throw new Error('Operation timed out')
-  }, 60 * 1000) // 60 seconds
-
   debugLogger().debug('encrypt file')
   const encryptedContent = await encryptFile(
     {
@@ -166,10 +160,6 @@ export const encryptAsset = async ({
     },
     litClient
   )
-
-  await litClient.disconnect()
-  // If the operation completes before the timeout, clear the timeout
-  clearTimeout(timeout)
 
   const { ciphertext, dataToEncryptHash } = encryptedContent
 
@@ -212,12 +202,6 @@ export const decryptAsset = async ({
   debugLogger().debug('get access control conditions')
   const authorization = getDefaultAuth(contentHash, chain, contractAddress)
 
-  // Set a timeout to throw an error after a fixed amount of time
-  const timeout = setTimeout(async () => {
-    await litClient.disconnect()
-    throw new Error('Operation timed out')
-  }, 60 * 1000) // 60 seconds
-
   debugLogger().debug('decrypt file')
   const asset = await decryptToFile(
     {
@@ -231,10 +215,6 @@ export const decryptAsset = async ({
     },
     litClient
   )
-
-  await litClient.disconnect()
-  // If the operation completes before the timeout, clear the timeout
-  clearTimeout(timeout)
 
   return asset
 }
