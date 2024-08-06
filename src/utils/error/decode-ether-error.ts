@@ -65,8 +65,8 @@ function decodeErrorBasedOnPrefix(
     )[0]
     const reason =
       decodeType === 'uint256'
-        ? panicErrorCodeToReason(decodedValue as BigNumber) ??
-          defaultErrorMessage
+        ? (panicErrorCodeToReason(decodedValue as BigNumber) ??
+          defaultErrorMessage)
         : decodedValue
 
     return {
