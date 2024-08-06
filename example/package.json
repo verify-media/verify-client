@@ -34,7 +34,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "@verify-media/verify-client": "^1.0.9",
+    "@verify-media/verify-client": "^1.0.10",
     "ethers": "^5.7.0",
     "siwe": "^2.0.5",
     "typescript": "^5.2.2"
