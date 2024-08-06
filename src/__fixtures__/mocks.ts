@@ -32,7 +32,7 @@ export class _FormData {
 
   entries = jest.fn();
 
-  [Symbol.iterator] = this.entries;
+  [Symbol.iterator] = this.entries
 
   readonly [Symbol.toStringTag] = 'FormData'
 }
@@ -58,7 +58,7 @@ export class _Headers {
 
   getSetCookie = jest.fn();
 
-  [Symbol.iterator] = this.entries;
+  [Symbol.iterator] = this.entries
 
   readonly [Symbol.toStringTag] = 'Headers'
 }
