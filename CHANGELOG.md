@@ -1,5 +1,11 @@
 # @verify-media/verify-client
 
+## 1.0.8
+
+### Patch Changes
+
+- af39bd1: temp lit sdk version rollback
+
 ## 1.0.7
 
 ### Patch Changes
