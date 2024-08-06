@@ -66,7 +66,7 @@ jest.mock('@lit-protocol/lit-node-client', () => {
 describe('test sign functions', () => {
   it('should be able to generate and siwe message', async () => {
     const chainId = getConfig().chainId
-    const address = '0x123'
+    const address = '0xa1b4f1AC0Ab274D2B61cA213695758b7f9D5f448'
 
     const siweMessage = await new SiweMessage({
       domain: 'localhost',
@@ -78,7 +78,7 @@ describe('test sign functions', () => {
     })
 
     const _siweMessage = await generateSIWEMessage({
-      address: '0x123',
+      address: '0xa1b4f1AC0Ab274D2B61cA213695758b7f9D5f448',
       chainId: 1833
     })
 
