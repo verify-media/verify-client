@@ -44,7 +44,7 @@ describe('test config operations', () => {
         message = e.message
       }
     } finally {
-      expect(message).toBe(
+      expect(message).toMatch(
         'stage cannot be empty, either set and env var STAGE or pass a value to this function'
       )
     }
@@ -66,7 +66,7 @@ describe('test config operations', () => {
         message = e.message
       }
     } finally {
-      expect(message).toBe('stage can be either sandbox, testnet or mainnet')
+      expect(message).toMatch('stage can have one of the following values')
     }
   })
 
@@ -140,10 +140,11 @@ describe('test config operations', () => {
   test('it uses env vars if set', () => {
     mockEnvVars()
     const config = init({
-      stage: '',
+      stage: 'testnet',
       pvtKey: '',
-      rpcUrl: '',
-      chainId: 0,
+      rpcUrl: 'pqr',
+      chainId: 123,
+      maxGasPrice: 30000000000000,
       walletExpiryDays: 1
     })
     expect(config.pvtKey).toBe(

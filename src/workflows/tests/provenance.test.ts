@@ -9,11 +9,11 @@ import fetchMock from 'jest-fetch-mock'
 import { publishArticle } from '../provenance'
 
 init({
-  stage: '',
+  stage: 'sandbox',
   pvtKey: '',
-  rpcUrl: '',
-  chainId: 0,
-  chain: '',
+  rpcUrl: 'xyz',
+  chainId: 1,
+  chain: 'amoy',
   maxGasPrice: 2000000000000,
   walletExpiryDays: 1
 })

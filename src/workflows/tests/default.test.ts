@@ -10,11 +10,11 @@ import { publishAssets } from '../default'
 import { LicenseType } from '../../types/app'
 
 init({
-  stage: '',
+  stage: 'sandbox',
   pvtKey: '',
-  rpcUrl: '',
-  chainId: 0,
-  chain: '',
+  rpcUrl: 'xyz',
+  chainId: 1,
+  chain: 'amoy',
   maxGasPrice: 2000000000000,
   walletExpiryDays: 1
 })

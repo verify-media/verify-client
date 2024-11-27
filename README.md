@@ -20,12 +20,12 @@ VERIFY is a public library of signed digital assets with capabilities that allow
 VERIFY Protocol is deployed on an Polygon CDK validium based appchain. 
 
 ```
-Network Name: VERIFY Testnet
-RPC URL: https://rpc.verify-testnet.gelato.digital
-Chain ID: 1833
+Network Name: Polygon Testnet
+RPC URL: https://rpc-amoy.polygon.technology
+Chain ID: 80002
 Currency Symbol: MATIC
-Block Explorer URL: https://verify-testnet.blockscout.com/
-Settlement Layer: Amoy 
+Block Explorer URL: https://amoy.polygonscan.com/
+Faucet: https://faucet.polygon.technology/
 ```
 
 more details can be found [here](https://docs.verifymedia.com/verify-testnet).

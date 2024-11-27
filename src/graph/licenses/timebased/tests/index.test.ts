@@ -23,7 +23,12 @@ import { getLicense } from '../../../../constants'
 import { LicenseType } from '../../../../types/app'
 
 const mockRootAddress = '0x706Fe724eA8F05928e5Fce8fAd5584061FE586ec'
-const config = init()
+const config = init({
+  stage: 'sandbox',
+  rpcUrl: 'xyz',
+  chainId: 1,
+  chain: 'amoy'
+})
 const mockGasPrice = jest.fn()
 const sampleEmbargo: Embargo = {
   embargoDate: BigNumber.from(

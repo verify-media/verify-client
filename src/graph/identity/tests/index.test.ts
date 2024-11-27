@@ -11,7 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { mockTransactionResponse } from '../../../__fixtures__/data'
+import {
+  mockDefaultGasPrice,
+  mockTransactionResponse
+} from '../../../__fixtures__/data'
 import { init, unset } from '../../../utils/config'
 import {
   registerRoot,
@@ -29,11 +32,12 @@ import {
 } from '../index'
 import { ethers, Wallet, Contract, utils } from 'ethers'
 import { IDENTITY_ABI } from '../types'
+import { Config } from '../../../types/app'
 
 const mockOrgName = 'testOrg'
 const mockRootAddress = '0x706Fe724eA8F05928e5Fce8fAd5584061FE586ec'
 const mockRegistered = jest.fn()
-let config = init()
+const mockGasPrice = jest.fn()
 
 jest.mock('ethers', () => {
   const original = jest.requireActual('ethers')
@@ -57,8 +61,9 @@ jest.mock('ethers', () => {
     Wallet: jest.fn().mockImplementation(() => ({
       ...originalWallet,
       address: mockRootAddress,
-      providers: {
-        JsonRpcProvider: jest.fn()
+      provider: {
+        JsonRpcProvider: jest.fn(),
+        getGasPrice: mockGasPrice.mockResolvedValue(mockDefaultGasPrice)
       }
     })),
     JsonRpcProvider: jest.fn().mockImplementation(() => ({
@@ -86,9 +91,18 @@ jest.mock('ethers', () => {
     }))
   }
 })
+let config: Config
 
 describe('identity functions', () => {
   beforeEach(() => {
+    config = init({
+      stage: 'sandbox',
+      rpcUrl: 'xyz',
+      chainId: 1,
+      chain: 'amoy',
+      rootPvtKey: 'abc'
+    })
+
     jest.clearAllMocks()
   })
 
@@ -149,7 +163,6 @@ describe('identity functions', () => {
     } catch (error) {
       expect(error).toMatchObject(errorObj)
     }
-    config = init()
   })
 
   // it('should register intermediate wallet from config and return transaction hash', async () => {

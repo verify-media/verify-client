@@ -18,26 +18,30 @@ import { trimLowerCase } from './utils/app'
 export const getIdentityContractAddress = (stage: string): string => {
   switch (stage) {
     case 'testnet':
-      return '0x27BA7E931906FebA79dED5d32947b12f30379135'
+      return '0xB592953198eE37c21f39D697e3EC630aC866a2aA' //amoy
     case 'sandbox':
-      return '0xdCE27c4a76bE1fF9F9C543E13FCC3591E33A0E25'
+      return '0xEe586a3655EB0D017643551e9849ed828Fd7c7FA' //amoy
     case 'mainnet':
       return 'TBD'
     default:
-      throw new Error('stage can be either sandbox, testnet or mainnet')
+      throw new Error(
+        `stage can have one of the following values ${Object.values(STAGE).join(',')}`
+      )
   }
 }
 
 export const getGraphContractAddress = (stage: string): string => {
   switch (stage) {
     case 'testnet':
-      return '0xAE8c7c7e6819f425CE750CC7F7e72A13Ef3635E0'
+      return '0x2EEed35561F9C6F454d2Ed58C87904e646214f9d' //amoy
     case 'sandbox':
-      return '0xEe586a3655EB0D017643551e9849ed828Fd7c7FA'
+      return '0xEF2E371BaFAe46a116519F18A1cfF750570E8842' //amoy
     case 'mainnet':
       return 'TBD'
     default:
-      throw new Error('stage can be either sandbox, testnet or mainnet')
+      throw new Error(
+        `stage can have one of the following values ${Object.values(STAGE).join(',')}`
+      )
   }
 }
 
@@ -50,7 +54,9 @@ export const getLitNetwork = (stage: string): string => {
     case 'mainnet':
       return 'habanero'
     default:
-      throw new Error('stage can be either sandbox, testnet or mainnet')
+      throw new Error(
+        `stage can have one of the following values ${Object.values(STAGE).join(',')}`
+      )
   }
 }
 
@@ -65,8 +71,8 @@ export const getLicense = (licenseType: LicenseType, stage: string): string => {
   switch (trimLowerCase(licenseType)) {
     case 'allowlist': {
       const allowlistLicense: Record<STAGE, string> = {
-        sandbox: '0xb98068e0DA0Da5b9a50461F3B99473a3417dFf62',
-        testnet: '0xAa800342cC635FC8D9c394981120CcAf65321b15',
+        sandbox: '0x074340A85FCc5005BE0794E29e7fe1825600366B', // amoy
+        testnet: '0x3fb39aEDE0f88183195c8c506DCeE227F33062d2', // amoy
         mainnet: ''
       }
 
@@ -74,8 +80,8 @@ export const getLicense = (licenseType: LicenseType, stage: string): string => {
     }
     case 'public': {
       const publicLicense: Record<STAGE, string> = {
-        sandbox: '0xB4D05978AfC8a03A1D8e91314186fBd3A9E513b3',
-        testnet: '0x6Cf8374a13b48070b600be33F16370Ab3e557600',
+        sandbox: '0x96BcFc032677da04B243f53fdb972ab6EC6Bc9f4', // amoy
+        testnet: '0xEf71Be486abace4cCB921Bb1943351cefa208D6a', // amoy
         mainnet: ''
       }
 
@@ -84,8 +90,8 @@ export const getLicense = (licenseType: LicenseType, stage: string): string => {
 
     case 'private': {
       const privateLicense: Record<STAGE, string> = {
-        sandbox: '0xEab65FD2aBF9b14C08187aa69bD6A74B7993eAf3',
-        testnet: '0xd4547af11c8296Bc9B3d79Fd9a680b2163D419C',
+        sandbox: '0x141ae63032Ad3D89AA20bCC92Ab601B77Ec1d200',
+        testnet: '0x2B09b8f1855E7f309B32A738E45c7545A095fC3b',
         mainnet: ''
       }
 
@@ -94,8 +100,8 @@ export const getLicense = (licenseType: LicenseType, stage: string): string => {
 
     case 'timebased': {
       const timebasedLicense: Record<STAGE, string> = {
-        sandbox: '0x55B03c3025901F391bb787FeFB83f23450e7c909',
-        testnet: '',
+        sandbox: '0xFC937a068c93e5878CcD5C20f2DBaEf95d7F1Cfe',
+        testnet: '0x285098018b2e01a74974ABF5d34e97f655b7e227',
         mainnet: ''
       }
 
@@ -104,8 +110,8 @@ export const getLicense = (licenseType: LicenseType, stage: string): string => {
 
     case 'authorizer': {
       const authorizerLicense: Record<STAGE, string> = {
-        sandbox: '0x4d18eE1343165E74fe8de53700ee62FDB0810cDb',
-        testnet: '',
+        sandbox: '0xF2a81936441BA4fE353633b2874195792Fb41823',
+        testnet: '0x7B4d19810Aa1AEc46ab790fB78E5F85214036bFb',
         mainnet: ''
       }
 
