@@ -14,9 +14,6 @@
 import { BigNumber, ContractInterface } from 'ethers'
 import { AssetNode } from '../../../types/schema'
 
-export type CHAINS = 'polygon' | 'verifyTestnet'
-export type CHAIN_IDS = 137 | 1833
-
 /**
  * @hidden
  */

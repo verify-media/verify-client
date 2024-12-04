@@ -14,16 +14,6 @@
 import fetchMock from 'jest-fetch-mock'
 // import { uploadToIPFS } from '../index'
 import 'utils/config'
-import { init } from '../../../utils/config'
-
-init({
-  stage: '',
-  pvtKey: '',
-  rpcUrl: '',
-  chainId: 0,
-  chain: '',
-  walletExpiryDays: 1
-})
 
 describe('write to IPFS', () => {
   // const config = {

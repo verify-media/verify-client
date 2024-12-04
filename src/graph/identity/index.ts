@@ -18,6 +18,7 @@ import { debugLogger } from '../../utils/logger'
 import { SIGNATURE_DEADLINE, getIdentityContractAddress } from '../../constants'
 import { getCurrentBlockTime } from '../../utils/chain'
 import { withErrorHandlingIdentity } from '../../utils/error/decode-ether-error'
+import { checkGasLimits } from '../protocol'
 
 /**
  * @hidden
@@ -239,6 +240,7 @@ export const register = withErrorHandlingIdentity(
     const { walletExpiryDays, chainId } = getConfig()
     const rootWallet = getRootWalletInstance()
     const identityContract = getContractInstance()
+    const gasOptions = { gasPrice: await checkGasLimits() }
 
     debugLogger().debug(`walletExpiryDays ${walletExpiryDays}`)
     debugLogger().debug(`rootWallet ${rootWallet.address}`)
@@ -270,7 +272,8 @@ export const register = withErrorHandlingIdentity(
         address,
         expiry,
         chainId,
-        deadline
+        deadline,
+        gasOptions
       )
 
     debugLogger().debug('intermediate wallet registered: %s', txn.hash)
@@ -353,6 +356,7 @@ export const unregister = withErrorHandlingIdentity(
     const { chainId } = getConfig()
     const rootWallet = getRootWalletInstance()
     const identityContract = getContractInstance()
+    const gasOptions = { gasPrice: await checkGasLimits() }
 
     debugLogger().debug(`rootWallet ${rootWallet.address}`)
     debugLogger().debug(`identityContract ${identityContract.address}`)
@@ -375,7 +379,8 @@ export const unregister = withErrorHandlingIdentity(
         rootWallet.address,
         address,
         chainId,
-        deadline
+        deadline,
+        gasOptions
       )
 
     const receipt: ethers.providers.TransactionReceipt = await txn.wait()
@@ -420,12 +425,18 @@ export const registerRoot = withErrorHandlingIdentity(
     if (!orgName) throw new Error('orgName cannot be empty')
     const rootWallet = getRootWalletInstance()
     const identityContract = getContractInstance()
+    const gasOptions = { gasPrice: await checkGasLimits() }
+
     debugLogger().debug(`rootWallet ${rootWallet.address}`)
     debugLogger().debug(`identityContract ${identityContract.address}`)
 
     debugLogger().debug('registering root wallet: %s', rootWallet.address)
     const txn: ethers.providers.TransactionResponse =
-      await identityContract.registerRoot(rootWallet.address, orgName)
+      await identityContract.registerRoot(
+        rootWallet.address,
+        orgName,
+        gasOptions
+      )
     debugLogger().debug('root wallet registered: %s', txn.hash)
     const receipt: ethers.providers.TransactionReceipt = await txn.wait()
 
@@ -450,9 +461,14 @@ export const registerRootWithVerify = withErrorHandlingIdentity(
       throw new Error('root wallet address cannot be empty')
     if (!orgName) throw new Error('orgName cannot be empty')
     const identityContract = getContractInstance()
+    const gasOptions = { gasPrice: await checkGasLimits() }
     debugLogger().debug('registering root wallet: %s', rootWalletAddress)
     const txn: ethers.providers.TransactionResponse =
-      await identityContract.registerRoot(rootWalletAddress, orgName)
+      await identityContract.registerRoot(
+        rootWalletAddress,
+        orgName,
+        gasOptions
+      )
     debugLogger().debug('root wallet registered: %s', txn.hash)
     const receipt: ethers.providers.TransactionReceipt = await txn.wait()
 
@@ -470,11 +486,12 @@ export const unRegisterRoot = withErrorHandlingIdentity(
   async (): Promise<ethers.providers.TransactionReceipt> => {
     const rootWallet = getRootWalletInstance()
     const identityContract = getContractInstance()
+    const gasOptions = { gasPrice: await checkGasLimits() }
 
     debugLogger().debug('unregistering root wallet: %s', rootWallet.address)
 
     const txn: ethers.providers.TransactionResponse =
-      await identityContract.unregisterRoot(rootWallet.address)
+      await identityContract.unregisterRoot(rootWallet.address, gasOptions)
 
     debugLogger().debug('root wallet unregistered: %s', txn.hash)
 
@@ -494,11 +511,12 @@ export const unRegisterRoot = withErrorHandlingIdentity(
 export const unRegisterRootFromVerify = withErrorHandlingIdentity(
   async (rootWallet: string): Promise<ethers.providers.TransactionReceipt> => {
     const identityContract = getContractInstance()
+    const gasOptions = { gasPrice: await checkGasLimits() }
 
     debugLogger().debug('unregistering root wallet: %s', rootWallet)
 
     const txn: ethers.providers.TransactionResponse =
-      await identityContract.unregisterRoot(rootWallet)
+      await identityContract.unregisterRoot(rootWallet, gasOptions)
 
     debugLogger().debug('root wallet unregistered: %s', txn.hash)
 

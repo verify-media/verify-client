@@ -31,11 +31,11 @@ mockEnvVars()
 const mockSignerWalletAddress = '0xC0ab82C83e3d8Ad1d998a38CbDEEf3f89d787eaa'
 
 const config = init({
-  stage: '',
+  stage: 'sandbox',
   pvtKey: '',
-  rpcUrl: '',
-  chainId: 0,
-  chain: '',
+  rpcUrl: 'xyz',
+  chainId: 1,
+  chain: 'amoy',
   walletExpiryDays: 1
 })
 
@@ -79,7 +79,7 @@ describe('test sign functions', () => {
 
     const _siweMessage = await generateSIWEMessage({
       address: '0xa1b4f1AC0Ab274D2B61cA213695758b7f9D5f448',
-      chainId: 1833
+      chainId: 80002
     })
 
     expect(siweMessage.statement).toEqual(_siweMessage.statement)

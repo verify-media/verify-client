@@ -20,11 +20,11 @@ import { hashImage, hash as rawHash } from '../../../write'
 import { init } from '../../../utils/config'
 
 init({
-  stage: '',
+  stage: 'sandbox',
   pvtKey: '',
-  rpcUrl: '',
-  chainId: 0,
-  chain: '',
+  rpcUrl: 'xyz',
+  chainId: 1,
+  chain: 'amoy',
   walletExpiryDays: 1
 })
 

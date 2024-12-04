@@ -52,11 +52,11 @@ describe('write functions', () => {
   mockEnvVars()
 
   init({
-    stage: '',
+    stage: 'sandbox',
     pvtKey: '',
-    rpcUrl: '',
-    chainId: 0,
-    chain: '',
+    rpcUrl: 'xyz',
+    chainId: 1,
+    chain: 'amoy',
     walletExpiryDays: 1
   })
 

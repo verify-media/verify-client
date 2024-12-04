@@ -1,4 +1,4 @@
-_Note: this guide assumes publishing on [verifyTestnet](https://docs.verifymedia.com/verify-testnet) using a [sandbox](https://docs.verifymedia.com/smart-contracts/#sandbox) env . Using testnet or mainnet requires a whitelist from the VERIFY team. Please reach out to [VERIFY](https://verifymedia.com/) for more information._
+_Note: this guide assumes publishing on [Polygon Testnet](https://docs.verifymedia.com/verify-testnet) using [sandbox environment](https://docs.verifymedia.com/smart-contracts#sandbox-environment) env . Using testnet or mainnet requires a whitelist from the VERIFY team. Please reach out to [VERIFY](https://verifymedia.com/) for more information._
 
 ## Configure
 
@@ -8,10 +8,10 @@ To start publishing the sdk needs to be configured with some settings. It can be
 
 ```bash
 DEBUG=0 # 0 if false and 1 is true with default false. When true print debug logs
-RPC_URL=https://rpc.verify-testnet.gelato.digital # allows for a developer to interact with an Ethereum node via HTTP(S)
+RPC_URL=https://rpc-amoy.polygon.technology # allows for a developer to interact with an Ethereum node via HTTP(S)
 STAGE=sandbox # stage of the VERIFY Protocol
-CHAIN_ID=1833 # chain id for the network
-CHAIN=verifyTestnet # network name
+CHAIN_ID=80002 # chain id for the network
+CHAIN=amoy # network name
 MAX_GAS_PRICE=0 #if set a transaction will not be performed if network gas is above this limit
 ROOT_PVT_KEY=<root_pvt_key> # private key for the root wallet which acts as the publishers identity
 PVT_KEY=<intermediate_pvt_key> # private key for the intermediate wallet which acts as the signer, there could be more than one signer wallets hence its preferred to pass this value as a parameter instead
@@ -55,7 +55,7 @@ console.log(config.stage)
 - Repeat the same steps to add an intermediate wallet and configure the private key in `.env` against `PVT_KEY`
 
 - Now that the wallet is created, add funds to it.
-  **Note: funds always need to be added to the intermediate wallet (public key) only**, since this is all on testnet (**not real money**). The intermediate wallet (_<b>public key</b>_) can be funded using a bridge to transfer MATIC from AMOY to verifyTestnet. Please refer to the [bridge](https://dev-docs.verifymedia.com/verify-testnet#using-the-verify-testnet-network) documentation for more details.
+  **Note: funds always need to be added to the intermediate wallet (public key) only**, since this is all on testnet (**not real money**). The intermediate wallet (_<b>public key</b>_) can be funded using Polygon Faucet, more details on funding your wallet can be found [here](https://docs.verifymedia.com/verify-testnet#using-the-verify-testnet-network).
 
 - All content published on VERIFY Protocol is stored on IPFS. VERIFY client sdk supports this via [Pinata](https://www.pinata.cloud/) or your own IPFS cluster setup using [Kubo](https://github.com/ipfs/kubo).
   For the purpose of this example please set up a [free](https://www.pinata.cloud/pricing) Pinata account. Configure the Pinata API key and Pinata secret, and then add that to `.env` as

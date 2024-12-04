@@ -13,9 +13,6 @@
 // limitations under the License.
 import { ContractInterface } from 'ethers'
 
-export type CHAINS = 'verifyTestnet' | 'polygon'
-export type CHAIN_IDS = 1833 | 137
-
 export type LinkToken = {
   token: string
   expiry: number
