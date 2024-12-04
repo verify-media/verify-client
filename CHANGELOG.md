@@ -1,5 +1,11 @@
 # @verify-media/verify-client
 
+## 1.2.0
+
+### Minor Changes
+
+- 044e093: switch to polygon testnet
+
 ## 1.0.10
 
 ### Patch Changes
