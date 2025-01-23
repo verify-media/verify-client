@@ -22,7 +22,7 @@ export const getIdentityContractAddress = (stage: string): string => {
     case 'sandbox':
       return '0xEe586a3655EB0D017643551e9849ed828Fd7c7FA' //amoy
     case 'mainnet':
-      return 'TBD'
+      return '0xEe586a3655EB0D017643551e9849ed828Fd7c7FA'
     default:
       throw new Error(
         `stage can have one of the following values ${Object.values(STAGE).join(',')}`
@@ -37,7 +37,7 @@ export const getGraphContractAddress = (stage: string): string => {
     case 'sandbox':
       return '0xEF2E371BaFAe46a116519F18A1cfF750570E8842' //amoy
     case 'mainnet':
-      return 'TBD'
+      return '0x917340A034FBce4166Bffd556015D862D00021aD'
     default:
       throw new Error(
         `stage can have one of the following values ${Object.values(STAGE).join(',')}`
@@ -73,7 +73,7 @@ export const getLicense = (licenseType: LicenseType, stage: string): string => {
       const allowlistLicense: Record<STAGE, string> = {
         sandbox: '0x074340A85FCc5005BE0794E29e7fe1825600366B', // amoy
         testnet: '0x3fb39aEDE0f88183195c8c506DCeE227F33062d2', // amoy
-        mainnet: ''
+        mainnet: '0x141ae63032Ad3D89AA20bCC92Ab601B77Ec1d200'
       }
 
       return allowlistLicense[_stage as STAGE]
@@ -82,7 +82,7 @@ export const getLicense = (licenseType: LicenseType, stage: string): string => {
       const publicLicense: Record<STAGE, string> = {
         sandbox: '0x96BcFc032677da04B243f53fdb972ab6EC6Bc9f4', // amoy
         testnet: '0xEf71Be486abace4cCB921Bb1943351cefa208D6a', // amoy
-        mainnet: ''
+        mainnet: '0x074340A85FCc5005BE0794E29e7fe1825600366B'
       }
 
       return publicLicense[_stage as STAGE]
@@ -92,7 +92,7 @@ export const getLicense = (licenseType: LicenseType, stage: string): string => {
       const privateLicense: Record<STAGE, string> = {
         sandbox: '0x141ae63032Ad3D89AA20bCC92Ab601B77Ec1d200',
         testnet: '0x2B09b8f1855E7f309B32A738E45c7545A095fC3b',
-        mainnet: ''
+        mainnet: '0x96BcFc032677da04B243f53fdb972ab6EC6Bc9f4'
       }
 
       return privateLicense[_stage as STAGE]
@@ -102,7 +102,7 @@ export const getLicense = (licenseType: LicenseType, stage: string): string => {
       const timebasedLicense: Record<STAGE, string> = {
         sandbox: '0xFC937a068c93e5878CcD5C20f2DBaEf95d7F1Cfe',
         testnet: '0x285098018b2e01a74974ABF5d34e97f655b7e227',
-        mainnet: ''
+        mainnet: '0xFC937a068c93e5878CcD5C20f2DBaEf95d7F1Cfe'
       }
 
       return timebasedLicense[_stage as STAGE]
@@ -112,7 +112,7 @@ export const getLicense = (licenseType: LicenseType, stage: string): string => {
       const authorizerLicense: Record<STAGE, string> = {
         sandbox: '0xF2a81936441BA4fE353633b2874195792Fb41823',
         testnet: '0x7B4d19810Aa1AEc46ab790fB78E5F85214036bFb',
-        mainnet: ''
+        mainnet: '0xF2a81936441BA4fE353633b2874195792Fb41823'
       }
 
       return authorizerLicense[_stage as STAGE]
