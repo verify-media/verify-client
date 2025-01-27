@@ -22,7 +22,7 @@ export const getIdentityContractAddress = (stage: string): string => {
     case 'sandbox':
       return '0xEe586a3655EB0D017643551e9849ed828Fd7c7FA' //amoy
     case 'mainnet':
-      return '0xEe586a3655EB0D017643551e9849ed828Fd7c7FA'
+      return '0x27BA7E931906FebA79dED5d32947b12f30379135'
     default:
       throw new Error(
         `stage can have one of the following values ${Object.values(STAGE).join(',')}`
@@ -37,7 +37,7 @@ export const getGraphContractAddress = (stage: string): string => {
     case 'sandbox':
       return '0xEF2E371BaFAe46a116519F18A1cfF750570E8842' //amoy
     case 'mainnet':
-      return '0x917340A034FBce4166Bffd556015D862D00021aD'
+      return '0xEF2E371BaFAe46a116519F18A1cfF750570E8842'
     default:
       throw new Error(
         `stage can have one of the following values ${Object.values(STAGE).join(',')}`
