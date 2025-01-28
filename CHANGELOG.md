@@ -1,5 +1,11 @@
 # @verify-media/verify-client
 
+## 1.1.1
+
+### Patch Changes
+
+- fba6c47: patch to update production mainnet contract details
+
 ## 1.2.0
 
 ### Minor Changes
