@@ -34,7 +34,7 @@ describe('getIdentityContractAddress', () => {
 
   it('returns the correct contract address for mainnet', () => {
     const result = getIdentityContractAddress('mainnet')
-    expect(result).toBe('TBD')
+    expect(result).toBe('0x27BA7E931906FebA79dED5d32947b12f30379135')
   })
 
   it('throws an error for an invalid stage', () => {
@@ -63,7 +63,7 @@ describe('getGraphContractAddress', () => {
 
   it('returns the correct contract address for mainnet', () => {
     const result = getGraphContractAddress('mainnet')
-    expect(result).toBe('TBD')
+    expect(result).toBe('0xEF2E371BaFAe46a116519F18A1cfF750570E8842')
   })
 
   it('throws an error for an invalid stage', () => {
