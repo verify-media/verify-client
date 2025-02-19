@@ -65,6 +65,8 @@ console.log(config.stage)
   PINATA_SECRET=<PINATA_SECRET>
   ```
 
+  <i>Note: The Verify protocol does not enforce the use of IPFS by design. Any other storage mechanism, such as AWS S3, can also be used.</i>
+
 - Finally please set the ORG_NAME in the `.env` file to the name of the publisher
 
 ## Publishing
