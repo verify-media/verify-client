@@ -4,6 +4,16 @@
 
 ### Minor Changes
 
+- 22e2a71: added s3 metadata storage
+
+### Patch Changes
+
+- fba6c47: patch to update production mainnet contract details
+
+## 1.2.0
+
+### Minor Changes
+
 - 044e093: switch to polygon testnet
 
 ## 1.0.10
