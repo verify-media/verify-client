@@ -36,3 +36,8 @@ export type IPFSResponse = {
   cid: string
   size: number
 }
+
+export type EncryptedContent = {
+  ciphertext: string
+  dataToEncryptHash: string
+}

@@ -5,3 +5,7 @@ if (process.env.JEST_DEBUG) {
 
 import fetchMock from 'jest-fetch-mock'
 fetchMock.enableMocks()
+
+jest.mock('cbor2', () => ({
+  encode: jest.fn(() => Buffer.from([]))
+}))
