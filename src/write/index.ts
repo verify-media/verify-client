@@ -27,6 +27,8 @@ import { LicenseType, ProcessedAsset } from '../types/app'
 import { genCid } from '../storage'
 export { uploadToIPFS } from '../storage/ipfs'
 export { uploadToIPFS as uploadToPinata } from '../storage/pinata'
+export { uploadToS3 } from '../storage/s3'
+export { uploadData } from '../storage'
 export { encryptAsset } from '../encryption/lit'
 export {
   registerRoot,

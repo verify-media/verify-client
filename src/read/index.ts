@@ -27,6 +27,8 @@ export { fetchFileFromPinata, getWalletBalance, decodeEtherError }
 
 // limitations under the License.
 export { fetchFromIPFS } from '../storage/ipfs'
+export { fetchFromS3 } from '../storage/s3'
+export { fetchData } from '../storage'
 export { decryptAsset } from '../encryption/lit'
 export {
   whoIs,

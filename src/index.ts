@@ -45,7 +45,9 @@ export {
   setAllowList,
   setAuthorizer,
   setEmbargo,
-  setPurchaseAccess
+  setPurchaseAccess,
+  uploadData,
+  uploadToS3
 } from './write'
 
 export { publishArticle } from './workflows/provenance'
@@ -82,7 +84,9 @@ export {
   getAuthorizerRoot,
   getEmbargo,
   getAssetPrice,
-  decodeEtherError
+  decodeEtherError,
+  fetchData,
+  fetchFromS3
 } from './read'
 
 export { getLicense } from './constants'
