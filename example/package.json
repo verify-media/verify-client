@@ -29,8 +29,12 @@
   "author": "bcl-eng",
   "license": "ISC",
   "type": "module",
+  "overrides": {
+    "axios": "1.14.0"
+  },
   "dependencies": {
     "@verify-media/verify-client": "~1.1.0",
+    "axios": "1.14.0",
     "ethers": "^5.7.0",
     "siwe": "2.1.4",
     "typescript": "^5.2.2"
